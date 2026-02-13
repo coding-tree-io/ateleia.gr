@@ -1,0 +1,80 @@
+name: Deploy Client Review to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Validate project
+        run: pnpm check
+
+      - name: Build static site
+        run: pnpm build
+
+      - name: Keep only client-review as root page
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [[ ! -f dist/client-review/index.html ]]; then
+            echo "Expected dist/client-review/index.html to exist."
+            exit 1
+          fi
+
+          cp dist/client-review/index.html dist/index.html
+
+          rm -rf dist/client-review dist/palette-preview
+
+          find dist -type f -name "*.html" ! -path "dist/index.html" -delete
+
+          touch dist/.nojekyll
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
