@@ -1,21 +1,36 @@
-# Base Astro + shadcn-ui Starter
+# Ateleia.gr (Astro + shadcn-ui)
 
-Baseline project for a static Astro site with shadcn-ui components and React islands.
-This repo is configured for GitHub Pages project deployments under `coding-tree-io/ateleia.gr`.
+Static Astro website for the approved client direction.
 
-## What this is
+## Current brand lock
 
-- Astro 5 static site starter.
-- Tailwind CSS v4 + shadcn-ui token setup.
-- React integration for Astro islands.
-- One shadcn `Button` and one interactive island example.
+The theme is intentionally frozen to the approved choice:
+
+- Palette: `Terracotta Calm`
+- Font: `Nunito`
+
+Production does not include runtime palette/font switching.
+
+## Archive branch
+
+All previous chooser/lab work is preserved on:
+
+- `archive/theme-lab-choices`
+
+Use that branch only if you intentionally want to revisit palette/font exploration.
+
+## Stack
+
+- Astro 5 static output
+- React integration for shadcn components
+- Tailwind CSS v4
+- shadcn-ui
+- pnpm
 
 ## Prerequisites
 
 - Node.js 20+
-- pnpm (or Corepack)
-
-If `pnpm` is not globally available on your machine, use `corepack pnpm` in all commands below.
+- Corepack (recommended)
 
 ## Setup
 
@@ -23,7 +38,7 @@ If `pnpm` is not globally available on your machine, use `corepack pnpm` in all 
 corepack pnpm install
 ```
 
-## Run locally
+## Local development
 
 ```sh
 corepack pnpm dev
@@ -38,35 +53,17 @@ corepack pnpm build
 
 ## GitHub Pages configuration
 
-`astro.config.mjs` is preconfigured for GitHub Pages project mode:
+`astro.config.mjs` is configured for project pages:
 
 - `site: "https://coding-tree-io.github.io"`
 - `base: "/ateleia.gr"`
 - `output: "static"`
 
-This matches deployment to:
-
-`https://coding-tree-io.github.io/ateleia.gr`
-
-If the repository slug changes, update `base` to the new repo path.
+Deployment workflow on `main` publishes the homepage artifact from `dist`.
 
 ## Key files
 
-- `src/pages/index.astro`: starter page with shadcn + island demo
-- `src/pages/client-review.astro`: client-facing selection page (colors + fonts)
-- `src/components/ClientReviewIsland.tsx`: interactive client review island with URL persistence
-- `src/components/ui/button.tsx`: shadcn button component
-- `src/components/ExampleIsland.tsx`: minimal hydrated React island
-- `src/styles/global.css`: Tailwind + shadcn theme tokens
-- `components.json`: shadcn registry config
-
-## Client review page
-
-Use the client-facing page locally at:
-
-`/client-review`
-
-It supports:
-- color and font switching
-- desktop/mobile frame toggle
-- URL-persisted selections for easy sharing
+- `src/config/approved-theme.ts`: frozen Terracotta Calm + Nunito tokens/typography
+- `src/content/site-copy.ts`: structured Greek copy/placeholders for homepage
+- `src/components/home/HomePageScaffold.tsx`: homepage sections built with shadcn components
+- `src/pages/index.astro`: production entry page
