@@ -1,0 +1,45 @@
+---
+import '@/styles/global.css';
+
+import { ClientReviewIsland } from '@/components/ClientReviewIsland';
+
+const baseUrl = import.meta.env.BASE_URL;
+const normalizedBaseUrl = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
+const faviconSvgUrl = `${normalizedBaseUrl}favicon.svg`;
+const faviconIcoUrl = `${normalizedBaseUrl}favicon.ico`;
+---
+
+<html lang="el">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href={faviconSvgUrl} />
+    <link rel="icon" href={faviconIcoUrl} />
+    <meta name="generator" content={Astro.generator} />
+    <meta
+      name="description"
+      content="Σελίδα επιλογής χρωματικής εκδοχής και γραμματοσειράς για την πρώτη παρουσίαση προς πελάτη."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;500;600;700&family=GFS+Didot&family=GFS+Neohellenic:wght@400;500;700&family=Noto+Sans:wght@400;500;600;700&family=Noto+Serif:wght@400;500;600;700&family=Nunito:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <title>Επιλογές Σχεδίασης | Ατέλεια</title>
+  </head>
+  <body class="min-h-screen bg-background text-foreground">
+    <main class="mx-auto w-full max-w-7xl px-4 py-8 md:px-6 md:py-12">
+      <header class="mb-6 space-y-2 md:mb-8">
+        <p class="text-xs uppercase tracking-[0.2em] text-muted-foreground">Ατέλεια</p>
+        <h1 class="text-2xl font-semibold tracking-tight md:text-4xl">Σελίδα Επιλογών Σχεδίασης</h1>
+        <p class="max-w-3xl text-sm leading-relaxed text-muted-foreground md:text-base">
+          Εδώ μπορείτε να συγκρίνετε χρώματα και γραμματοσειρές πάνω στην ίδια σελίδα και να μας στείλετε τις τελικές
+          σας προτιμήσεις.
+        </p>
+      </header>
+
+      <ClientReviewIsland client:load baseUrl={normalizedBaseUrl} />
+    </main>
+  </body>
+</html>

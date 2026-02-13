@@ -1,13 +1,72 @@
-# Astro with Tailwind
+# Base Astro + shadcn-ui Starter
+
+Baseline project for a static Astro site with shadcn-ui components and React islands.
+This repo is configured for GitHub Pages project deployments under `coding-tree-io/ateleia.gr`.
+
+## What this is
+
+- Astro 5 static site starter.
+- Tailwind CSS v4 + shadcn-ui token setup.
+- React integration for Astro islands.
+- One shadcn `Button` and one interactive island example.
+
+## Prerequisites
+
+- Node.js 20+
+- pnpm (or Corepack)
+
+If `pnpm` is not globally available on your machine, use `corepack pnpm` in all commands below.
+
+## Setup
 
 ```sh
-pnpm create astro@latest -- --template with-tailwindcss
+corepack pnpm install
 ```
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/with-tailwindcss)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/with-tailwindcss)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/with-tailwindcss/devcontainer.json)
+## Run locally
 
-Astro comes with [Tailwind](https://tailwindcss.com) support out of the box. This example showcases how to style your Astro project with Tailwind.
+```sh
+corepack pnpm dev
+```
 
-For complete setup instructions, please see our [Tailwind Styling Guide](https://docs.astro.build/en/guides/styling/#tailwind).
+## Verification
+
+```sh
+corepack pnpm check
+corepack pnpm build
+```
+
+## GitHub Pages configuration
+
+`astro.config.mjs` is preconfigured for GitHub Pages project mode:
+
+- `site: "https://coding-tree-io.github.io"`
+- `base: "/ateleia.gr"`
+- `output: "static"`
+
+This matches deployment to:
+
+`https://coding-tree-io.github.io/ateleia.gr`
+
+If the repository slug changes, update `base` to the new repo path.
+
+## Key files
+
+- `src/pages/index.astro`: starter page with shadcn + island demo
+- `src/pages/client-review.astro`: client-facing selection page (colors + fonts)
+- `src/components/ClientReviewIsland.tsx`: interactive client review island with URL persistence
+- `src/components/ui/button.tsx`: shadcn button component
+- `src/components/ExampleIsland.tsx`: minimal hydrated React island
+- `src/styles/global.css`: Tailwind + shadcn theme tokens
+- `components.json`: shadcn registry config
+
+## Client review page
+
+Use the client-facing page locally at:
+
+`/client-review`
+
+It supports:
+- color and font switching
+- desktop/mobile frame toggle
+- URL-persisted selections for easy sharing
