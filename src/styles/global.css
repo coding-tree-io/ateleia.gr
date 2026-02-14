@@ -12,6 +12,10 @@
   --radius-2xl: calc(var(--radius) + 8px);
   --radius-3xl: calc(var(--radius) + 12px);
   --radius-4xl: calc(var(--radius) + 16px);
+
+  --font-sans: 'Nunito', 'Noto Sans', system-ui, sans-serif;
+  --font-serif: 'Cormorant Garamond', 'Georgia', serif;
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -47,37 +51,37 @@
 
 :root {
   --radius: 0.875rem;
-  --background: #fdfefe;
-  --foreground: #2f2a2a;
-  --card: #ffffff;
-  --card-foreground: #2f2a2a;
-  --popover: #ffffff;
-  --popover-foreground: #2f2a2a;
-  --primary: #c7392e;
-  --primary-foreground: #ffffff;
-  --secondary: #efe9e8;
-  --secondary-foreground: #2f2a2a;
-  --muted: #efe9e8;
-  --muted-foreground: #625251;
-  --accent: #5c7a82;
-  --accent-foreground: #ffffff;
-  --destructive: #b42318;
-  --border: #c0a3a1;
-  --input: #e1d1d0;
-  --ring: #c7392e;
-  --chart-1: #c7392e;
-  --chart-2: #5c7a82;
-  --chart-3: #f0847b;
+  --background: #FDFBF9;
+  --foreground: #2F2A2A;
+  --card: #FFFFFF;
+  --card-foreground: #2F2A2A;
+  --popover: #FFFFFF;
+  --popover-foreground: #2F2A2A;
+  --primary: #C7392E;
+  --primary-foreground: #FFFFFF;
+  --secondary: #F0EAE6;
+  --secondary-foreground: #2F2A2A;
+  --muted: #F0EAE6;
+  --muted-foreground: #6B5E5C;
+  --accent: #5C7A82;
+  --accent-foreground: #FFFFFF;
+  --destructive: #B42318;
+  --border: #DDD4CF;
+  --input: #E8DDD8;
+  --ring: #C7392E;
+  --chart-1: #C7392E;
+  --chart-2: #5C7A82;
+  --chart-3: #F0847B;
   --chart-4: #625251;
-  --chart-5: #c0a3a1;
-  --sidebar: #ffffff;
-  --sidebar-foreground: #2f2a2a;
-  --sidebar-primary: #c7392e;
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #efe9e8;
-  --sidebar-accent-foreground: #2f2a2a;
-  --sidebar-border: #c0a3a1;
-  --sidebar-ring: #c7392e;
+  --chart-5: #C0A3A1;
+  --sidebar: #FFFFFF;
+  --sidebar-foreground: #2F2A2A;
+  --sidebar-primary: #C7392E;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #F0EAE6;
+  --sidebar-accent-foreground: #2F2A2A;
+  --sidebar-border: #DDD4CF;
+  --sidebar-ring: #C7392E;
 }
 
 .dark {
@@ -121,6 +125,9 @@
 
   body {
     @apply bg-background text-foreground antialiased;
-    font-family: "Nunito", "Inter", "Noto Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+  }
+
+  html {
+    scroll-behavior: smooth;
   }
 }
