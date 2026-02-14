@@ -1,18 +1,18 @@
 import * as React from 'react';
 
 import { siteCopy } from '@/content/site-copy';
-import { WavyDivider } from '@/components/decorative/ArtShapes';
+import { OrganicDivider } from '@/components/decorative/ArtShapes';
 
 export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="px-5 pt-0 pb-8 md:px-8">
-      <WavyDivider className="mb-8 w-full text-border" />
+    <footer className="px-6 pb-10 pt-0 md:px-10">
+      <OrganicDivider className="mb-10 h-4 w-full text-border" />
 
-      <div className="mx-auto flex max-w-5xl flex-col items-center gap-4 text-center">
+      <div className="mx-auto flex max-w-5xl flex-col items-center gap-5 text-center">
         {/* Brand */}
-        <span className="font-serif text-lg font-semibold text-foreground">
+        <span className="font-serif text-xl font-bold text-foreground">
           {siteCopy.brandName}
         </span>
         <p className="text-xs text-muted-foreground">
@@ -20,12 +20,12 @@ export function Footer() {
         </p>
 
         {/* Nav links */}
-        <nav className="flex flex-wrap justify-center gap-4" aria-label="Πλοήγηση υποσέλιδου">
+        <nav className="flex flex-wrap justify-center gap-5" aria-label="Πλοήγηση υποσέλιδου">
           {siteCopy.navItems.map((item) => (
             <a
               key={item.label}
               href={item.href}
-              className="text-xs text-muted-foreground transition-colors hover:text-foreground"
+              className="text-xs text-muted-foreground transition-colors duration-300 hover:text-foreground"
             >
               {item.label}
             </a>
@@ -33,13 +33,13 @@ export function Footer() {
         </nav>
 
         {/* Built by */}
-        <p className="text-[11px] text-muted-foreground/60">
+        <p className="text-[11px] text-muted-foreground/50">
           {siteCopy.footer.builtBy}{' '}
           <a
             href={siteCopy.footer.builtByLink.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="underline underline-offset-2 hover:text-foreground"
+            className="underline underline-offset-2 transition-colors hover:text-foreground"
           >
             {siteCopy.footer.builtByLink.label}
           </a>

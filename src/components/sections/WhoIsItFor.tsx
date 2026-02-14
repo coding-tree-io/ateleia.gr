@@ -1,29 +1,29 @@
 import * as React from 'react';
 
 import { siteCopy } from '@/content/site-copy';
-import { FreehandCircle } from '@/components/decorative/ArtShapes';
+import { AbstractFace } from '@/components/decorative/ArtShapes';
+import { useReveal } from '@/hooks/use-reveal';
 
 export function WhoIsItFor() {
-  return (
-    <section className="relative px-5 py-16 md:px-8 md:py-24">
-      <FreehandCircle className="absolute -right-10 bottom-0 w-36 text-accent" />
+  const ref = useReveal<HTMLElement>();
 
-      <div className="mx-auto max-w-3xl">
-        <h2 className="font-serif text-3xl font-semibold leading-tight text-foreground text-balance md:text-4xl">
+  return (
+    <section ref={ref} className="reveal relative overflow-hidden px-6 py-20 md:px-10 md:py-28">
+      <AbstractFace className="absolute -right-16 -top-10 w-[380px] text-accent animate-gentle-float md:w-[440px]" />
+
+      <div className="relative mx-auto max-w-3xl">
+        <h2 className="font-serif text-3xl font-bold leading-tight text-foreground text-balance md:text-4xl lg:text-5xl">
           {siteCopy.whoIsItFor.title}
         </h2>
 
-        <ul className="mt-8 space-y-4" role="list">
+        <ul className="mt-10 space-y-5" role="list">
           {siteCopy.whoIsItFor.items.map((item, i) => (
             <li
               key={i}
-              className="flex items-start gap-3 text-base leading-relaxed text-muted-foreground"
+              className="reveal-child flex items-start gap-4 text-base leading-relaxed text-muted-foreground"
             >
-              <span
-                className="mt-2 block h-2 w-2 shrink-0 rounded-full bg-primary/60"
-                aria-hidden="true"
-              />
-              {item}
+              <span className="mt-2.5 flex size-2.5 shrink-0 rounded-full bg-primary/50" aria-hidden="true" />
+              <span className="md:text-lg">{item}</span>
             </li>
           ))}
         </ul>
