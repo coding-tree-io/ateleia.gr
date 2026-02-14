@@ -19,7 +19,12 @@ export function Trust() {
           </p>
         </div>
 
-        <div className="no-scrollbar mt-8 overflow-x-auto pb-2" role="region" aria-label="Σημεία εμπιστοσύνης">
+        <div
+          className="no-scrollbar mt-8 overflow-x-auto pb-2 outline-none focus-visible:ring-2 focus-visible:ring-primary/35 focus-visible:ring-offset-2"
+          role="region"
+          aria-label="Σημεία εμπιστοσύνης"
+          tabIndex={0}
+        >
           <div className="flex w-max gap-4 pr-6">
             {siteCopy.trust.markers.map((marker) => (
               <article

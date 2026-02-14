@@ -1,50 +1,42 @@
 import * as React from 'react';
 
 import { siteCopy } from '@/content/site-copy';
-import { OrganicDivider } from '@/components/decorative/ArtShapes';
 
 export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="px-6 pb-10 pt-0 md:px-10">
-      <OrganicDivider className="mb-10 h-4 w-full text-border" />
-
-      <div className="mx-auto flex max-w-5xl flex-col items-center gap-5 text-center">
-        {/* Brand */}
-        <span className="font-serif text-xl font-bold text-foreground">
-          {siteCopy.brandName}
-        </span>
-        <p className="text-xs text-muted-foreground">
-          {siteCopy.footer.copyright}
-        </p>
-
-        {/* Nav links */}
-        <nav className="flex flex-wrap justify-center gap-5" aria-label="Πλοήγηση υποσέλιδου">
-          {siteCopy.navItems.map((item) => (
-            <a
-              key={item.label}
-              href={item.href}
-              className="text-xs text-muted-foreground transition-colors duration-300 hover:text-foreground"
-            >
-              {item.label}
-            </a>
-          ))}
-        </nav>
-
-        {/* Built by */}
-        <p className="text-[11px] text-muted-foreground/50">
+    <footer className="border-t border-border/60 bg-background/95 px-6 py-10 md:px-10">
+      <div className="mx-auto flex w-full max-w-6xl flex-col items-center gap-6 md:flex-row md:justify-between">
+        <p className="text-center text-sm leading-relaxed text-muted-foreground md:text-left">
           {siteCopy.footer.builtBy}{' '}
           <a
             href={siteCopy.footer.builtByLink.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="underline underline-offset-2 transition-colors hover:text-foreground"
+            className="font-semibold text-foreground underline underline-offset-4 transition-colors hover:text-primary"
           >
             {siteCopy.footer.builtByLink.label}
           </a>
-          {` \u00A9 ${year}`}
+          .
         </p>
+
+        <nav className="flex flex-wrap items-center justify-center gap-4 md:gap-6" aria-label="Πλοήγηση υποσέλιδου">
+          {siteCopy.navItems.map((item) => (
+            <a
+              key={item.label}
+              href={item.href}
+              className="text-sm font-medium text-muted-foreground transition-colors duration-300 hover:text-foreground"
+            >
+              {item.label}
+            </a>
+          ))}
+        </nav>
+      </div>
+
+      <div className="mx-auto mt-6 flex w-full max-w-6xl flex-col items-center gap-2 border-t border-border/45 pt-5 text-center md:flex-row md:justify-between md:text-left">
+        <p className="text-sm text-muted-foreground">{siteCopy.footer.copyright}</p>
+        <p className="text-sm text-muted-foreground">© {year} {siteCopy.brandName}. Με επιφύλαξη παντός δικαιώματος.</p>
       </div>
     </footer>
   );
