@@ -53,13 +53,15 @@ corepack pnpm build
 
 ## GitHub Pages configuration
 
-`astro.config.mjs` is configured for root-path deployment:
+`astro.config.mjs` is configured for GitHub project pages deployment:
 
-- `site: "https://ateleia.gr"`
-- `base: "/"`
+- `site: "https://coding-tree-io.github.io"`
+- `base: "/ateleia.gr/"`
 - `output: "static"`
 
-Deployment workflow on `main` publishes the homepage artifact from `dist`.
+Deployment workflow on `main` publishes the homepage artifact from `dist` to:
+
+- `https://coding-tree-io.github.io/ateleia.gr/`
 
 ## Key files
 

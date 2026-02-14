@@ -12,7 +12,7 @@ import {
 import { ParallaxLayer } from '@/components/decorative/ParallaxLayer';
 
 export function Hero() {
-  const logoSrc = '/images/client-review/logo.png';
+  const logoSrc = `${import.meta.env.BASE_URL}images/client-review/logo.png`;
 
   return (
     <section id="hero" className="relative overflow-hidden px-6 pb-20 pt-20 md:px-10 md:pb-28 md:pt-28 lg:pt-32">

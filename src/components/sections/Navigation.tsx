@@ -14,7 +14,7 @@ export function Navigation() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const logoSrc = '/images/client-review/logo.png';
+  const logoSrc = `${import.meta.env.BASE_URL}images/client-review/logo.png`;
 
   return (
     <header
