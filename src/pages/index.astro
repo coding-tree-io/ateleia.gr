@@ -1,26 +1,28 @@
 ---
-import '../styles/global.css';
-// Component Imports
-import Button from '../components/Button.astro';
+import '@/styles/global.css';
 
-// Full Astro Component Syntax:
-// https://docs.astro.build/basics/astro-components/
+import { HomePageScaffold } from '@/components/home/HomePageScaffold';
+import { approvedTheme } from '@/config/approved-theme';
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro + TailwindCSS</title>
-	</head>
-
-	<body>
-		<div class="grid place-items-center h-screen content-center">
-			<Button>Tailwind Button in Astro!</Button>
-			<a href="/markdown-page" class="p-4 underline">Markdown is also supported...</a>
-		</div>
-	</body>
+<html lang="el">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#C7392E" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="generator" content={Astro.generator} />
+    <meta
+      name="description"
+      content="Ατέλεια — Ψυχοθεραπεία μέσω Τέχνης. Ένας ασφαλής και δημιουργικός χώρος για προσωπική εξέλιξη μέσα από τη δημιουργική έκφραση."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+    <link href={approvedTheme.typography.stylesheetUrl} rel="stylesheet" />
+    <title>Ατέλεια | Ψυχοθεραπεία μέσω Τέχνης</title>
+  </head>
+  <body class="min-h-screen bg-background text-foreground">
+    <HomePageScaffold client:load />
+  </body>
 </html>
