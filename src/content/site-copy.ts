@@ -338,7 +338,5 @@ export const siteCopy = {
 
   footer: {
     copyright: 'Ατέλεια - Ψυχοθεραπεία μέσω Τέχνης',
-    builtBy: 'Κατασκευή ιστοσελίδας',
-    builtByLink: { label: 'Coding Tree', url: 'https://codingtree.io' },
   },
 } as const;
