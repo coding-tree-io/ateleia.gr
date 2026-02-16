@@ -20,14 +20,14 @@ export function Benefits() {
   const ref = useReveal<HTMLElement>();
 
   return (
-    <section ref={ref} className="reveal relative overflow-hidden px-6 py-20 md:px-10 md:py-28">
-      <ParallaxLayer speed={0.12} className="absolute -left-24 bottom-[-10%] w-[760px] opacity-90">
+    <section ref={ref} className="reveal relative overflow-hidden px-4 py-16 sm:px-6 sm:py-20 md:px-10 md:py-28">
+      <ParallaxLayer speed={0.12} className="absolute -left-14 bottom-[-8%] w-[320px] opacity-45 md:-left-24 md:bottom-[-10%] md:w-[760px] md:opacity-90">
         <ExpressiveStrokes />
       </ParallaxLayer>
 
-      <div className="relative mx-auto max-w-6xl">
-        <div className="grid gap-8 lg:grid-cols-[1.02fr_0.98fr] lg:items-end">
-          <h2 className="font-serif text-3xl font-bold leading-tight text-foreground text-balance md:text-4xl lg:text-5xl">
+      <div className="relative z-10 mx-auto max-w-6xl">
+        <div className="grid gap-7 lg:grid-cols-[1.02fr_0.98fr] lg:items-end lg:gap-8">
+          <h2 className="font-serif text-3xl font-bold leading-tight text-balance text-foreground md:text-4xl lg:text-5xl">
             {siteCopy.benefits.title}
           </h2>
 
@@ -36,12 +36,12 @@ export function Benefits() {
           </p>
         </div>
 
-        <div className="mt-12 grid gap-5 md:grid-cols-6">
+        <div className="mt-10 grid gap-5 md:mt-12 md:grid-cols-6">
           {siteCopy.benefits.items.map((item, index) => (
             <article
               key={item.title}
               className={cn(
-                'reveal-child group paper-panel rounded-3xl border border-border/45 p-7 transition-all duration-500 hover:-translate-y-1.5 hover:shadow-xl',
+                'reveal-child group paper-panel rounded-3xl border border-border/45 p-6 transition-all duration-500 hover:-translate-y-1 hover:shadow-xl md:p-7',
                 cardLayout[index]
               )}
             >
@@ -51,7 +51,7 @@ export function Benefits() {
                 </svg>
               </div>
 
-              <h3 className="font-serif text-2xl font-semibold text-foreground">{item.title}</h3>
+              <h3 className="break-words font-serif text-2xl font-semibold text-foreground">{item.title}</h3>
               <p className="mt-3 text-sm leading-relaxed text-muted-foreground md:text-base">{item.description}</p>
             </article>
           ))}

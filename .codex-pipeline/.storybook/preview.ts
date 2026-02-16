@@ -1,13 +1,16 @@
-import "../generated/tokens.css";
-import "../stories/base.css";
+import type { Preview } from '@storybook/react-vite';
 
-const preview = {
+import '../../src/styles/global.css';
+import '../generated/tokens.css';
+import '../stories/base.css';
+
+const preview: Preview = {
   parameters: {
-    layout: "centered",
+    layout: 'fullscreen',
     controls: {
-      expanded: true
-    }
-  }
+      expanded: true,
+    },
+  },
 };
 
 export default preview;

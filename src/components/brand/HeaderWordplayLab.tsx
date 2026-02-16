@@ -100,8 +100,8 @@ function HeaderBarPreview({ Wordmark, state, mobile = false }: HeaderBarPreviewP
             src={logoSrc}
             alt="Λογότυπο Ατέλεια"
             className={cn(
-              'shrink-0 rounded-lg border border-border/60 bg-card object-cover shadow-sm',
-              mobile ? 'size-8' : 'size-9'
+              'shrink-0 rounded-lg border border-border/60 bg-card object-contain px-1 shadow-sm',
+              mobile ? 'h-8 w-12' : 'h-9 w-14'
             )}
           />
           <div className="min-w-0">
@@ -111,7 +111,7 @@ function HeaderBarPreview({ Wordmark, state, mobile = false }: HeaderBarPreviewP
         </div>
 
         {mobile ? (
-          <span className="inline-flex size-8 items-center justify-center rounded-md border border-border/55 text-muted-foreground">≡</span>
+          <span className="inline-flex size-11 items-center justify-center rounded-md border border-border/55 text-muted-foreground">≡</span>
         ) : (
           <nav className="hidden items-center gap-4 md:flex" aria-label="Header preview navigation">
             {siteCopy.navItems.slice(0, 3).map((item) => (
@@ -128,7 +128,7 @@ function HeaderBarPreview({ Wordmark, state, mobile = false }: HeaderBarPreviewP
 
 export function HeaderWordplayLab() {
   return (
-    <main className="mx-auto w-full max-w-6xl px-6 py-12 md:px-10 md:py-16">
+    <main className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 md:px-10 md:py-16">
       <header className="mb-8 space-y-3 md:mb-10">
         <Badge variant="outline" className="border-border/60 bg-card/70">
           Header exploration

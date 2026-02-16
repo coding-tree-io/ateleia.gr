@@ -1,0 +1,108 @@
+---
+import '@/styles/global.css';
+
+import { approvedTheme } from '@/config/approved-theme';
+
+const homeHref = `${import.meta.env.BASE_URL}`;
+const ccByHref = 'https://creativecommons.org/licenses/by/3.0/';
+
+const credits = [
+  {
+    title: 'Abstract Art',
+    creator: 'Kristina Margaryan',
+    sourceUrl: 'https://thenounproject.com/icon/abstract-art-4348166/',
+    fileName: 'noun-abstract-art-4348166.svg',
+  },
+  {
+    title: 'Abstract Art',
+    creator: 'Kristina Margaryan',
+    sourceUrl: 'https://thenounproject.com/icon/abstract-art-4348146/',
+    fileName: 'noun-abstract-art-4348146.svg',
+  },
+  {
+    title: 'Labyrinth',
+    creator: 'Kristina Margaryan',
+    sourceUrl: 'https://thenounproject.com/icon/labyrinth-5703299/',
+    fileName: 'noun-labyrinth-5703299.svg',
+  },
+];
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#C7392E" />
+    <link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL}favicon.svg`} />
+    <link rel="icon" href={`${import.meta.env.BASE_URL}favicon.ico`} />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content="Credits and license references for third-party visual assets used on ateleia.gr." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+    <link href={approvedTheme.typography.stylesheetUrl} rel="stylesheet" />
+    <title>Credits | Ateleia</title>
+  </head>
+  <body class="min-h-screen bg-background text-foreground">
+    <main class="mx-auto w-full max-w-4xl px-4 py-10 sm:px-6 md:px-10 md:py-16">
+      <a
+        href={homeHref}
+        class="inline-flex min-h-11 items-center rounded-xl px-3 text-sm font-semibold text-muted-foreground underline underline-offset-4 transition-colors hover:text-foreground"
+      >
+        Back to home
+      </a>
+
+      <header class="mt-4 border-b border-border/60 pb-6">
+        <h1 class="font-serif text-4xl font-bold leading-tight text-foreground md:text-5xl">Credits</h1>
+        <p class="mt-3 text-base leading-relaxed text-muted-foreground">
+          This page lists required creator credits and license references for third-party visual assets used on ateleia.gr.
+        </p>
+      </header>
+
+      <section class="mt-8 rounded-3xl border border-border/50 bg-card/70 p-6 md:p-8">
+        <h2 class="font-serif text-2xl font-semibold text-foreground">Noun Project</h2>
+
+        <ul class="mt-4 space-y-5 text-sm leading-relaxed text-muted-foreground md:text-base">
+          {
+            credits.map((item) => (
+              <li>
+                <p>
+                  {item.title} by {item.creator} from{' '}
+                  <a
+                    href={item.sourceUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="font-semibold text-foreground underline underline-offset-4 transition-colors hover:text-primary"
+                  >
+                    Noun Project
+                  </a>{' '}
+                  (
+                  <a
+                    href={ccByHref}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="font-semibold text-foreground underline underline-offset-4 transition-colors hover:text-primary"
+                  >
+                    CC BY 3.0
+                  </a>
+                  )
+                </p>
+                <p class="mt-1 text-xs text-muted-foreground/85">Source file: {item.fileName}</p>
+              </li>
+            ))
+          }
+        </ul>
+
+        <p class="mt-6 text-sm leading-relaxed text-muted-foreground md:text-base">
+          Modifications: removed embedded attribution text from source SVG files, optimized each file with SVGO, and applied palette-based variants (`minimal`, `whisper`, `vivid`) for production site usage.
+        </p>
+      </section>
+
+      <section class="mt-6 rounded-3xl border border-border/50 bg-card/60 p-6 md:p-8">
+        <h2 class="font-serif text-2xl font-semibold text-foreground">External Links Notice</h2>
+        <p class="mt-4 text-sm leading-relaxed text-muted-foreground md:text-base">
+          External links point to third-party websites that have their own terms of use and privacy policies.
+        </p>
+      </section>
+    </main>
+  </body>
+</html>

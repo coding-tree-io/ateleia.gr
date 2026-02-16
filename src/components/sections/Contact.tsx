@@ -1,11 +1,12 @@
 import * as React from 'react';
-import { Mail, Phone, MapPin } from 'lucide-react';
+import { Mail, MapPin, Phone } from 'lucide-react';
 
 import { siteCopy } from '@/content/site-copy';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { BotanicalCluster } from '@/components/decorative/ArtShapes';
+import { NounLabyrinth5703299 } from '@/components/decorative/NounLabyrinth5703299';
 import { ParallaxLayer } from '@/components/decorative/ParallaxLayer';
 import { useReveal } from '@/hooks/use-reveal';
 
@@ -13,29 +14,30 @@ export function Contact() {
   const ref = useReveal<HTMLElement>();
 
   return (
-    <section id="contact" ref={ref} className="reveal relative overflow-hidden px-6 py-20 md:px-10 md:py-28">
-      <ParallaxLayer speed={0.16} className="absolute -right-24 -top-8 w-[430px] md:w-[560px]">
+    <section id="contact" ref={ref} className="reveal relative overflow-hidden px-4 py-16 sm:px-6 sm:py-20 md:px-10 md:py-28">
+      <ParallaxLayer speed={0.16} className="absolute -right-10 -top-6 w-[220px] opacity-45 md:-right-24 md:-top-8 md:w-[560px] md:opacity-100">
         <BotanicalCluster />
       </ParallaxLayer>
+      <ParallaxLayer speed={0.09} className="pointer-events-none absolute -left-8 bottom-[-8%] w-[132px] opacity-45 md:-left-10 md:bottom-[-10%] md:w-[320px] md:opacity-50">
+        <NounLabyrinth5703299 variant="minimal" className="md:animate-gentle-float" />
+      </ParallaxLayer>
 
-      <div className="relative mx-auto max-w-6xl">
-        <div className="grid gap-12 lg:grid-cols-[1fr_0.95fr] lg:gap-16">
+      <div className="relative z-10 mx-auto max-w-6xl">
+        <div className="grid gap-10 lg:grid-cols-[1fr_0.95fr] lg:gap-16">
           <div>
-            <h2 className="font-serif text-3xl font-bold leading-tight text-foreground text-balance md:text-4xl lg:text-5xl">
+            <h2 className="font-serif text-3xl font-bold leading-tight text-balance text-foreground md:text-4xl lg:text-5xl">
               {siteCopy.contact.title}
             </h2>
-            <p className="mt-5 text-base leading-relaxed text-muted-foreground md:text-lg">
-              {siteCopy.contact.description}
-            </p>
+            <p className="mt-5 text-base leading-relaxed text-muted-foreground md:text-lg">{siteCopy.contact.description}</p>
 
-            <div className="mt-10 space-y-5">
+            <div className="mt-9 space-y-5">
               {siteCopy.contact.contactItems.map((item) => {
                 const Icon = item.label === 'Email' ? Mail : Phone;
                 return (
                   <a
                     key={item.label}
                     href={item.href}
-                    className="group flex items-center gap-4 text-base text-foreground transition-colors duration-300 hover:text-primary"
+                    className="group flex min-h-11 items-center gap-4 text-base text-foreground transition-colors duration-300 hover:text-primary"
                   >
                     <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-accent/25 text-[var(--tone-ink)] transition-colors duration-300 group-hover:bg-primary group-hover:text-primary-foreground">
                       <Icon className="size-5" aria-hidden="true" />
@@ -59,7 +61,7 @@ export function Contact() {
           </div>
 
           <div className="space-y-5">
-            <div className="paper-panel rounded-3xl border border-border/45 p-7 md:p-9">
+            <div className="paper-panel rounded-3xl border border-border/45 p-6 md:p-9">
               <form className="space-y-5" onSubmit={(event) => event.preventDefault()}>
                 <div className="space-y-2">
                   <label htmlFor="contact-name" className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
@@ -108,14 +110,14 @@ export function Contact() {
                     type="checkbox"
                     name="consent"
                     required
-                    className="mt-1 size-4 shrink-0 rounded border-border accent-primary"
+                    className="mt-1 size-11 shrink-0 rounded border-border accent-primary"
                   />
                   <span className="text-xs leading-relaxed text-muted-foreground">{siteCopy.contact.formLabels.consent}</span>
                 </label>
 
                 <Button
                   type="submit"
-                  className="w-full rounded-full py-6 text-base shadow-lg shadow-primary/15 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-primary/25"
+                  className="w-full rounded-full text-base shadow-lg shadow-primary/15 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-primary/25"
                 >
                   {siteCopy.contact.formLabels.submit}
                 </Button>

@@ -8,15 +8,13 @@ export function Trust() {
   const ref = useReveal<HTMLElement>();
 
   return (
-    <section ref={ref} className="reveal px-6 py-16 md:px-10 md:py-20">
+    <section ref={ref} className="reveal px-4 py-14 sm:px-6 sm:py-16 md:px-10 md:py-20">
       <div className="mx-auto max-w-6xl">
         <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
           <h2 className="font-serif text-3xl font-bold leading-tight text-foreground md:text-4xl">
             {siteCopy.trust.title}
           </h2>
-          <p className="max-w-xl text-sm leading-relaxed text-muted-foreground md:text-base">
-            {siteCopy.trust.intro}
-          </p>
+          <p className="max-w-xl text-sm leading-relaxed text-muted-foreground md:text-base">{siteCopy.trust.intro}</p>
         </div>
 
         <div
@@ -29,10 +27,10 @@ export function Trust() {
             {siteCopy.trust.markers.map((marker) => (
               <article
                 key={marker.title}
-                className="reveal-child paper-panel min-w-[19rem] max-w-[19rem] rounded-3xl border border-border/45 p-6 transition-all duration-500 hover:-translate-y-1 hover:shadow-lg"
+                className="reveal-child paper-panel min-w-[17.5rem] max-w-[17.5rem] rounded-3xl border border-border/45 p-6 transition-all duration-500 hover:-translate-y-1 hover:shadow-lg md:min-w-[19rem] md:max-w-[19rem]"
               >
                 <div className="flex items-center gap-3">
-                  <div className="flex size-10 items-center justify-center rounded-xl bg-accent/25 text-[var(--tone-ink)]">
+                  <div className="flex size-11 items-center justify-center rounded-xl bg-accent/25 text-[var(--tone-ink)]">
                     <ShieldCheck className="size-5" aria-hidden="true" />
                   </div>
                   <h3 className="font-serif text-xl font-semibold text-foreground">{marker.title}</h3>

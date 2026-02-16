@@ -1,22 +1,23 @@
 import * as React from 'react';
-import { Clock, MapPin, Users, ChevronDown } from 'lucide-react';
+import { ChevronDown, Clock, MapPin, Users } from 'lucide-react';
 
 import { siteCopy } from '@/content/site-copy';
 import { Button } from '@/components/ui/button';
-import { CanvasBrush, ConcentricRings, PaintSplashes } from '@/components/decorative/ArtShapes';
+import { ConcentricRings, PaintSplashes } from '@/components/decorative/ArtShapes';
+import { NounAbstractArt4348146 } from '@/components/decorative/NounAbstractArt4348146';
 import { ParallaxLayer } from '@/components/decorative/ParallaxLayer';
 import { useReveal } from '@/hooks/use-reveal';
 
 function ServiceCard({ service }: { service: (typeof siteCopy.services)[number] }) {
   return (
-    <article className="reveal-child group paper-panel flex flex-col rounded-3xl border border-border/45 p-7 transition-all duration-500 hover:-translate-y-1.5 hover:shadow-xl md:p-9">
-      <h3 className="font-serif text-2xl font-bold text-foreground md:text-3xl">{service.title}</h3>
+    <article className="reveal-child group paper-panel flex flex-col rounded-3xl border border-border/45 p-6 transition-all duration-500 hover:-translate-y-1 hover:shadow-xl md:p-9">
+      <h3 className="break-words font-serif text-2xl font-bold text-foreground md:text-3xl">{service.title}</h3>
       <p className="mt-4 text-base leading-relaxed text-muted-foreground">{service.description}</p>
 
       <div className="mt-7 space-y-3">
         <div className="flex items-start gap-3 text-sm text-muted-foreground">
-          <div className="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-lg bg-accent/25 text-[var(--tone-ink)]">
-            <Users className="size-3.5" aria-hidden="true" />
+          <div className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg bg-accent/25 text-[var(--tone-ink)]">
+            <Users className="size-4" aria-hidden="true" />
           </div>
           <span>
             <span className="font-semibold text-foreground">{'Ιδανικό για: '}</span>
@@ -24,8 +25,8 @@ function ServiceCard({ service }: { service: (typeof siteCopy.services)[number] 
           </span>
         </div>
         <div className="flex items-center gap-3 text-sm text-muted-foreground">
-          <div className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-accent/25 text-[var(--tone-ink)]">
-            <Clock className="size-3.5" aria-hidden="true" />
+          <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-accent/25 text-[var(--tone-ink)]">
+            <Clock className="size-4" aria-hidden="true" />
           </div>
           <span>
             {service.format}
@@ -34,8 +35,8 @@ function ServiceCard({ service }: { service: (typeof siteCopy.services)[number] 
           </span>
         </div>
         <div className="flex items-center gap-3 text-sm text-muted-foreground">
-          <div className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-accent/25 text-[var(--tone-ink)]">
-            <MapPin className="size-3.5" aria-hidden="true" />
+          <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-accent/25 text-[var(--tone-ink)]">
+            <MapPin className="size-4" aria-hidden="true" />
           </div>
           <span>{service.location}</span>
         </div>
@@ -53,7 +54,7 @@ function FaqAccordion() {
   const ref = useReveal<HTMLDivElement>();
 
   return (
-    <div ref={ref} className="reveal mt-20">
+    <div ref={ref} className="reveal mt-16 md:mt-20">
       <h3 className="font-serif text-2xl font-bold text-foreground md:text-3xl">{siteCopy.faqTitle}</h3>
       <div className="mt-8 space-y-3">
         {siteCopy.faqItems.map((item) => (
@@ -61,14 +62,14 @@ function FaqAccordion() {
             key={item.question}
             className="reveal-child group rounded-2xl border border-border/40 bg-card/70 backdrop-blur-sm transition-all duration-300 hover:shadow-sm open:shadow-md"
           >
-            <summary className="flex cursor-pointer items-center justify-between gap-4 px-6 py-5 text-sm font-semibold text-foreground [&::-webkit-details-marker]:hidden">
+            <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-4 px-5 py-3 text-base font-semibold text-foreground [&::-webkit-details-marker]:hidden md:px-6 md:py-4">
               {item.question}
               <ChevronDown
                 className="size-4 shrink-0 text-muted-foreground transition-transform duration-300 group-open:rotate-180"
                 aria-hidden="true"
               />
             </summary>
-            <div className="px-6 pb-5">
+            <div className="px-5 pb-4 md:px-6 md:pb-5">
               <p className="text-sm leading-relaxed text-muted-foreground">{item.answer}</p>
             </div>
           </details>
@@ -83,20 +84,20 @@ export function Services() {
   const [emailContact, phoneContact] = siteCopy.contact.contactItems;
 
   return (
-    <section id="services" ref={ref} className="reveal relative overflow-hidden px-6 py-20 md:px-10 md:py-28">
-      <ParallaxLayer speed={0.18} className="absolute -right-32 -top-24 w-[560px] md:w-[660px]">
+    <section id="services" ref={ref} className="reveal relative overflow-hidden px-4 py-16 sm:px-6 sm:py-20 md:px-10 md:py-28">
+      <ParallaxLayer speed={0.18} className="absolute -right-16 -top-16 w-[260px] opacity-45 md:-right-32 md:-top-24 md:w-[660px] md:opacity-100">
         <ConcentricRings />
       </ParallaxLayer>
-      <ParallaxLayer speed={0.12} className="absolute -left-24 top-[8%] hidden w-[300px] lg:block">
-        <CanvasBrush />
+      <ParallaxLayer speed={0.12} className="absolute -left-10 top-[7%] w-[120px] opacity-50 md:-left-24 md:w-[300px] md:opacity-100">
+        <NounAbstractArt4348146 variant="vivid" />
       </ParallaxLayer>
-      <ParallaxLayer speed={0.24} className="absolute -left-24 bottom-[-16%] w-[400px] md:w-[520px]">
+      <ParallaxLayer speed={0.24} className="absolute -left-14 bottom-[-14%] w-[220px] opacity-45 md:-left-24 md:bottom-[-16%] md:w-[520px] md:opacity-100">
         <PaintSplashes />
       </ParallaxLayer>
 
-      <div className="relative mx-auto max-w-6xl">
+      <div className="relative z-10 mx-auto max-w-6xl">
         <div className="grid gap-7 lg:grid-cols-[1.04fr_0.96fr] lg:items-end">
-          <h2 className="font-serif text-3xl font-bold leading-tight text-foreground text-balance md:text-4xl lg:text-5xl">
+          <h2 className="font-serif text-3xl font-bold leading-tight text-balance text-foreground md:text-4xl lg:text-5xl">
             {siteCopy.servicesTitle}
           </h2>
           <p className="rounded-2xl border border-border/45 bg-card/70 p-5 text-sm leading-relaxed text-muted-foreground backdrop-blur-sm md:text-base">
@@ -104,7 +105,7 @@ export function Services() {
           </p>
         </div>
 
-        <div className="mt-12 grid gap-6 md:grid-cols-2 md:gap-8">
+        <div className="mt-10 grid gap-6 md:mt-12 md:grid-cols-2 md:gap-8">
           {siteCopy.services.map((service) => (
             <ServiceCard key={service.title} service={service} />
           ))}
@@ -112,22 +113,36 @@ export function Services() {
 
         <FaqAccordion />
 
-        <div className="paper-panel mt-20 flex flex-col items-center gap-5 rounded-3xl border border-border/45 p-8 text-center md:p-12">
+        <div className="paper-panel mt-16 flex flex-col items-center gap-5 rounded-3xl border border-border/45 p-7 text-center md:mt-20 md:p-12">
           <h3 className="font-serif text-2xl font-bold text-foreground md:text-3xl">{'Έτοιμοι να ξεκινήσετε;'}</h3>
           <p className="max-w-lg text-sm leading-relaxed text-muted-foreground">
             {'Επικοινωνήστε μαζί μου για να προγραμματίσουμε μια πρώτη γνωριμία.'}
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-3">
-            <Button asChild size="lg" className="rounded-full px-8 shadow-lg shadow-primary/15 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-primary/30">
+          <div className="flex w-full flex-col items-stretch justify-center gap-3 sm:w-auto sm:flex-row sm:flex-wrap">
+            <Button
+              asChild
+              size="lg"
+              className="w-full rounded-full shadow-lg shadow-primary/15 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-primary/30 sm:w-auto"
+            >
               <a href="#contact">{'Κλείστε ραντεβού'}</a>
             </Button>
             {emailContact && (
-              <Button asChild variant="outline" size="lg" className="rounded-full border-border/60 bg-card/60 px-8 transition-all duration-300 hover:border-accent">
+              <Button
+                asChild
+                variant="outline"
+                size="lg"
+                className="w-full rounded-full border-border/60 bg-card/60 transition-all duration-300 hover:border-accent sm:w-auto"
+              >
                 <a href={`mailto:${emailContact.value}`}>{emailContact.value}</a>
               </Button>
             )}
             {phoneContact && (
-              <Button asChild variant="outline" size="lg" className="rounded-full border-border/60 bg-card/60 px-8 transition-all duration-300 hover:border-accent">
+              <Button
+                asChild
+                variant="outline"
+                size="lg"
+                className="w-full rounded-full border-border/60 bg-card/60 transition-all duration-300 hover:border-accent sm:w-auto"
+              >
                 <a href={phoneContact.href}>{phoneContact.value}</a>
               </Button>
             )}

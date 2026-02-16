@@ -9,22 +9,22 @@ export function About() {
   const ref = useReveal<HTMLElement>();
 
   return (
-    <section id="about" ref={ref} className="reveal relative overflow-hidden px-6 py-20 md:px-10 md:py-28">
-      <ParallaxLayer speed={0.16} className="absolute -left-20 top-2 w-[340px] md:w-[440px]">
+    <section id="about" ref={ref} className="reveal relative overflow-hidden px-4 py-16 sm:px-6 sm:py-20 md:px-10 md:py-28">
+      <ParallaxLayer speed={0.16} className="absolute -left-8 top-4 w-[170px] opacity-45 md:-left-20 md:top-2 md:w-[440px] md:opacity-100">
         <AbstractFace />
       </ParallaxLayer>
 
-      <div className="relative mx-auto grid max-w-6xl gap-12 lg:grid-cols-[1.08fr_0.92fr]">
+      <div className="relative z-10 mx-auto grid max-w-6xl gap-10 lg:grid-cols-[1.08fr_0.92fr] lg:gap-12">
         <div>
-          <h2 className="font-serif text-3xl font-bold leading-tight text-foreground text-balance md:text-4xl lg:text-5xl">
+          <h2 className="font-serif text-3xl font-bold leading-tight text-balance text-foreground md:text-4xl lg:text-5xl">
             {siteCopy.about.title}
           </h2>
 
-          <OrganicDivider className="my-8 h-4 w-44" />
+          <OrganicDivider className="my-8 h-4 w-40 md:w-44" />
 
           <div className="space-y-5">
             {siteCopy.about.bio.map((paragraph, index) => (
-              <p key={index} className="reveal-child text-base leading-[1.8] text-muted-foreground md:text-lg">
+              <p key={index} className="reveal-child text-base leading-[1.78] text-muted-foreground md:text-lg">
                 {paragraph}
               </p>
             ))}

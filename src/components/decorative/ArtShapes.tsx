@@ -154,29 +154,6 @@ export function HandCircle({ className }: { className?: string }) {
   );
 }
 
-export function CanvasBrush({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 560 380" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} aria-hidden="true">
-      <rect x="78" y="48" width="274" height="206" rx="12" fill="#ffffff" fillOpacity="0.5" />
-      <rect x="88" y="58" width="254" height="186" rx="8" stroke={palette.ink} strokeWidth="3" strokeOpacity="0.28" />
-
-      <path d="M122 186 C146 138, 214 132, 248 176 C272 206, 318 202, 334 162" stroke={palette.teal} strokeWidth="16" strokeLinecap="round" strokeOpacity="0.3" />
-      <path d="M126 214 C182 184, 246 220, 294 200" stroke={palette.terracotta} strokeWidth="12" strokeLinecap="round" strokeOpacity="0.3" />
-      <path d="M128 118 C182 96, 238 106, 298 96" stroke={palette.ochre} strokeWidth="10" strokeLinecap="round" strokeOpacity="0.32" />
-      <circle cx="164" cy="102" r="10" fill={palette.tealSoft} fillOpacity="0.35" />
-      <circle cx="286" cy="144" r="11" fill={palette.terracottaSoft} fillOpacity="0.34" />
-      <circle cx="226" cy="210" r="8" fill={palette.ochreSoft} fillOpacity="0.4" />
-
-      <path d="M362 292 L446 188" stroke={palette.ink} strokeWidth="14" strokeLinecap="round" strokeOpacity="0.34" />
-      <path d="M436 198 L468 158 L492 182 L458 220 Z" fill={palette.sage} fillOpacity="0.45" />
-      <path d="M358 296 L378 320 L406 286 L382 264 Z" fill={palette.terracotta} fillOpacity="0.4" />
-      <path d="M406 286 L458 220" stroke={palette.ochre} strokeWidth="8" strokeLinecap="round" strokeOpacity="0.32" />
-
-      <ellipse cx="214" cy="292" rx="136" ry="18" fill={palette.ink} fillOpacity="0.11" />
-    </svg>
-  );
-}
-
 export function WavyDivider({ className }: { className?: string }) {
   return className ? <PaintedEdgeDivider className={className} /> : <PaintedEdgeDivider />;
 }

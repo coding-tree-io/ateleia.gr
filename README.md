@@ -44,12 +44,47 @@ corepack pnpm install
 corepack pnpm dev
 ```
 
-## Verification
+For a clean rerun that clears Astro/Vite caches before starting dev:
+
+```sh
+corepack pnpm dev:clean
+```
+
+Manual cache cleanup only:
+
+```sh
+corepack pnpm clean:dev-cache
+```
+
+Cache targets: `.astro`, `node_modules/.astro`, `node_modules/.vite`.
+
+## Verification (Required)
+
+### Core app checks
 
 ```sh
 corepack pnpm check
 corepack pnpm build
 ```
+
+### Sidecar design checks (`.codex-pipeline`)
+
+```sh
+npm --prefix .codex-pipeline install
+npm --prefix .codex-pipeline run setup:browsers
+$env:BASE_URL="https://coding-tree-io.github.io/ateleia.gr/"
+npm --prefix .codex-pipeline run verify:all
+```
+
+For local dev verification, point `BASE_URL` to your local URL (for example `http://localhost:4321/ateleia.gr/`).
+
+## SVG normalization workflow (Noun Project assets)
+
+```sh
+corepack pnpm svg:noun:normalize
+```
+
+This command strips embedded source attribution text from local source SVGs in `docs/`, optimizes them with SVGO, and writes normalized tracked files to `src/assets/noun/normalized/`. Public attribution is maintained on `/credits`.
 
 ## GitHub Pages configuration
 
@@ -69,3 +104,4 @@ Deployment workflow on `main` publishes the homepage artifact from `dist` to:
 - `src/content/site-copy.ts`: structured Greek copy/placeholders for homepage
 - `src/components/home/HomePageScaffold.tsx`: homepage sections built with shadcn components
 - `src/pages/index.astro`: production entry page
+- `.codex-pipeline/README.md`: sidecar verification details and visual baseline workflow

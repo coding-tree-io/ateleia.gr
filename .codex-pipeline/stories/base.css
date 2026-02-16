@@ -1,62 +1,13 @@
-:root {
-  font-family: "Segoe UI", Arial, sans-serif;
-}
-
 * {
   box-sizing: border-box;
 }
 
 body {
   margin: 0;
-  background: var(--color-surface-page);
-  color: var(--color-text-primary);
+  background: var(--background);
+  color: var(--foreground);
 }
 
-.canvas {
-  width: min(44rem, 100%);
-  padding: var(--size-space-md);
-}
-
-.card {
-  display: grid;
-  gap: var(--size-space-sm);
-  background: var(--color-surface-card);
-  border: 1px solid color-mix(in srgb, var(--color-brand-primary) 22%, white);
-  border-radius: var(--size-radius-md);
-  box-shadow: 0 20px 50px -28px color-mix(in srgb, var(--color-brand-primary) 35%, black);
-  padding: var(--size-space-lg);
-}
-
-.eyebrow {
-  margin: 0;
-  color: var(--color-brand-primary);
-  font-size: 0.875rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
-h1 {
-  margin: 0;
-  font-size: var(--size-font-title);
-  line-height: 1.2;
-}
-
-.body {
-  margin: 0;
-  color: var(--color-text-muted);
-  font-size: var(--size-font-body);
-  line-height: 1.6;
-}
-
-.cta {
-  width: fit-content;
-  border: 0;
-  border-radius: calc(var(--size-radius-md) - 0.2rem);
-  background: linear-gradient(125deg, var(--color-brand-primary), var(--color-brand-accent));
-  color: var(--color-brand-contrast);
-  cursor: pointer;
-  font: inherit;
-  font-weight: 700;
-  padding: 0.7rem 1.1rem;
+#storybook-root {
+  min-height: 100vh;
 }

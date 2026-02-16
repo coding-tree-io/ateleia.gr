@@ -7,13 +7,21 @@ export function useParallax<T extends HTMLElement = HTMLElement>(speed = 0.12) {
     const element = ref.current;
     if (!element) return;
 
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReducedMotion) return;
+    const reducedMotionMedia = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const mobileMedia = window.matchMedia('(max-width: 767px)');
+
+    const shouldDisable = () => reducedMotionMedia.matches || mobileMedia.matches;
 
     let frame = 0;
 
     const update = () => {
       frame = 0;
+
+      if (shouldDisable()) {
+        element.style.setProperty('--parallax-offset', '0px');
+        return;
+      }
+
       const rect = element.getBoundingClientRect();
       const viewportHeight = window.innerHeight || 1;
       const relativeCenter = rect.top + rect.height / 2 - viewportHeight / 2;
@@ -29,6 +37,8 @@ export function useParallax<T extends HTMLElement = HTMLElement>(speed = 0.12) {
     requestUpdate();
     window.addEventListener('scroll', requestUpdate, { passive: true });
     window.addEventListener('resize', requestUpdate);
+    reducedMotionMedia.addEventListener('change', requestUpdate);
+    mobileMedia.addEventListener('change', requestUpdate);
 
     return () => {
       if (frame !== 0) {
@@ -36,6 +46,8 @@ export function useParallax<T extends HTMLElement = HTMLElement>(speed = 0.12) {
       }
       window.removeEventListener('scroll', requestUpdate);
       window.removeEventListener('resize', requestUpdate);
+      reducedMotionMedia.removeEventListener('change', requestUpdate);
+      mobileMedia.removeEventListener('change', requestUpdate);
       element.style.removeProperty('--parallax-offset');
     };
   }, [speed]);
