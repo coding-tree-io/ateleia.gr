@@ -41,11 +41,17 @@ export function Footer() {
         </nav>
       </div>
 
-      <div className="mx-auto mt-6 flex w-full max-w-6xl flex-col items-center gap-2 border-t border-border/45 pt-5 text-center md:flex-row md:justify-between md:text-left">
+      <div className="mx-auto mt-6 flex w-full max-w-6xl flex-col items-center gap-2 border-t border-border/45 pt-5 text-center md:flex-row md:flex-wrap md:justify-between md:text-left">
         <p className="text-sm text-muted-foreground">{siteCopy.footer.copyright}</p>
         <p className="text-sm text-muted-foreground">
           © {year} {siteCopy.brandName}. Με επιφύλαξη παντός δικαιώματος.
         </p>
+        <coding-tree-attribution
+          className="origin-center scale-[0.82]"
+          theme="default"
+          size="sm"
+          href="https://github.com/coding-tree-io"
+        ></coding-tree-attribution>
       </div>
     </footer>
   );

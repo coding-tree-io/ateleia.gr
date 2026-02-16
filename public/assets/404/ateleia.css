@@ -1,0 +1,35 @@
+:root {
+  --ateleia-terracotta: #c7392e;
+  --ateleia-teal: #5c7a82;
+  --ateleia-bg: #fcfaf7;
+  --ateleia-surface: #ffffff;
+  --ateleia-text: #2f2a2a;
+  --ateleia-muted: #665654;
+
+  --ct-404-bg: var(--ateleia-bg);
+  --ct-404-surface: var(--ateleia-surface);
+  --ct-404-text: var(--ateleia-text);
+  --ct-404-muted: var(--ateleia-muted);
+
+  --ct-404-primary: var(--ateleia-terracotta);
+  --ct-404-primary-contrast: #ffffff;
+  --ct-404-primary-soft: rgba(199, 57, 46, 0.2);
+
+  --ct-404-accent: var(--ateleia-teal);
+  --ct-404-accent-soft: rgba(92, 122, 130, 0.18);
+
+  --ct-404-border: #ddd4cf;
+  --ct-404-button-ghost-bg: rgba(255, 255, 255, 0.78);
+  --ct-404-shadow-color: rgba(47, 42, 42, 0.18);
+
+  --ct-404-gradient-start: #fcfaf7;
+  --ct-404-gradient-end: #f3ece7;
+
+  --ct-404-menu-surface: var(--ct-404-primary);
+  --ct-404-menu-text: var(--ct-404-primary-contrast);
+  --ct-404-menu-hover: var(--ct-404-accent);
+
+  --ct-404-illustration-stroke: var(--ct-404-text);
+  --ct-404-illustration-fill: var(--ct-404-surface);
+  --ct-404-illustration-dot: var(--ct-404-text);
+}

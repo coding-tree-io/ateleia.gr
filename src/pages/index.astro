@@ -24,5 +24,10 @@ import { approvedTheme } from '@/config/approved-theme';
   </head>
   <body class="min-h-screen overflow-x-clip bg-background text-foreground">
     <HomePageScaffold client:load />
+    <script
+      is:inline
+      type="module"
+      src={`${import.meta.env.BASE_URL}assets/vendor/coding-tree-attribution/coding-tree-attribution.js`}
+    ></script>
   </body>
 </html>
