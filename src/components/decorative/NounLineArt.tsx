@@ -20,7 +20,6 @@ const svgPalette = {
   ochre: '#C49A3C',
   ochreSoft: '#E0C987',
   ink: '#3D3534',
-  paper: '#F8F2EC',
 };
 
 const variantProfile: Record<
@@ -42,25 +41,25 @@ const variantProfile: Record<
     dots: 0.08,
     gradientStroke: 0,
     accent: 0,
-    line: 0.78,
+    line: 0.74,
   },
   whisper: {
-    terracottaBlob: 0.1,
+    terracottaBlob: 0.09,
     tealBlob: 0.08,
     ochreBlob: 0.06,
-    dots: 0.18,
-    gradientStroke: 0.16,
-    accent: 0.14,
-    line: 0.62,
+    dots: 0.16,
+    gradientStroke: 0.14,
+    accent: 0.12,
+    line: 0.6,
   },
   vivid: {
-    terracottaBlob: 0.32,
-    tealBlob: 0.28,
-    ochreBlob: 0.24,
-    dots: 0.38,
-    gradientStroke: 0.46,
-    accent: 0.3,
-    line: 0.75,
+    terracottaBlob: 0.3,
+    tealBlob: 0.26,
+    ochreBlob: 0.22,
+    dots: 0.34,
+    gradientStroke: 0.42,
+    accent: 0.26,
+    line: 0.73,
   },
 };
 
@@ -133,17 +132,23 @@ export function NounLineArt({ className, variant = 'whisper', definition, dataCo
       aria-hidden="true"
       focusable="false"
       shapeRendering="geometricPrecision"
+      preserveAspectRatio="xMidYMid meet"
       data-component={dataComponent}
     >
       <defs>
-        <linearGradient id={gradientId} x1={minX + width * 0.14} y1={minY + height * 0.18} x2={minX + width * 0.83} y2={minY + height * 0.84} gradientUnits="userSpaceOnUse">
+        <linearGradient
+          id={gradientId}
+          x1={minX + width * 0.14}
+          y1={minY + height * 0.18}
+          x2={minX + width * 0.83}
+          y2={minY + height * 0.84}
+          gradientUnits="userSpaceOnUse"
+        >
           <stop offset="0%" stopColor={svgPalette.terracotta} />
           <stop offset="52%" stopColor={svgPalette.teal} />
           <stop offset="100%" stopColor={svgPalette.ochre} />
         </linearGradient>
       </defs>
-
-      <rect x={minX} y={minY} width={width} height={height} fill={svgPalette.paper} fillOpacity="0.96" />
 
       {blobs.map((blob) => (
         <circle key={`${blob.cx}-${blob.cy}-${blob.color}`} cx={blob.cx} cy={blob.cy} r={blob.r} fill={blob.color} fillOpacity={blob.opacity} />
@@ -159,7 +164,7 @@ export function NounLineArt({ className, variant = 'whisper', definition, dataCo
           d={pathData}
           fill="none"
           stroke={svgPalette.ink}
-          strokeWidth={shortEdge * 0.0092}
+          strokeWidth={shortEdge * 0.0088}
           strokeLinecap="round"
           strokeLinejoin="round"
           strokeOpacity={profile.line}
@@ -174,7 +179,7 @@ export function NounLineArt({ className, variant = 'whisper', definition, dataCo
             d={pathData}
             fill="none"
             stroke={`url(#${gradientId})`}
-            strokeWidth={shortEdge * 0.0082}
+            strokeWidth={shortEdge * 0.0078}
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeOpacity={profile.gradientStroke}
@@ -189,7 +194,7 @@ export function NounLineArt({ className, variant = 'whisper', definition, dataCo
             d={pathData}
             fill="none"
             stroke={svgPalette.terracottaSoft}
-            strokeWidth={shortEdge * 0.0034}
+            strokeWidth={shortEdge * 0.0032}
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeOpacity={profile.accent}
@@ -198,7 +203,13 @@ export function NounLineArt({ className, variant = 'whisper', definition, dataCo
         ))}
 
       {variant === 'minimal' && (
-        <circle cx={centerX + width * 0.15} cy={centerY + height * 0.26} r={shortEdge * 0.015} fill={svgPalette.ochreSoft} fillOpacity="0.24" />
+        <circle
+          cx={centerX + width * 0.15}
+          cy={centerY + height * 0.26}
+          r={shortEdge * 0.015}
+          fill={svgPalette.ochreSoft}
+          fillOpacity="0.22"
+        />
       )}
     </svg>
   );

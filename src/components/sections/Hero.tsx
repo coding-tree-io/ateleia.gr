@@ -13,8 +13,6 @@ import { NounAbstractArt } from '@/components/decorative/NounAbstractArt';
 import { ParallaxLayer } from '@/components/decorative/ParallaxLayer';
 
 export function Hero() {
-  const logoSrc = `${import.meta.env.BASE_URL}images/client-review/logo.png`;
-
   return (
     <section
       id="hero"
@@ -51,14 +49,6 @@ export function Hero() {
 
       <div className="relative z-10 mx-auto grid max-w-6xl gap-10 lg:grid-cols-[1.08fr_0.92fr] lg:gap-12">
         <div className="self-end">
-          <span className="animate-fade-up mb-5 inline-flex items-center rounded-full border border-border/50 bg-card/75 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground backdrop-blur-sm">
-            <img
-              src={logoSrc}
-              alt="Σήμα Ατέλεια"
-              className="h-5 w-9 rounded-sm border border-border/45 bg-card object-contain px-0.5"
-            />
-          </span>
-
           <h1 className="animate-fade-up stagger-1 font-serif text-4xl font-bold leading-[1.08] tracking-tight text-balance text-foreground sm:text-5xl md:text-7xl">
             {siteCopy.hero.headline}
           </h1>
@@ -79,7 +69,7 @@ export function Hero() {
               asChild
               variant="outline"
               size="lg"
-              className="w-full rounded-full border-border/60 bg-card/70 backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary hover:bg-card hover:shadow-md sm:w-auto"
+              className="w-full rounded-full border-border/60 bg-card/70 text-foreground backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary hover:bg-card hover:text-foreground hover:shadow-md sm:w-auto"
             >
               <a href="#contact">{siteCopy.hero.secondaryCta}</a>
             </Button>

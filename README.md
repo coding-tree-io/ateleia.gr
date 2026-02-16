@@ -84,7 +84,17 @@ For local dev verification, point `BASE_URL` to your local URL (for example `htt
 corepack pnpm svg:noun:normalize
 ```
 
-This command strips embedded source attribution text from local source SVGs in `docs/`, optimizes them with SVGO, and writes normalized tracked files to `src/assets/noun/normalized/`. Public attribution is maintained on `/credits`.
+This command now runs a full pipeline for the tracked Noun SVG assets:
+
+- Inkscape CLI plain-SVG export pass (when available)
+- Attribution text stripping from embedded SVG source text
+- SVGO optimization into `src/assets/noun/normalized/`
+- `svger-cli` conversion validation pass (output is temporary and removed)
+
+Notes:
+
+- GraphicsMagick is probed and reported, but not required for successful normalization.
+- Public attribution remains on `/credits` and `ATTRIBUTIONS.md`.
 
 ## GitHub Pages configuration
 
