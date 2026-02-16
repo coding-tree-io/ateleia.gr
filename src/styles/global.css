@@ -194,6 +194,29 @@
   }
 }
 
+@keyframes alpha-underline {
+  0%,
+  20%,
+  100% {
+    transform: scaleX(0.5);
+    opacity: 0.38;
+  }
+  60% {
+    transform: scaleX(1);
+    opacity: 0.82;
+  }
+}
+
+.animate-alpha-underline {
+  animation: alpha-underline 2.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+@supports not (will-change: transform) {
+  .animate-alpha-underline {
+    will-change: auto;
+  }
+}
+
 .animate-fade-up {
   animation: fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
 }

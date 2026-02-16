@@ -1,5 +1,6 @@
 import { therapyPracticeWebsiteContent } from '@/content/therapy-practice-website-content';
 import { createCreditsPageUrl, createLogoImageUrl } from '@/config/site-branding';
+import { ThreadedAlphaWordmark } from '@/components/brand/ThreadedAlphaWordmark';
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -24,9 +25,7 @@ export function Footer() {
               className="h-10 w-16 shrink-0 rounded-lg border border-border/55 bg-card/85 object-contain px-1 shadow-sm"
             />
             <div className="text-left">
-              <span className="block font-serif text-2xl font-bold tracking-tight text-foreground transition-colors group-hover:text-primary">
-                {brandName}
-              </span>
+              <ThreadedAlphaWordmark className="text-2xl" />
               <span className="text-xs tracking-[0.12em] text-muted-foreground">
                 {brandSubtitle}
               </span>

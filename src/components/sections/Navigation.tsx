@@ -3,6 +3,7 @@ import { Menu } from 'lucide-react';
 import { createLogoImageUrl } from '@/config/site-branding';
 import { therapyPracticeWebsiteContent } from '@/content/therapy-practice-website-content';
 import { Button } from '@/components/ui/button';
+import { ThreadedAlphaWordmark } from '@/components/brand/ThreadedAlphaWordmark';
 import {
   Sheet,
   SheetClose,
@@ -35,9 +36,7 @@ export function Navigation() {
             className="h-10 w-16 shrink-0 rounded-lg border border-border/60 bg-card/85 object-contain px-1 shadow-sm"
           />
           <div className="min-w-0">
-            <span className="block truncate font-serif text-xl font-bold tracking-tight text-foreground transition-colors group-hover:text-primary sm:text-2xl">
-              {brandName}
-            </span>
+            <ThreadedAlphaWordmark className="text-xl sm:text-2xl" />
             <span className="hidden truncate text-[11px] tracking-[0.12em] text-muted-foreground sm:inline">
               {brandSubtitle}
             </span>
