@@ -16,7 +16,7 @@ This file records third-party visual assets used in `ateleia.gr`.
 - Modifications applied:
   - Removed embedded SVG text labels.
   - Optimized with SVGO.
-  - Recolored to match the approved palette.
+  - Recolored to match the selected site palette.
   - Applied selected variant: `whisper`.
 - Usage:
   - Decorative background art in Hero.
@@ -33,7 +33,7 @@ This file records third-party visual assets used in `ateleia.gr`.
 - Modifications applied:
   - Removed embedded SVG text labels.
   - Optimized with SVGO.
-  - Recolored to match the approved palette.
+  - Recolored to match the selected site palette.
   - Applied selected variant: `vivid`.
 - Usage:
   - Decorative background art in Services.
@@ -50,7 +50,7 @@ This file records third-party visual assets used in `ateleia.gr`.
 - Modifications applied:
   - Removed embedded SVG text labels.
   - Optimized with SVGO.
-  - Recolored to match the approved palette.
+  - Recolored to match the selected site palette.
   - Applied selected variant: `minimal`.
 - Usage:
   - Decorative background art in Contact.

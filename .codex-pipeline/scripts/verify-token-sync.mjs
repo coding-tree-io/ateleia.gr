@@ -2,90 +2,103 @@ import { readFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const scriptsDir = dirname(fileURLToPath(import.meta.url));
-const sidecarRoot = resolve(scriptsDir, '..');
-const repoRoot = resolve(sidecarRoot, '..');
+const scriptsDirectory = dirname(fileURLToPath(import.meta.url));
+const sidecarRootDirectory = resolve(scriptsDirectory, '..');
+const repositoryRootDirectory = resolve(sidecarRootDirectory, '..');
 
-const tokensPath = resolve(sidecarRoot, 'tokens/core/tokens.json');
-const cssPath = resolve(repoRoot, 'src/styles/global.css');
-const approvedThemePath = resolve(repoRoot, 'src/config/approved-theme.ts');
+const sidecarTokensPath = resolve(sidecarRootDirectory, 'tokens/core/tokens.json');
+const projectGlobalStylesPath = resolve(repositoryRootDirectory, 'src/styles/global.css');
+const siteBrandingConfigPath = resolve(repositoryRootDirectory, 'src/config/site-branding.ts');
 
-const tokens = JSON.parse(await readFile(tokensPath, 'utf8'));
-const cssSource = await readFile(cssPath, 'utf8');
-const approvedThemeSource = await readFile(approvedThemePath, 'utf8');
+const sidecarTokens = JSON.parse(await readFile(sidecarTokensPath, 'utf8'));
+const projectGlobalStylesSource = await readFile(projectGlobalStylesPath, 'utf8');
+const siteBrandingConfigSource = await readFile(siteBrandingConfigPath, 'utf8');
 
-function getCssVar(name) {
-  const match = cssSource.match(new RegExp(`--${name}:\\s*([^;]+);`));
-  return match ? match[1].trim().toLowerCase() : null;
+function readCssVariable(cssVariableName) {
+  const cssVariableMatch = projectGlobalStylesSource.match(new RegExp(`--${cssVariableName}:\\s*([^;]+);`));
+  return cssVariableMatch ? cssVariableMatch[1].trim().toLowerCase() : null;
 }
 
-function normalizeColor(value) {
-  return String(value).trim().toLowerCase();
+function normalizeColorValue(colorValue) {
+  return String(colorValue).trim().toLowerCase();
 }
 
-const checks = [
+const tokenToCssColorChecks = [
   {
     label: 'brand.primary <-> --primary',
-    tokenValue: tokens?.color?.brand?.primary?.$value,
-    cssValue: getCssVar('primary'),
+    tokenValue: sidecarTokens?.color?.brand?.primary?.$value,
+    cssValue: readCssVariable('primary'),
   },
   {
     label: 'brand.accent <-> --tone-teal',
-    tokenValue: tokens?.color?.brand?.accent?.$value,
-    cssValue: getCssVar('tone-teal'),
+    tokenValue: sidecarTokens?.color?.brand?.accent?.$value,
+    cssValue: readCssVariable('tone-teal'),
   },
   {
     label: 'surface.page <-> --background',
-    tokenValue: tokens?.color?.surface?.page?.$value,
-    cssValue: getCssVar('background'),
+    tokenValue: sidecarTokens?.color?.surface?.page?.$value,
+    cssValue: readCssVariable('background'),
   },
   {
     label: 'text.primary <-> --foreground',
-    tokenValue: tokens?.color?.text?.primary?.$value,
-    cssValue: getCssVar('foreground'),
+    tokenValue: sidecarTokens?.color?.text?.primary?.$value,
+    cssValue: readCssVariable('foreground'),
   },
 ];
 
-const failures = [];
+const verificationFailures = [];
 
-for (const check of checks) {
-  if (!check.tokenValue || !check.cssValue) {
-    failures.push(`${check.label}: missing token or CSS var`);
+for (const tokenToCssColorCheck of tokenToCssColorChecks) {
+  if (!tokenToCssColorCheck.tokenValue || !tokenToCssColorCheck.cssValue) {
+    verificationFailures.push(`${tokenToCssColorCheck.label}: missing token or CSS var`);
     continue;
   }
 
-  if (normalizeColor(check.tokenValue) !== normalizeColor(check.cssValue)) {
-    failures.push(`${check.label}: token ${check.tokenValue} does not match CSS ${check.cssValue}`);
+  if (
+    normalizeColorValue(tokenToCssColorCheck.tokenValue) !==
+    normalizeColorValue(tokenToCssColorCheck.cssValue)
+  ) {
+    verificationFailures.push(
+      `${tokenToCssColorCheck.label}: token ${tokenToCssColorCheck.tokenValue} does not match CSS ${tokenToCssColorCheck.cssValue}`
+    );
   }
 }
 
-const bodyFontToken = tokens?.typography?.family?.body?.$value;
-const headingFontToken = tokens?.typography?.family?.heading?.$value;
-const bodyFontString = Array.isArray(bodyFontToken) ? bodyFontToken.join(',') : String(bodyFontToken ?? '');
-const headingFontString = Array.isArray(headingFontToken) ? headingFontToken.join(',') : String(headingFontToken ?? '');
+const bodyFontToken = sidecarTokens?.typography?.family?.body?.$value;
+const headingFontToken = sidecarTokens?.typography?.family?.heading?.$value;
+const bodyFontTokenString = Array.isArray(bodyFontToken) ? bodyFontToken.join(',') : String(bodyFontToken ?? '');
+const headingFontTokenString = Array.isArray(headingFontToken)
+  ? headingFontToken.join(',')
+  : String(headingFontToken ?? '');
 
-if (!bodyFontString.toLowerCase().includes('nunito')) {
-  failures.push('typography.family.body must include Nunito');
+if (!bodyFontTokenString.toLowerCase().includes('nunito')) {
+  verificationFailures.push('typography.family.body must include Nunito');
 }
 
-if (!headingFontString.toLowerCase().includes('cormorant garamond')) {
-  failures.push('typography.family.heading must include Cormorant Garamond');
+if (!headingFontTokenString.toLowerCase().includes('cormorant garamond')) {
+  verificationFailures.push('typography.family.heading must include Cormorant Garamond');
 }
 
-if (!approvedThemeSource.includes('paletteName: \'Terracotta Calm\'')) {
-  failures.push('approved-theme.ts is no longer locked to Terracotta Calm');
+if (!/themeColorHex:\s*'#C7392E'/i.test(siteBrandingConfigSource)) {
+  verificationFailures.push('site-branding.ts must keep the locked Terracotta theme color (#C7392E)');
 }
 
-if (!approvedThemeSource.includes('Nunito')) {
-  failures.push('approved-theme.ts no longer includes Nunito');
+if (!/bodyFontFamily:\s*'"Nunito"/i.test(siteBrandingConfigSource)) {
+  verificationFailures.push('site-branding.ts bodyFontFamily must include Nunito');
 }
 
-if (failures.length > 0) {
+if (!/headingFontFamily:\s*'"Cormorant Garamond"/i.test(siteBrandingConfigSource)) {
+  verificationFailures.push('site-branding.ts headingFontFamily must include Cormorant Garamond');
+}
+
+if (verificationFailures.length > 0) {
   console.error('[tokens:verify-sync] Theme/token drift detected:');
-  for (const failure of failures) {
-    console.error(`- ${failure}`);
+  for (const verificationFailure of verificationFailures) {
+    console.error(`- ${verificationFailure}`);
   }
   process.exit(1);
 }
 
-console.log('[tokens:verify-sync] Sidecar tokens are aligned with the locked Terracotta/Nunito theme.');
+console.log(
+  '[tokens:verify-sync] Sidecar tokens are aligned with the locked Terracotta Calm + Nunito branding configuration.'
+);

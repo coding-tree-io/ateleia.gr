@@ -1,10 +1,10 @@
 # Ateleia.gr (Astro + shadcn-ui)
 
-Static Astro website for the approved client direction.
+Static Astro website for the selected client direction.
 
 ## Current brand lock
 
-The theme is intentionally frozen to the approved choice:
+The theme is intentionally frozen to the current locked choice:
 
 - Palette: `Terracotta Calm`
 - Font: `Nunito`
@@ -65,6 +65,7 @@ Cache targets: `.astro`, `node_modules/.astro`, `node_modules/.vite`.
 ```sh
 corepack pnpm check
 corepack pnpm build
+corepack pnpm perf:budget
 ```
 
 ### Sidecar design checks (`.codex-pipeline`)
@@ -96,6 +97,23 @@ Notes:
 - GraphicsMagick is probed and reported, but not required for successful normalization.
 - Public attribution remains on `/credits` and `ATTRIBUTIONS.md`.
 
+## Islands architecture
+
+The homepage is static-first. Only two interactive islands are hydrated:
+
+- `MobileNavigationMenu.tsx` via `client:media="(max-width: 767px)"`
+- `ResourcesFilters.tsx` via `client:visible`
+
+Detailed conventions are documented in `ISLANDS_POLICY.md`.
+
+## Performance budget
+
+A Lighthouse-backed mobile budget is enforced locally and in CI:
+
+- config: `performance-budget.json`
+- command: `corepack pnpm perf:budget`
+- script: `scripts/check-lighthouse-budget.mjs`
+
 ## GitHub Pages configuration
 
 `astro.config.mjs` is configured for GitHub project pages deployment:
@@ -110,8 +128,13 @@ Deployment workflow on `main` publishes the homepage artifact from `dist` to:
 
 ## Key files
 
-- `src/config/approved-theme.ts`: frozen Terracotta Calm + Nunito tokens/typography
-- `src/content/site-copy.ts`: structured Greek copy/placeholders for homepage
-- `src/components/home/HomePageScaffold.tsx`: homepage sections built with shadcn components
+- `src/config/site-branding.ts`: frozen Terracotta Calm + Nunito brand/typography configuration
+- `src/content/therapy-practice-website-content.ts`: structured Greek copy/placeholders for homepage
+- `src/components/sections/SiteHeader.astro`: static header shell with mobile menu island boundary
+- `src/components/sections/MobileNavigationMenu.tsx`: mobile-only shadcn Sheet island
+- `src/components/sections/ResourcesSection.astro`: static resources section shell
+- `src/components/sections/ResourcesFilters.tsx`: resources filtering/search island
 - `src/pages/index.astro`: production entry page
+- `performance-budget.json`: mobile performance budget thresholds
+- `scripts/check-lighthouse-budget.mjs`: budget enforcement script
 - `.codex-pipeline/README.md`: sidecar verification details and visual baseline workflow

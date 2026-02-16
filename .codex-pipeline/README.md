@@ -5,7 +5,7 @@ This folder is the project-local verification sidecar for UI and design quality.
 ## What It Verifies
 
 - Style Dictionary + DTCG tokens (`tokens/core/tokens.json`)
-- Theme-token sync against production theme lock (`src/styles/global.css`, `src/config/approved-theme.ts`)
+- Theme-token sync against production theme lock (`src/styles/global.css`, `src/config/site-branding.ts`)
 - Storybook build for real project React components
 - Playwright + axe accessibility checks
 - Playwright screenshot-based visual regression (desktop + mobile)

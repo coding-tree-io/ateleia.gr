@@ -11,7 +11,7 @@ It follows harness-style principles: keep instructions short, enforce invariants
   - `site: "https://coding-tree-io.github.io"`
   - `base: "/ateleia.gr/"`
   - `output: "static"`
-- Theme is locked to approved brand direction (Terracotta Calm + Nunito).
+- Theme is locked to the selected brand direction (Terracotta Calm + Nunito).
 - Primary language is Greek-first.
 
 ## Source-Of-Truth Map
@@ -20,10 +20,10 @@ It follows harness-style principles: keep instructions short, enforce invariants
 - Package scripts and verification commands: `package.json`
 - TypeScript strictness and aliases: `tsconfig.json`
 - shadcn/ui config and aliases: `components.json`
-- Theme tokens and typography lock: `src/config/approved-theme.ts`, `src/styles/global.css`
+- Theme tokens and typography lock: `src/config/site-branding.ts`, `src/styles/global.css`
 - Main page entrypoint: `src/pages/index.astro`
 - Homepage composition: `src/components/home/HomePageScaffold.tsx`
-- Copy source: `src/content/site-copy.ts`
+- Copy source: `src/content/therapy-practice-website-content.ts`
 - Deployment workflow: `.github/workflows/pages.yml`
 - Design intent/reference docs: `docs/pre-design-checklist.md`, `docs/v0-redesign-brief.md`, `docs/reference-benchmark.md`
 - Sidecar verification stack: `.codex-pipeline/README.md`
@@ -35,6 +35,12 @@ It follows harness-style principles: keep instructions short, enforce invariants
 - Convert repeated mistakes into enforceable guardrails (tests, scripts, or explicit rules in docs/config).
 - If behavior changes, update docs in the same change set.
 - Treat unverified claims as hypotheses; verify or mark as unverified.
+
+## Mandatory Framework MCP Consultation
+- Always consult `astro_docs` MCP before implementing, refactoring, or verifying Astro-specific behavior (routing, islands, config, static output, content collections, integrations, rendering semantics).
+- Always consult `shadcn` MCP before implementing or changing shadcn/ui components, theming, composition patterns, CLI usage, or styling conventions.
+- Treat MCP guidance as required input and then reconcile it with this repo's constraints.
+- If MCP guidance conflicts with pinned project constraints in this file, follow repo invariants and document the tradeoff in the task report.
 
 ## Mandatory `.codex-pipeline` Verification Stack
 Use this stack in task verification for every task completion claim.
