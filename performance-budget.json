@@ -1,0 +1,11 @@
+{
+  "pageUrl": "http://127.0.0.1:4321/ateleia.gr/",
+  "lighthouse": {
+    "minPerformanceScore": 0.85,
+    "maxLargestContentfulPaintMs": 3200,
+    "maxTotalBlockingTimeMs": 400
+  },
+  "javascript": {
+    "maxFirstPartyScriptKilobytes": 120
+  }
+}

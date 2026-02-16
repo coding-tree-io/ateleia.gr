@@ -10,6 +10,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
+    "perf:budget": "node scripts/check-lighthouse-budget.mjs",
     "astro": "astro",
     "svg:noun:normalize": "node scripts/svg/normalize-noun-icons.mjs"
   },
