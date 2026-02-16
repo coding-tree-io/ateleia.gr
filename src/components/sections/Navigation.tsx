@@ -31,7 +31,7 @@ export function Navigation() {
       }`}
     >
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-3.5 sm:px-6 md:px-10">
-        <a href="#hero" className="group flex min-w-0 items-center gap-3" aria-label="Αρχική">
+        <a href="#hero" className="group flex min-h-11 min-w-0 items-center gap-3 py-0.5" aria-label="Αρχική">
           <img
             src={logoSrc}
             alt="Λογότυπο Ατέλεια"
@@ -52,7 +52,7 @@ export function Navigation() {
             <a
               key={item.label}
               href={item.href}
-              className="relative text-sm font-semibold text-muted-foreground transition-colors duration-300 hover:text-foreground after:absolute after:-bottom-1 after:left-0 after:h-px after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-full"
+              className="relative inline-flex min-h-11 items-center px-1.5 text-sm font-semibold text-muted-foreground transition-colors duration-300 hover:text-foreground after:absolute after:bottom-1 after:left-1.5 after:h-px after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-[calc(100%-0.75rem)]"
             >
               {item.label}
             </a>

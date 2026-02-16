@@ -15,7 +15,7 @@ export function Footer() {
             href={siteCopy.footer.builtByLink.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="font-semibold text-foreground underline underline-offset-4 transition-colors hover:text-primary"
+            className="inline-flex min-h-11 items-center rounded-md px-1 font-semibold text-foreground underline underline-offset-4 transition-colors hover:text-primary"
           >
             {siteCopy.footer.builtByLink.label}
           </a>
