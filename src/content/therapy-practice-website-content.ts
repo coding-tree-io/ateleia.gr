@@ -1,4 +1,4 @@
-export type ServiceItem = {
+export type TherapyServiceOffering = {
   title: string;
   description: string;
   idealFor: string;
@@ -8,46 +8,25 @@ export type ServiceItem = {
   whatToExpect: string;
 };
 
-export type FaqItem = {
-  question: string;
-  answer: string;
-};
-
-export type ContactItem = {
+export type ContactChannel = {
   label: string;
   value: string;
   href: string;
 };
 
-export type ResourceItem = {
+export type CuratedResource = {
   title: string;
   source: string;
   note: string;
-  tags: string[];
+  tags: readonly string[];
   url: string;
 };
 
-export type BenefitItem = {
-  title: string;
-  description: string;
-};
-
-export type StepItem = {
-  step: string;
-  title: string;
-  description: string;
-};
-
-export type TrustMarker = {
-  title: string;
-  description: string;
-};
-
-export const siteCopy = {
+export const therapyPracticeWebsiteContent = {
   brandName: 'Ατέλεια',
   brandSubtitle: 'Ψυχοθεραπεία μέσω Τέχνης',
 
-  navItems: [
+  navigationItems: [
     { label: 'Αρχική', href: '#hero' },
     { label: 'Σχετικά', href: '#about' },
     { label: 'Υπηρεσίες', href: '#services' },
@@ -56,7 +35,6 @@ export const siteCopy = {
   ],
 
   hero: {
-    kicker: 'Art Psychotherapy Studio',
     headline: 'Ψυχοθεραπεία μέσω Τέχνης',
     subheadline:
       'Ένας ασφαλής και δημιουργικός χώρος όπου η τέχνη γίνεται γέφυρα κατανόησης, ενσυναίσθησης και προσωπικής εξέλιξης. Δεν χρειάζεται καλλιτεχνική εμπειρία.',
@@ -104,7 +82,7 @@ export const siteCopy = {
         description:
           'Ενισχύει την αίσθηση ελέγχου, αυτοπεποίθησης και εσωτερικής δύναμης μέσα από τη δημιουργία.',
       },
-    ] as BenefitItem[],
+    ],
   },
 
   whoIsItFor: {
@@ -139,7 +117,7 @@ export const siteCopy = {
         description:
           'Μαζί αναστοχαζόμαστε πάνω στη δημιουργική διαδικασία και τα έργα, ανακαλύπτοντας νέα νοήματα και προοπτικές.',
       },
-    ] as StepItem[],
+    ],
   },
 
   trust: {
@@ -170,7 +148,7 @@ export const siteCopy = {
         description:
           'Η επαγγελματική πρακτική υποστηρίζεται από συνεχιζόμενη εκπαίδευση και κλινική εποπτεία.',
       },
-    ] as TrustMarker[],
+    ],
   },
 
   about: {
@@ -225,10 +203,10 @@ export const siteCopy = {
       whatToExpect:
         'Οι ομάδες λειτουργούν σε κλειστό πλαίσιο με σταθερά μέλη. Κάθε συνάντηση περιλαμβάνει θεματική δημιουργική δραστηριότητα και ομαδικό αναστοχασμό.',
     },
-  ] as ServiceItem[],
+  ],
 
-  faqTitle: 'Συχνές Ερωτήσεις',
-  faqItems: [
+  frequentlyAskedQuestionsTitle: 'Συχνές Ερωτήσεις',
+  frequentlyAskedQuestions: [
     {
       question: 'Χρειάζεται να ξέρω να ζωγραφίζω;',
       answer:
@@ -264,7 +242,7 @@ export const siteCopy = {
       answer:
         'Μπορείτε να επικοινωνήσετε μέσω email, τηλεφώνου ή της φόρμας επικοινωνίας στη σελίδα.',
     },
-  ] as FaqItem[],
+  ],
 
   resources: {
     title: 'Πόροι',
@@ -312,7 +290,7 @@ export const siteCopy = {
         tags: ['έρευνα', 'νευροεπιστήμες'],
         url: 'https://www.frontiersin.org',
       },
-    ] as ResourceItem[],
+    ],
   },
 
   contact: {
@@ -332,7 +310,7 @@ export const siteCopy = {
     contactItems: [
       { label: 'Email', value: 'email@example.com', href: 'mailto:email@example.com' },
       { label: 'Τηλέφωνο', value: '+30 XXX XXX XXXX', href: 'tel:+30XXXXXXXXXX' },
-    ] as ContactItem[],
+    ],
     addresses: ['Διεύθυνση κατόπιν επικοινωνίας', 'Online συνεδρίες διαθέσιμες κατόπιν συνεννόησης'],
   },
 

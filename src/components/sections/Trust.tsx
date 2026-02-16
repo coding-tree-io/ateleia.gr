@@ -1,20 +1,18 @@
-import * as React from 'react';
 import { ShieldCheck } from 'lucide-react';
 
-import { siteCopy } from '@/content/site-copy';
-import { useReveal } from '@/hooks/use-reveal';
+import { therapyPracticeWebsiteContent } from '@/content/therapy-practice-website-content';
 
 export function Trust() {
-  const ref = useReveal<HTMLElement>();
+  const { trust } = therapyPracticeWebsiteContent;
 
   return (
-    <section ref={ref} className="reveal px-4 py-14 sm:px-6 sm:py-16 md:px-10 md:py-20">
+    <section className="px-4 py-14 sm:px-6 sm:py-16 md:px-10 md:py-20">
       <div className="mx-auto max-w-6xl">
         <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
           <h2 className="font-serif text-3xl font-bold leading-tight text-foreground md:text-4xl">
-            {siteCopy.trust.title}
+            {trust.title}
           </h2>
-          <p className="max-w-xl text-sm leading-relaxed text-muted-foreground md:text-base">{siteCopy.trust.intro}</p>
+          <p className="max-w-xl text-sm leading-relaxed text-muted-foreground md:text-base">{trust.intro}</p>
         </div>
 
         <div
@@ -24,10 +22,10 @@ export function Trust() {
           tabIndex={0}
         >
           <div className="flex w-max gap-4 pr-6">
-            {siteCopy.trust.markers.map((marker) => (
+            {trust.markers.map((marker) => (
               <article
                 key={marker.title}
-                className="reveal-child paper-panel min-w-[17.5rem] max-w-[17.5rem] rounded-3xl border border-border/45 p-6 transition-all duration-500 hover:-translate-y-1 hover:shadow-lg md:min-w-[19rem] md:max-w-[19rem]"
+                className="paper-panel min-w-[17.5rem] max-w-[17.5rem] rounded-3xl border border-border/45 p-6 transition-all duration-500 hover:-translate-y-1 hover:shadow-lg md:min-w-[19rem] md:max-w-[19rem]"
               >
                 <div className="flex items-center gap-3">
                   <div className="flex size-11 items-center justify-center rounded-xl bg-accent/25 text-[var(--tone-ink)]">
@@ -42,7 +40,7 @@ export function Trust() {
         </div>
 
         <blockquote className="mt-8 rounded-2xl border border-border/45 bg-card/70 p-6 text-base leading-relaxed text-[var(--tone-ink)] md:text-lg">
-          «{siteCopy.trust.pullQuote}»
+          «{trust.pullQuote}»
         </blockquote>
       </div>
     </section>

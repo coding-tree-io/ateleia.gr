@@ -1,33 +1,64 @@
 ---
-import '@/styles/global.css';
+import { PaintedEdgeDivider } from '@/components/decorative/ArtShapes';
+import { About } from '@/components/sections/About';
+import { Benefits } from '@/components/sections/Benefits';
+import { Contact } from '@/components/sections/Contact';
+import { Footer } from '@/components/sections/Footer';
+import { Hero } from '@/components/sections/Hero';
+import { HowItWorks } from '@/components/sections/HowItWorks';
+import ResourcesSection from '@/components/sections/ResourcesSection.astro';
+import SiteHeader from '@/components/sections/SiteHeader.astro';
+import { Services } from '@/components/sections/Services';
+import { Trust } from '@/components/sections/Trust';
+import { WhatIs } from '@/components/sections/WhatIs';
+import { WhoIsItFor } from '@/components/sections/WhoIsItFor';
+import PublicDocumentLayout from '@/layouts/PublicDocumentLayout.astro';
 
-import { HomePageScaffold } from '@/components/home/HomePageScaffold';
-import { approvedTheme } from '@/config/approved-theme';
+const topDividerClassName = 'painted-divider -mt-1 h-3 w-full opacity-28 md:h-10 md:opacity-60';
+const sectionDividerClassName = 'painted-divider -mt-1 h-2 w-full opacity-22 md:h-8 md:opacity-55';
+const sectionDividerInvertedClassName =
+  'painted-divider -mt-1 h-2 w-full rotate-180 opacity-22 md:h-8 md:opacity-55';
 ---
 
-<html lang="el">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#C7392E" />
-    <link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL}favicon.svg`} />
-    <link rel="icon" href={`${import.meta.env.BASE_URL}favicon.ico`} />
-    <meta name="generator" content={Astro.generator} />
-    <meta
-      name="description"
-      content="Ατέλεια — Ψυχοθεραπεία μέσω Τέχνης. Ένας ασφαλής και δημιουργικός χώρος για προσωπική εξέλιξη μέσα από τη δημιουργική έκφραση."
-    />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
-    <link href={approvedTheme.typography.stylesheetUrl} rel="stylesheet" />
-    <title>Ατέλεια | Ψυχοθεραπεία μέσω Τέχνης</title>
-  </head>
-  <body class="min-h-screen overflow-x-clip bg-background text-foreground">
-    <HomePageScaffold client:load />
-    <script
-      is:inline
-      type="module"
-      src={`${import.meta.env.BASE_URL}assets/vendor/coding-tree-attribution/coding-tree-attribution.js`}
-    ></script>
-  </body>
-</html>
+<PublicDocumentLayout
+  pageTitle="Ατέλεια | Ψυχοθεραπεία μέσω Τέχνης"
+  pageDescription="Ατέλεια — Ψυχοθεραπεία μέσω Τέχνης. Ένας ασφαλής και δημιουργικός χώρος για προσωπική εξέλιξη μέσα από τη δημιουργική έκφραση."
+  includeCodingTreeAttributionScript
+>
+  <div class="min-h-screen overflow-x-clip bg-background font-sans text-foreground">
+    <SiteHeader />
+
+    <main class="relative overflow-x-clip overflow-y-visible">
+      <Hero />
+      <PaintedEdgeDivider className={topDividerClassName} />
+
+      <WhatIs />
+      <PaintedEdgeDivider className={sectionDividerInvertedClassName} />
+
+      <Benefits />
+      <PaintedEdgeDivider className={sectionDividerClassName} />
+
+      <WhoIsItFor />
+      <PaintedEdgeDivider className={sectionDividerInvertedClassName} />
+
+      <HowItWorks />
+      <PaintedEdgeDivider className={sectionDividerClassName} />
+
+      <Trust />
+      <PaintedEdgeDivider className={sectionDividerInvertedClassName} />
+
+      <About />
+      <PaintedEdgeDivider className={sectionDividerClassName} />
+
+      <Services />
+      <PaintedEdgeDivider className={sectionDividerInvertedClassName} />
+
+      <ResourcesSection />
+      <PaintedEdgeDivider className={sectionDividerClassName} />
+
+      <Contact />
+    </main>
+
+    <Footer />
+  </div>
+</PublicDocumentLayout>

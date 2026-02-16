@@ -1,0 +1,109 @@
+---
+import '@/styles/global.css';
+
+import {
+  createCodingTreeAttributionScriptUrl,
+  createProjectRelativeUrl,
+  therapyPracticeSiteBranding,
+} from '@/config/site-branding';
+
+interface Props {
+  pageTitle: string;
+  pageDescription: string;
+  language?: string;
+  bodyClassName?: string;
+  includeCodingTreeAttributionScript?: boolean;
+}
+
+const {
+  pageTitle,
+  pageDescription,
+  language = 'el',
+  bodyClassName = 'min-h-screen overflow-x-clip bg-background text-foreground',
+  includeCodingTreeAttributionScript = false,
+} = Astro.props;
+
+const faviconSvgUrl = createProjectRelativeUrl('favicon.svg');
+const faviconIcoUrl = createProjectRelativeUrl('favicon.ico');
+const codingTreeAttributionScriptUrl = createCodingTreeAttributionScriptUrl();
+---
+
+<html lang={language}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content={therapyPracticeSiteBranding.visualIdentity.themeColorHex} />
+    <link rel="icon" type="image/svg+xml" href={faviconSvgUrl} />
+    <link rel="icon" href={faviconIcoUrl} />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={pageDescription} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+    <link href={therapyPracticeSiteBranding.typography.googleFontsStylesheetUrl} rel="stylesheet" />
+    <slot name="head" />
+    <title>{pageTitle}</title>
+  </head>
+  <body class={bodyClassName}>
+    <slot />
+    {
+      includeCodingTreeAttributionScript && (
+        <script is:inline data-coding-tree-attribution-script-url={codingTreeAttributionScriptUrl}>
+          const currentInlineScriptElement = document.currentScript;
+          const codingTreeAttributionScriptUrl =
+            currentInlineScriptElement?.dataset.codingTreeAttributionScriptUrl;
+
+          if (!codingTreeAttributionScriptUrl) {
+            console.warn('Missing coding tree attribution script URL.');
+          } else {
+            const loadCodingTreeAttributionScript = () => {
+              if (document.querySelector('script[data-coding-tree-attribution]')) {
+                return;
+              }
+
+              const attributionScriptElement = document.createElement('script');
+              attributionScriptElement.type = 'module';
+              attributionScriptElement.src = codingTreeAttributionScriptUrl;
+              attributionScriptElement.dataset.codingTreeAttribution = 'true';
+              document.body.append(attributionScriptElement);
+            };
+
+            const scheduleCodingTreeAttributionScriptLoad = () => {
+              if ('requestIdleCallback' in window) {
+                window.requestIdleCallback(loadCodingTreeAttributionScript, { timeout: 2_000 });
+                return;
+              }
+
+              window.setTimeout(loadCodingTreeAttributionScript, 1_200);
+            };
+
+            const attributionWidgetElement = document.querySelector('coding-tree-attribution');
+            if (attributionWidgetElement) {
+              if ('IntersectionObserver' in window) {
+                const attributionObserver = new IntersectionObserver(
+                  (entries) => {
+                    const hasVisibleAttributionEntry = entries.some((entry) => entry.isIntersecting);
+
+                    if (!hasVisibleAttributionEntry) {
+                      return;
+                    }
+
+                    attributionObserver.disconnect();
+                    scheduleCodingTreeAttributionScriptLoad();
+                  },
+                  { rootMargin: '240px 0px 240px 0px' },
+                );
+
+                attributionObserver.observe(attributionWidgetElement);
+                window.setTimeout(scheduleCodingTreeAttributionScriptLoad, 12_000);
+              } else if (document.readyState === 'complete') {
+                scheduleCodingTreeAttributionScriptLoad();
+              } else {
+                window.addEventListener('load', scheduleCodingTreeAttributionScriptLoad, { once: true });
+              }
+            }
+          }
+        </script>
+      )
+    }
+  </body>
+</html>
