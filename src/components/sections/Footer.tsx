@@ -8,48 +8,48 @@ export function Footer() {
   const { brandName, navigationItems } = therapyPracticeWebsiteContent;
 
   return (
-    <footer className="relative border-t border-border/60 bg-background/95 px-4 py-10 sm:px-6 md:px-10 md:py-12">
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-primary/10 to-transparent opacity-30" />
+    <footer className="relative border-t border-border/60 bg-background/95 px-4 py-3 sm:px-6 md:px-10 md:py-4">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-8 bg-gradient-to-b from-primary/10 to-transparent opacity-30" />
 
       <div className="relative mx-auto w-full max-w-6xl">
-        <div className="flex flex-col items-center gap-5 text-center">
+        <div className="flex flex-col items-center gap-1.5 text-center">
           <a
             href="#hero"
             aria-label="Επιστροφή στην αρχή"
-            className="group inline-flex min-h-11 items-center rounded-2xl p-1.5 transition-transform duration-300 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            className="group inline-flex min-h-8 items-center rounded-xl p-0.5 transition-transform duration-300 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
             <img
               src={logoImageUrl}
               alt={`Λογότυπο ${brandName}`}
-              className="h-10 w-16 shrink-0 rounded-lg border border-border/55 bg-card/85 object-contain px-1 shadow-sm"
+              className="h-7 w-12 shrink-0 rounded-lg border border-border/55 bg-card/85 object-contain px-1 shadow-sm"
             />
           </a>
 
-          <nav className="flex flex-wrap items-center justify-center gap-1.5" aria-label="Πλοήγηση υποσέλιδου">
+          <nav className="flex flex-wrap items-center justify-center gap-0.5" aria-label="Πλοήγηση υποσέλιδου">
             {navigationItems.map((navigationItem) => (
               <a
                 key={navigationItem.label}
                 href={navigationItem.href}
-                className="inline-flex min-h-11 items-center rounded-full border border-transparent px-3 text-sm font-medium text-muted-foreground transition-colors duration-300 hover:border-border/60 hover:bg-secondary/70 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                className="inline-flex min-h-8 items-center rounded-full border border-transparent px-2 text-sm font-medium text-muted-foreground transition-colors duration-300 hover:border-border/60 hover:bg-secondary/70 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
               >
                 {navigationItem.label}
               </a>
             ))}
             <a
               href={creditsPageUrl}
-              className="inline-flex min-h-11 items-center rounded-full border border-transparent px-3 text-sm font-medium text-muted-foreground transition-colors duration-300 hover:border-border/60 hover:bg-secondary/70 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              className="inline-flex min-h-8 items-center rounded-full border border-transparent px-2 text-sm font-medium text-muted-foreground transition-colors duration-300 hover:border-border/60 hover:bg-secondary/70 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             >
               Credits
             </a>
           </nav>
         </div>
 
-        <div className="mx-auto mt-7 flex w-full max-w-6xl flex-col items-center gap-2 border-t border-border/45 pt-5 text-center">
+        <div className="mx-auto mt-2.5 flex w-full max-w-6xl flex-col items-center gap-0.5 border-t border-border/45 pt-1.5 text-center">
           <p className="text-sm text-muted-foreground">© {currentYear}. All rights reserved.</p>
 
           <div className="flex w-full justify-center">
             <coding-tree-attribution
-              className="origin-center scale-[0.82]"
+              className="origin-center scale-[0.62]"
               theme="default"
               size="sm"
               href="https://github.com/coding-tree-io"
