@@ -1,5 +1,6 @@
 ---
-import { Button } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 import { createLogoImageUrl } from '@/config/site-branding';
 import { therapyPracticeWebsiteContent } from '@/content/therapy-practice-website-content';
 import { MobileNavigationMenu } from '@/components/sections/MobileNavigationMenu';
@@ -13,6 +14,11 @@ const {
 } = therapyPracticeWebsiteContent;
 
 const logoImageUrl = createLogoImageUrl();
+
+const desktopBookingButtonClassName = cn(
+  buttonVariants({ size: 'lg' }),
+  'rounded-full px-6 opacity-100 transition-[opacity,transform] duration-300 motion-reduce:transition-none md:[.hero-in-view_&]:pointer-events-none md:[.hero-in-view_&]:-translate-y-1 md:[.hero-in-view_&]:opacity-0',
+);
 ---
 
 <header class="sticky top-0 z-50 border-b border-border/45 bg-background/90 shadow-sm">
@@ -25,7 +31,7 @@ const logoImageUrl = createLogoImageUrl();
       />
       <div class="min-w-0">
         <ThreadedAlphaWordmark className="text-xl sm:text-2xl" />
-        <span class="hidden truncate text-[11px] tracking-[0.12em] text-muted-foreground sm:inline">
+        <span class="mt-2 hidden truncate text-[11px] tracking-[0.12em] text-muted-foreground sm:block">
           {brandSubtitle}
         </span>
       </div>
@@ -42,9 +48,11 @@ const logoImageUrl = createLogoImageUrl();
       ))}
     </nav>
 
-    <Button asChild className="hidden rounded-full px-6 md:inline-flex">
-      <a href="#contact">{primaryCta}</a>
-    </Button>
+    <div class="hidden md:flex md:w-[14rem] md:justify-end">
+      <a href="#contact" class={desktopBookingButtonClassName} data-header-cta aria-hidden="true" tabindex="-1">
+        {primaryCta}
+      </a>
+    </div>
 
     <MobileNavigationMenu
       client:media="(max-width: 767px)"

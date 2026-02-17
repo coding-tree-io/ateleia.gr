@@ -4,6 +4,7 @@ import { About } from '@/components/sections/About';
 import { Benefits } from '@/components/sections/Benefits';
 import { Contact } from '@/components/sections/Contact';
 import { Footer } from '@/components/sections/Footer';
+import { HeaderCtaVisibilityObserver } from '@/components/sections/HeaderCtaVisibilityObserver';
 import { Hero } from '@/components/sections/Hero';
 import { HowItWorks } from '@/components/sections/HowItWorks';
 import ResourcesSection from '@/components/sections/ResourcesSection.astro';
@@ -23,10 +24,12 @@ const sectionDividerInvertedClassName =
 <PublicDocumentLayout
   pageTitle="Ατέλεια | Ψυχοθεραπεία μέσω Τέχνης"
   pageDescription="Ατέλεια — Ψυχοθεραπεία μέσω Τέχνης. Ένας ασφαλής και δημιουργικός χώρος για προσωπική εξέλιξη μέσα από τη δημιουργική έκφραση."
+  htmlClassName="hero-in-view"
   includeCodingTreeAttributionScript
 >
   <div class="min-h-screen overflow-x-clip bg-background font-sans text-foreground">
     <SiteHeader />
+    <HeaderCtaVisibilityObserver client:load />
 
     <main class="relative overflow-x-clip overflow-y-visible">
       <Hero />

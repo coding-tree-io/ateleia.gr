@@ -11,6 +11,7 @@ interface Props {
   pageTitle: string;
   pageDescription: string;
   language?: string;
+  htmlClassName?: string;
   bodyClassName?: string;
   includeCodingTreeAttributionScript?: boolean;
 }
@@ -19,6 +20,7 @@ const {
   pageTitle,
   pageDescription,
   language = 'el',
+  htmlClassName = '',
   bodyClassName = 'min-h-screen overflow-x-clip bg-background text-foreground',
   includeCodingTreeAttributionScript = false,
 } = Astro.props;
@@ -28,7 +30,7 @@ const faviconIcoUrl = createProjectRelativeUrl('favicon.ico');
 const codingTreeAttributionScriptUrl = createCodingTreeAttributionScriptUrl();
 ---
 
-<html lang={language}>
+<html lang={language} class={htmlClassName}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
