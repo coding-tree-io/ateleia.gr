@@ -22,8 +22,11 @@ It follows harness-style principles: keep instructions short, enforce invariants
 - shadcn/ui config and aliases: `components.json`
 - Theme tokens and typography lock: `src/config/site-branding.ts`, `src/styles/global.css`
 - Main page entrypoint: `src/pages/index.astro`
-- Homepage composition: `src/components/home/HomePageScaffold.tsx`
+- Production homepage composition: `src/pages/index.astro`, `src/components/sections/SiteHeader.astro`, `src/components/sections/ResourcesSection.astro`, `src/components/sections/HeaderCtaVisibilityObserver.tsx`
 - Copy source: `src/content/therapy-practice-website-content.ts`
+- Islands policy deep-dive: `ISLANDS_POLICY.md`
+- Performance budget config: `performance-budget.json`
+- Performance budget gate: `scripts/check-lighthouse-budget.mjs`
 - Deployment workflow: `.github/workflows/pages.yml`
 - Design intent/reference docs: `docs/pre-design-checklist.md`, `docs/v0-redesign-brief.md`, `docs/reference-benchmark.md`
 - Sidecar verification stack: `.codex-pipeline/README.md`
@@ -66,14 +69,18 @@ Rules:
 ## Astro + Islands Policy
 - Default to static Astro rendering; hydrate only where interaction is required.
 - Keep React islands as small leaf boundaries, not page-wide wrappers.
-- Current baseline hydrates `HomePageScaffold` with `client:load`; do not expand this pattern further.
+- Current production islands baseline:
+  - `src/components/sections/MobileNavigationMenu.tsx` via `client:media="(max-width: 767px)"`
+  - `src/components/sections/ResourcesFilters.tsx` via `client:visible`
+  - `src/components/sections/HeaderCtaVisibilityObserver.tsx` via `client:load`
 - For new or refactored interaction, prefer:
   - `client:visible` for below-the-fold interactive UI.
   - `client:idle` for non-critical interaction after first paint.
-  - `client:load` only when interaction is required immediately on first paint.
+  - Avoid new `client:load` unless strictly necessary for immediate first-paint interaction.
 - Keep island props serializable and avoid leaking non-serializable runtime state.
 - Keep browser-only APIs (`window`, `document`, `matchMedia`) inside client code paths.
 - Respect `prefers-reduced-motion` for all animations.
+- Canonical deeper guidance: `ISLANDS_POLICY.md`.
 
 ## shadcn/ui + Styling Rules
 - Reuse primitives from `src/components/ui/*` before adding new base components.
@@ -105,6 +112,7 @@ Rules:
 - Run fast core checks after meaningful edits:
   - `corepack pnpm check`
   - `corepack pnpm build`
+  - `corepack pnpm perf:budget`
 - Run the mandatory sidecar gate:
   - `npm --prefix .codex-pipeline run verify:all`
 
@@ -140,6 +148,7 @@ Token discipline for DevTools MCP:
 A task is done only when all are true:
 - Requested behavior is implemented.
 - `pnpm check` and `pnpm build` succeed.
+- `corepack pnpm perf:budget` passes.
 - `.codex-pipeline` verification passes (`verify:all`).
 - Visual tasks pass the DevTools MCP loop on desktop and mobile.
 - GitHub Pages base-path/static constraints remain intact.
