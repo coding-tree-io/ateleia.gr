@@ -119,6 +119,45 @@ Rules:
 5. Report
 - Summarize changed files, commands run, results, and remaining risks.
 
+## File Inspection Discipline
+- Apply the global bounded-read rules from `C:\Users\SVall\.codex\AGENTS.md`.
+- Never use uncapped reads (`Get-Content <file>` without `-TotalCount` or `-Tail`).
+- If an anchor pattern is known, use bounded search first:
+  - `rg -n -C 2 -m 20 -- <pattern> <path>`
+  - Prefer `git grep -n` for tracked files.
+- If no anchor is known, bootstrap with bounded slices:
+  - `Get-Content <file> -TotalCount 120`
+  - `Get-Content <file> -Tail 120`
+- Keep each single command output under ~200 lines.
+
+## Multi-agent split map (ateleia.gr)
+- Split policy: conservative.
+- Max concurrent agents: `3`.
+- Split strategy: by file domains only.
+- Default domain ownership:
+  - Agent A: `src/components/**`, `src/pages/**` (UI markup/behavior in owned paths)
+  - Agent B: `src/styles/**` and style-token updates in owned style files
+  - Agent C: `tests/**`, `README.md`, `.codex-pipeline/**` and lightweight docs/verification updates.
+- Lead-only shared surfaces (single owner unless task is intentionally single-agent):
+  - `astro.config.*`
+  - `package.json`
+  - lockfiles (`pnpm-lock.yaml`, `package-lock.json`, `yarn.lock`)
+  - `components.json`
+  - `.github/workflows/pages.yml`
+  - shared app shell/layout files (for example `src/layouts/**`).
+- Do not split when any subtask requires the same file as another subtask.
+- Integration protocol:
+  - subagents deliver branches/patches only
+  - lead agent performs all integration.
+- Verification protocol:
+  - each subagent runs path-scoped checks before handoff
+  - lead agent runs full gates once after integration:
+    - `corepack pnpm check`
+    - `corepack pnpm build`
+    - `corepack pnpm perf:budget`
+    - `npm --prefix .codex-pipeline run verify:all`
+  - visual changes must pass the DevTools MCP loop.
+
 ## Mandatory DevTools MCP Verification For Visual Changes
 For any UI/layout/style/motion change, do a full DevTools verification loop and iterate until it passes.
 

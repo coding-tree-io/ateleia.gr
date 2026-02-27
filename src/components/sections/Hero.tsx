@@ -6,7 +6,6 @@ import {
   PaintSplashes,
 } from '@/components/decorative/ArtShapes';
 import { ParallaxLayer } from '@/components/decorative/ParallaxLayer';
-import { ReflectiveFigureIllustration } from '@/components/decorative/ReflectiveFigureIllustration';
 import { Button } from '@/components/ui/button';
 import { therapyPracticeWebsiteContent } from '@/content/therapy-practice-website-content';
 
@@ -18,34 +17,27 @@ export function Hero() {
       id="hero"
       className="relative overflow-hidden px-4 pb-16 pt-16 sm:px-6 sm:pb-20 sm:pt-20 md:px-10 md:pb-28 md:pt-28 lg:pt-32"
     >
-      <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-        <ConcentricRings className="w-[420px] opacity-[0.18] md:w-[840px] md:opacity-30 motion-safe:md:animate-slow-spin" />
+      <div className="pointer-events-none absolute inset-0 flex -translate-y-[14%] items-center justify-center sm:translate-y-0">
+        <ConcentricRings className="w-[clamp(20rem,52vw,52rem)] opacity-[0.38] motion-safe:md:animate-slow-spin sm:opacity-[0.24] lg:opacity-[0.28]" />
       </div>
 
       <ParallaxLayer
         speed={0.08}
-        className="absolute -left-20 -top-8 w-[260px] opacity-55 md:-left-28 md:-top-14 md:w-[700px] md:opacity-100"
+        className="pointer-events-none absolute left-[-14%] top-[-8%] w-[clamp(14rem,38vw,42rem)] opacity-60 lg:left-[-10%] lg:top-[-12%] lg:opacity-95"
       >
         <BotanicalCluster />
       </ParallaxLayer>
 
       <ParallaxLayer
-        speed={0.12}
-        className="pointer-events-none absolute right-1 top-8 w-[128px] opacity-55 md:right-14 md:top-12 md:w-[320px] md:opacity-85"
-      >
-        <ReflectiveFigureIllustration variant="whisper" className="md:animate-gentle-drift" />
-      </ParallaxLayer>
-
-      <ParallaxLayer
         speed={0.2}
-        className="absolute -right-16 bottom-[-20%] w-[300px] opacity-55 md:-right-10 md:bottom-[-18%] md:w-[760px] md:opacity-100"
+        className="pointer-events-none absolute bottom-[-24%] right-[-16%] w-[clamp(16rem,42vw,48rem)] opacity-55 lg:bottom-[-20%] lg:right-[-12%] lg:opacity-95"
       >
         <DancingFigures />
       </ParallaxLayer>
 
       <ParallaxLayer
         speed={0.28}
-        className="absolute left-[62%] top-[10%] w-[86px] opacity-50 md:left-[56%] md:top-[14%] md:w-[260px] md:opacity-100"
+        className="pointer-events-none absolute left-[62%] top-[14%] w-[clamp(4.8rem,12vw,16rem)] opacity-45 sm:left-[60%] sm:top-[12%] lg:left-[58%] lg:top-[13%] lg:opacity-85"
       >
         <PaintSplashes />
       </ParallaxLayer>
@@ -64,7 +56,7 @@ export function Hero() {
             <Button
               asChild
               size="lg"
-              className="w-full rounded-full shadow-lg shadow-primary/15 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-primary/25 sm:w-auto"
+              className="w-full rounded-full px-7 shadow-lg shadow-primary/15 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-primary/25 sm:w-auto"
             >
               <a href="#contact">{hero.primaryCta}</a>
             </Button>
@@ -73,7 +65,7 @@ export function Hero() {
               asChild
               variant="outline"
               size="lg"
-              className="w-full rounded-full border-border/60 bg-card/70 text-foreground transition-all duration-300 hover:-translate-y-0.5 hover:border-primary hover:bg-card hover:text-foreground hover:shadow-md sm:w-auto"
+              className="w-full rounded-full border-border/60 bg-card/75 px-7 text-foreground backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary hover:bg-card hover:text-foreground hover:shadow-md sm:w-auto"
             >
               <a href="#contact">{hero.secondaryCta}</a>
             </Button>
@@ -98,7 +90,7 @@ export function Hero() {
 
           <ParallaxLayer
             speed={0.3}
-            className="absolute -bottom-7 -left-7 w-16 opacity-60 md:-bottom-10 md:-left-10 md:w-24 md:opacity-100"
+            className="pointer-events-none absolute -bottom-8 -left-8 w-[clamp(3.75rem,7vw,6rem)] opacity-70"
           >
             <HandCircle />
           </ParallaxLayer>

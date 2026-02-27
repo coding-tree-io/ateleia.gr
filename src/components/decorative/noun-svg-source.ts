@@ -1,6 +1,7 @@
 import growthThreadRawSvg from '@/assets/noun/normalized/noun-abstract-art-4348146.svg?raw';
-import reflectiveFigureRawSvg from '@/assets/noun/normalized/noun-abstract-art-4348166.svg?raw';
 import guidingLabyrinthRawSvg from '@/assets/noun/normalized/noun-labyrinth-5703299.svg?raw';
+
+// Source originals are stored in docs/ and normalized into src/assets/noun/normalized via svg:noun:normalize.
 
 export type NounSvgDefinition = {
   viewBox: string;
@@ -30,11 +31,6 @@ function extractNounSvgDefinitionFromRawSvgSource(
     paths: pathDefinitions,
   };
 }
-
-export const reflectiveFigureNounSvgDefinition = extractNounSvgDefinitionFromRawSvgSource(
-  reflectiveFigureRawSvg,
-  'noun-abstract-art-4348166.svg'
-);
 
 export const growthThreadNounSvgDefinition = extractNounSvgDefinitionFromRawSvgSource(
   growthThreadRawSvg,

@@ -1,16 +1,12 @@
 ---
 import { PaintedEdgeDivider } from '@/components/decorative/ArtShapes';
 import { About } from '@/components/sections/About';
-import { Benefits } from '@/components/sections/Benefits';
 import { Contact } from '@/components/sections/Contact';
 import { Footer } from '@/components/sections/Footer';
 import { HeaderCtaVisibilityObserver } from '@/components/sections/HeaderCtaVisibilityObserver';
 import { Hero } from '@/components/sections/Hero';
-import { HowItWorks } from '@/components/sections/HowItWorks';
-import ResourcesSection from '@/components/sections/ResourcesSection.astro';
 import SiteHeader from '@/components/sections/SiteHeader.astro';
 import { Services } from '@/components/sections/Services';
-import { Trust } from '@/components/sections/Trust';
 import { WhatIs } from '@/components/sections/WhatIs';
 import { WhoIsItFor } from '@/components/sections/WhoIsItFor';
 import PublicDocumentLayout from '@/layouts/PublicDocumentLayout.astro';
@@ -22,8 +18,8 @@ const sectionDividerInvertedClassName =
 ---
 
 <PublicDocumentLayout
-  pageTitle="Ατέλεια | Ψυχοθεραπεία μέσω Τέχνης"
-  pageDescription="Ατέλεια — Ψυχοθεραπεία μέσω Τέχνης. Ένας ασφαλής και δημιουργικός χώρος για προσωπική εξέλιξη μέσα από τη δημιουργική έκφραση."
+  pageTitle="Ατέλεια | Θεραπεία μέσω τέχνης"
+  pageDescription="Ατέλεια — Θεραπεία μέσω τέχνης. Ένας ασφαλής και δημιουργικός χώρος για προσωπική εξέλιξη μέσα από τη δημιουργική έκφραση."
   htmlClassName="hero-in-view"
   includeCodingTreeAttributionScript
 >
@@ -35,28 +31,20 @@ const sectionDividerInvertedClassName =
       <Hero />
       <PaintedEdgeDivider className={topDividerClassName} />
 
-      <WhatIs />
+      <div id="what-is">
+        <WhatIs />
+      </div>
       <PaintedEdgeDivider className={sectionDividerInvertedClassName} />
 
-      <Benefits />
+      <div id="who-is-it-for">
+        <WhoIsItFor />
+      </div>
       <PaintedEdgeDivider className={sectionDividerClassName} />
-
-      <WhoIsItFor />
-      <PaintedEdgeDivider className={sectionDividerInvertedClassName} />
-
-      <HowItWorks />
-      <PaintedEdgeDivider className={sectionDividerClassName} />
-
-      <Trust />
-      <PaintedEdgeDivider className={sectionDividerInvertedClassName} />
 
       <About />
-      <PaintedEdgeDivider className={sectionDividerClassName} />
-
-      <Services />
       <PaintedEdgeDivider className={sectionDividerInvertedClassName} />
 
-      <ResourcesSection />
+      <Services />
       <PaintedEdgeDivider className={sectionDividerClassName} />
 
       <Contact />

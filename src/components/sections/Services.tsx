@@ -3,10 +3,8 @@ import { ChevronDown, Clock, MapPin, Users } from 'lucide-react';
 import { ConcentricRings, PaintSplashes } from '@/components/decorative/ArtShapes';
 import { GrowthThreadIllustration } from '@/components/decorative/GrowthThreadIllustration';
 import { ParallaxLayer } from '@/components/decorative/ParallaxLayer';
-import { Button } from '@/components/ui/button';
 import {
   therapyPracticeWebsiteContent,
-  type ContactChannel,
   type TherapyServiceOffering,
 } from '@/content/therapy-practice-website-content';
 
@@ -96,24 +94,12 @@ function FrequentlyAskedQuestionsSection() {
   );
 }
 
-function findFirstContactChannelByHrefPrefix(
-  contactChannels: readonly ContactChannel[],
-  hrefPrefix: string
-): ContactChannel | undefined {
-  return contactChannels.find((contactChannel) => contactChannel.href.startsWith(hrefPrefix));
-}
-
 export function Services() {
   const {
     servicesTitle,
     services,
     trust: { pullQuote: trustPullQuote },
-    contact: { contactItems: contactChannels },
-    hero: { primaryCta: primaryContactCallToActionLabel },
   } = therapyPracticeWebsiteContent;
-
-  const emailContactChannel = findFirstContactChannelByHrefPrefix(contactChannels, 'mailto:');
-  const telephoneContactChannel = findFirstContactChannelByHrefPrefix(contactChannels, 'tel:');
 
   return (
     <section
@@ -159,44 +145,6 @@ export function Services() {
         </div>
 
         <FrequentlyAskedQuestionsSection />
-
-        <div className="paper-panel mt-16 flex flex-col items-center gap-5 rounded-3xl border border-border/45 p-7 text-center md:mt-20 md:p-12">
-          <h3 className="font-serif text-2xl font-bold text-foreground md:text-3xl">{'Έτοιμοι να ξεκινήσετε;'}</h3>
-          <p className="max-w-lg text-sm leading-relaxed text-muted-foreground">
-            {'Επικοινωνήστε μαζί μου για να προγραμματίσουμε μια πρώτη γνωριμία.'}
-          </p>
-          <div className="flex w-full flex-col items-stretch justify-center gap-3 sm:w-auto sm:flex-row sm:flex-wrap">
-            <Button
-              asChild
-              size="lg"
-              className="w-full rounded-full shadow-lg shadow-primary/15 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-primary/30 sm:w-auto"
-            >
-              <a href="#contact">{primaryContactCallToActionLabel}</a>
-            </Button>
-
-            {emailContactChannel && (
-              <Button
-                asChild
-                variant="outline"
-                size="lg"
-                className="w-full rounded-full border-border/60 bg-card/60 transition-all duration-300 hover:border-accent sm:w-auto"
-              >
-                <a href={emailContactChannel.href}>{emailContactChannel.value}</a>
-              </Button>
-            )}
-
-            {telephoneContactChannel && (
-              <Button
-                asChild
-                variant="outline"
-                size="lg"
-                className="w-full rounded-full border-border/60 bg-card/60 transition-all duration-300 hover:border-accent sm:w-auto"
-              >
-                <a href={telephoneContactChannel.href}>{telephoneContactChannel.value}</a>
-              </Button>
-            )}
-          </div>
-        </div>
       </div>
     </section>
   );
