@@ -92,33 +92,60 @@ editor:
   preview: false
 
 collections:
-  - name: services
-    label: Υπηρεσίες
-    label_singular: Υπηρεσία
-    description: Επεξεργασία των κάρτων υπηρεσιών της αρχικής σελίδας.
-    folder: src/data/services
-    create: false
-    delete: false
-    extension: json
-    format: json
-    identifier_field: title
-    summary: "{{title}}"
-    fields:
-      - { label: Σειρά εμφάνισης, name: order, widget: number, value_type: int, min: 0 }
-      - { label: Τίτλος, name: title, widget: string }
-      - { label: Περιγραφή, name: description, widget: text }
-      - label: Ιδανικό για
-        name: idealFor
-        widget: list
-        summary: "{{fields.value}}"
-        field: { label: Σημείο, name: value, widget: string }
-      - { label: Μορφή, name: format, widget: string, required: false }
-      - { label: Διάρκεια, name: duration, widget: string, required: false }
-      - label: Τι να περιμένετε
-        name: whatToExpect
-        widget: list
-        summary: "{{fields.value}}"
-        field: { label: Σημείο, name: value, widget: string }
+  - name: homepage
+    label: Αρχική σελίδα
+    files:
+      - name: services
+        label: Υπηρεσίες
+        description: Επεξεργασία των καρτών υπηρεσιών της αρχικής σελίδας.
+        file: src/data/services.json
+        fields:
+          - label: Υπηρεσίες
+            name: services
+            widget: list
+            label_singular: Υπηρεσία
+            summary: "{{fields.title}}"
+            hint: Προσθέστε, διαγράψτε ή σύρετε τις υπηρεσίες για να αλλάξετε τη σειρά εμφάνισης.
+            fields:
+              - {
+                  label: Τίτλος,
+                  name: title,
+                  widget: string,
+                  hint: Ο τίτλος που εμφανίζεται στην κάρτα της υπηρεσίας.
+                }
+              - {
+                  label: Περιγραφή,
+                  name: description,
+                  widget: text,
+                  hint: Σύντομη περιγραφή της υπηρεσίας.
+                }
+              - {
+                  label: Μορφή,
+                  name: format,
+                  widget: string,
+                  required: false,
+                  hint: Προαιρετικό, π.χ. Δια ζώσης ή διαδικτυακά.
+                }
+              - {
+                  label: Διάρκεια,
+                  name: duration,
+                  widget: string,
+                  required: false,
+                  hint: Προαιρετικό, π.χ. 50 λεπτά ανά συνεδρία.
+                }
+              - label: Ιδανικό για
+                name: idealFor
+                widget: list
+                summary: "{{fields.value}}"
+                hint: Προσθέστε ένα ή περισσότερα σημεία.
+                field: { label: Σημείο, name: value, widget: string }
+              - label: Τι να περιμένετε
+                name: whatToExpect
+                widget: list
+                required: false
+                summary: "{{fields.value}}"
+                hint: Προαιρετικά σημεία που εμφανίζονται στο κάτω μέρος της κάρτας.
+                field: { label: Σημείο, name: value, widget: string }
 `;
 
   return new Response(yaml, {

@@ -171,7 +171,7 @@ This repo includes a static Decap CMS admin configured for the services section 
 
 - admin entry: `src/pages/admin/index.astro`
 - generated config: `src/pages/admin/config.yml.ts`
-- editable content: `src/data/services/*.json`
+- editable content: `src/data/services.json`
 - content schema/query helpers: `src/content.config.ts`, `src/content/services.ts`
 - local unauthenticated mode: `corepack pnpm cms:dev`
 
@@ -181,6 +181,7 @@ Local development and production intentionally use different backends:
 - deployed GitHub Pages: DecapBridge PKCE via `git-gateway`, for Google login
 
 Decap editor labels remain Greek only where the client edits homepage service content. The surrounding code, docs, and configuration stay in English.
+The services editor is a single list-based document so the client can add, delete, and drag to reorder service cards without managing separate files.
 
 - correct GitHub Pages login URL: `https://coding-tree-io.github.io/ateleia.gr/admin/index.html`
 - `site_url` in the generated CMS config intentionally includes `/ateleia.gr/`, because this repo is deployed as a GitHub Pages project site, not a root site
