@@ -13,8 +13,6 @@ export const therapyPracticeSiteBranding = {
     ink: '#3D3534',
   },
   typography: {
-    googleFontsStylesheetUrl:
-      'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Nunito:wght@400;500;600;700&display=swap',
     headingFontFamily: '"Cormorant Garamond", Georgia, serif',
     bodyFontFamily: '"Nunito", "Noto Sans", system-ui, sans-serif',
   },

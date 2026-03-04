@@ -1,7 +1,17 @@
 ---
+import '@fontsource/nunito/400.css';
+import '@fontsource/nunito/500.css';
+import '@fontsource/nunito/600.css';
+import '@fontsource/nunito/700.css';
+import '@fontsource/cormorant-garamond/400.css';
+import '@fontsource/cormorant-garamond/500.css';
+import '@fontsource/cormorant-garamond/600.css';
+import '@fontsource/cormorant-garamond/700.css';
+import '@fontsource/cormorant-garamond/400-italic.css';
+import '@fontsource/cormorant-garamond/500-italic.css';
+
 import {
   createProjectRelativeUrl,
-  therapyPracticeSiteBranding,
 } from '@/config/site-branding';
 
 const adminConfigUrl = createProjectRelativeUrl('admin/config.yml');
@@ -9,7 +19,6 @@ const faviconSvgUrl = createProjectRelativeUrl('favicon.svg');
 const faviconIcoUrl = createProjectRelativeUrl('favicon.ico');
 const adminStyleUrl = createProjectRelativeUrl('admin/admin.css');
 const previewStyleUrl = createProjectRelativeUrl('admin/preview.css');
-const googleFontsStylesheetUrl = therapyPracticeSiteBranding.typography.googleFontsStylesheetUrl;
 ---
 
 <!doctype html>
@@ -19,9 +28,6 @@ const googleFontsStylesheetUrl = therapyPracticeSiteBranding.typography.googleFo
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex" />
     <title>Ateleia CMS</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
-    <link rel="stylesheet" href={googleFontsStylesheetUrl} />
     <link rel="stylesheet" href={adminStyleUrl} />
     <link rel="icon" type="image/svg+xml" href={faviconSvgUrl} />
     <link rel="icon" href={faviconIcoUrl} />

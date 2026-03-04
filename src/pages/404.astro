@@ -1,5 +1,16 @@
 ---
-import { createProjectRelativeUrl, therapyPracticeSiteBranding } from '@/config/site-branding';
+import '@fontsource/nunito/400.css';
+import '@fontsource/nunito/500.css';
+import '@fontsource/nunito/600.css';
+import '@fontsource/nunito/700.css';
+import '@fontsource/cormorant-garamond/400.css';
+import '@fontsource/cormorant-garamond/500.css';
+import '@fontsource/cormorant-garamond/600.css';
+import '@fontsource/cormorant-garamond/700.css';
+import '@fontsource/cormorant-garamond/400-italic.css';
+import '@fontsource/cormorant-garamond/500-italic.css';
+
+import { createProjectRelativeUrl } from '@/config/site-branding';
 
 const homeHref = createProjectRelativeUrl('');
 const contactHref = createProjectRelativeUrl('#contact');
@@ -21,9 +32,6 @@ const pageTitle = '404 | Page Not Found | Ateleia';
     <link rel="icon" type="image/svg+xml" href={faviconSvgUrl} />
     <link rel="icon" href={faviconIcoUrl} />
     <meta name="description" content="The page you requested was not found on Ateleia." />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
-    <link href={therapyPracticeSiteBranding.typography.googleFontsStylesheetUrl} rel="stylesheet" />
     <link rel="stylesheet" href={notFoundTokenStylesheetUrl} />
     <link rel="stylesheet" href={notFoundAteleiaStylesheetUrl} />
     <link rel="stylesheet" href={notFoundPageStylesheetUrl} />

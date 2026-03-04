@@ -41,15 +41,15 @@ export function Hero() {
 
       <div className="therapy-section-content-width grid gap-10 lg:grid-cols-[1.08fr_0.92fr] lg:gap-12">
         <div className="self-end">
-          <h1 className="therapy-animation-delay-step-one therapy-entrance-animation-rise therapy-hero-heading">
+          <h1 className="therapy-hero-heading">
             {hero.headline}
           </h1>
 
-          <p className="therapy-animation-delay-step-two therapy-entrance-animation-rise therapy-hero-summary mt-6">
+          <p className="therapy-hero-summary mt-6">
             {hero.subheadline}
           </p>
 
-          <div className="therapy-animation-delay-step-three therapy-entrance-animation-rise mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
+          <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
             <Button
               asChild
               size="lg"

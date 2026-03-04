@@ -1,4 +1,4 @@
-import { access, mkdtemp, readFile, rm } from 'node:fs/promises';
+import { access, appendFile, mkdtemp, readFile, rm } from 'node:fs/promises';
 import { constants as fileSystemConstants } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
@@ -185,6 +185,74 @@ function readBudgetViolations(lighthouseReport, budgetConfiguration, testedPageU
   };
 }
 
+function createPerformanceBudgetPayload({
+  testedPageUrl,
+  performanceScore,
+  largestContentfulPaintMilliseconds,
+  totalBlockingTimeMilliseconds,
+  firstPartyScriptKilobytes,
+  violations,
+  budgetConfiguration,
+}) {
+  return {
+    testedPageUrl,
+    score: {
+      actual: Number((performanceScore * 100).toFixed(1)),
+      minimum: Number((budgetConfiguration.lighthouse.minPerformanceScore * 100).toFixed(1)),
+    },
+    largestContentfulPaintMilliseconds: {
+      actual: Math.round(largestContentfulPaintMilliseconds),
+      maximum: budgetConfiguration.lighthouse.maxLargestContentfulPaintMs,
+    },
+    totalBlockingTimeMilliseconds: {
+      actual: Math.round(totalBlockingTimeMilliseconds),
+      maximum: budgetConfiguration.lighthouse.maxTotalBlockingTimeMs,
+    },
+    firstPartyScriptKilobytes: {
+      actual: Number(firstPartyScriptKilobytes.toFixed(1)),
+      maximum: budgetConfiguration.javascript.maxFirstPartyScriptKilobytes,
+    },
+    violations,
+  };
+}
+
+async function appendGitHubStepSummary(performanceBudgetPayload) {
+  const githubStepSummaryFilePath = process.env.GITHUB_STEP_SUMMARY;
+  if (!githubStepSummaryFilePath) {
+    return;
+  }
+
+  const {
+    testedPageUrl,
+    score,
+    largestContentfulPaintMilliseconds,
+    totalBlockingTimeMilliseconds,
+    firstPartyScriptKilobytes,
+    violations,
+  } = performanceBudgetPayload;
+
+  const statusIcon = violations.length === 0 ? '✅' : '❌';
+  const summaryLines = [
+    `### ${statusIcon} Lighthouse mobile performance budget`,
+    '',
+    `- URL: \`${testedPageUrl}\``,
+    `- Performance score: \`${score.actual}\` (min \`${score.minimum}\`)`,
+    `- Largest Contentful Paint: \`${largestContentfulPaintMilliseconds.actual}ms\` (max \`${largestContentfulPaintMilliseconds.maximum}ms\`)`,
+    `- Total Blocking Time: \`${totalBlockingTimeMilliseconds.actual}ms\` (max \`${totalBlockingTimeMilliseconds.maximum}ms\`)`,
+    `- First-party script transfer: \`${firstPartyScriptKilobytes.actual}KB\` (max \`${firstPartyScriptKilobytes.maximum}KB\`)`,
+  ];
+
+  if (violations.length > 0) {
+    summaryLines.push('', '**Violations**');
+    for (const violation of violations) {
+      summaryLines.push(`- ${violation}`);
+    }
+  }
+
+  summaryLines.push('');
+  await appendFile(githubStepSummaryFilePath, `${summaryLines.join('\n')}\n`, 'utf8');
+}
+
 async function main() {
   const budgetConfiguration = JSON.parse(await readFile(budgetConfigurationPath, 'utf8'));
 
@@ -253,11 +321,31 @@ async function main() {
       violations,
     } = readBudgetViolations(lighthouseReport, budgetConfiguration, testedPageUrl);
 
+    const performanceBudgetPayload = createPerformanceBudgetPayload({
+      testedPageUrl,
+      performanceScore,
+      largestContentfulPaintMilliseconds,
+      totalBlockingTimeMilliseconds,
+      firstPartyScriptKilobytes,
+      violations,
+      budgetConfiguration,
+    });
+
     console.log('Performance budget report');
-    console.log(`- Performance score: ${(performanceScore * 100).toFixed(0)}`);
-    console.log(`- Largest Contentful Paint: ${Math.round(largestContentfulPaintMilliseconds)}ms`);
-    console.log(`- Total Blocking Time: ${Math.round(totalBlockingTimeMilliseconds)}ms`);
-    console.log(`- First-party script transfer: ${firstPartyScriptKilobytes.toFixed(1)}KB`);
+    console.log(
+      `- Performance score: ${performanceBudgetPayload.score.actual} (min ${performanceBudgetPayload.score.minimum})`
+    );
+    console.log(
+      `- Largest Contentful Paint: ${performanceBudgetPayload.largestContentfulPaintMilliseconds.actual}ms (max ${performanceBudgetPayload.largestContentfulPaintMilliseconds.maximum}ms)`
+    );
+    console.log(
+      `- Total Blocking Time: ${performanceBudgetPayload.totalBlockingTimeMilliseconds.actual}ms (max ${performanceBudgetPayload.totalBlockingTimeMilliseconds.maximum}ms)`
+    );
+    console.log(
+      `- First-party script transfer: ${performanceBudgetPayload.firstPartyScriptKilobytes.actual}KB (max ${performanceBudgetPayload.firstPartyScriptKilobytes.maximum}KB)`
+    );
+    console.log(`PERF_BUDGET_RESULT::${JSON.stringify(performanceBudgetPayload)}`);
+    await appendGitHubStepSummary(performanceBudgetPayload);
 
     if (violations.length > 0) {
       console.error('Performance budget violations:');
@@ -265,7 +353,7 @@ async function main() {
         console.error(`- ${violation}`);
       }
 
-      throw new Error('Performance budget check failed.');
+      throw new Error(`Performance budget check failed: ${violations.join(' | ')}`);
     }
 
     console.log('Performance budget check passed.');
