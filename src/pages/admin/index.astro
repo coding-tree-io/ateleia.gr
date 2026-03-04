@@ -4,6 +4,7 @@ import { createProjectRelativeUrl } from '@/config/site-branding';
 const adminConfigUrl = createProjectRelativeUrl('admin/config.yml');
 const faviconSvgUrl = createProjectRelativeUrl('favicon.svg');
 const faviconIcoUrl = createProjectRelativeUrl('favicon.ico');
+const previewStyleUrl = createProjectRelativeUrl('admin/preview.css');
 ---
 
 <!doctype html>
@@ -19,5 +20,72 @@ const faviconIcoUrl = createProjectRelativeUrl('favicon.ico');
   </head>
   <body>
     <script src="https://unpkg.com/decap-cms@3.10.1/dist/decap-cms.js"></script>
+    <script is:inline define:vars={{ previewStyleUrl }}>
+      const registerServicesPreview = () => {
+        if (!window.CMS || !window.createClass || !window.h) {
+          return;
+        }
+
+        const h = window.h;
+
+        const toArray = (value) => {
+          if (!value) {
+            return [];
+          }
+
+          if (typeof value.toJS === 'function') {
+            return value.toJS();
+          }
+
+          return Array.isArray(value) ? value : [];
+        };
+
+        const ServicesPreview = window.createClass({
+          render() {
+            const services = toArray(this.props.entry.getIn(['data', 'services']));
+
+            return h('div', { className: 'decap-services-preview' }, [
+              h('p', { className: 'decap-services-preview__eyebrow', key: 'eyebrow' }, 'Προεπισκόπηση ενότητας'),
+              h('h1', { className: 'decap-services-preview__title', key: 'title' }, 'Υπηρεσίες'),
+              h(
+                'div',
+                { className: 'decap-services-preview__grid', key: 'grid' },
+                services.length > 0
+                  ? services.map((service, index) =>
+                      h('article', { className: 'decap-services-preview__card', key: `${service.title ?? 'service'}-${index}` }, [
+                        h('h2', { className: 'decap-services-preview__card-title', key: 'title' }, service.title || 'Νέα υπηρεσία'),
+                        h('p', { className: 'decap-services-preview__card-copy', key: 'description' }, service.description || 'Σύντομη περιγραφή υπηρεσίας.'),
+                        h(
+                          'p',
+                          { className: 'decap-services-preview__meta', key: 'meta' },
+                          [service.format, service.duration].filter(Boolean).join(' / ') || 'Μορφή και διάρκεια'
+                        ),
+                        h(
+                          'ul',
+                          { className: 'decap-services-preview__list', key: 'ideal-for' },
+                          toArray(service.idealFor).map((item, itemIndex) =>
+                            h('li', { key: `${item}-${itemIndex}` }, item),
+                          ),
+                        ),
+                      ]),
+                    )
+                  : [
+                      h(
+                        'div',
+                        { className: 'decap-services-preview__empty', key: 'empty' },
+                        'Προσθέστε υπηρεσίες για να εμφανιστεί η προεπισκόπηση των καρτών.',
+                      ),
+                    ],
+              ),
+            ]);
+          },
+        });
+
+        window.CMS.registerPreviewStyle(previewStyleUrl);
+        window.CMS.registerPreviewTemplate('services', ServicesPreview);
+      };
+
+      registerServicesPreview();
+    </script>
   </body>
 </html>

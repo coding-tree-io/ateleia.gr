@@ -47,7 +47,7 @@ function TherapyServiceCard({ service }: TherapyServiceCardProps) {
         <div className="therapy-surface-supporting-card mt-7 p-5">
           <p className="therapy-section-overline tracking-widest text-muted-foreground">Τι να περιμένετε</p>
           <ul className="therapy-section-supporting-copy mt-3 space-y-2">
-            {service.whatToExpect.map((item) => (
+            {service.whatToExpect.map((item: string) => (
               <li key={item} className="flex gap-2">
                 <span aria-hidden="true" className="pt-1 text-[var(--tone-ink)]">
                   •

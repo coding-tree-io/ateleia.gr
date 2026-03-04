@@ -89,7 +89,7 @@ site_url: ${escapeYamlScalar(siteRootUrl)}
 display_url: ${escapeYamlScalar(siteRootUrl)}
 logo_url: ${escapeYamlScalar(logoUrl)}
 editor:
-  preview: false
+  preview: true
 
 collections:
   - name: homepage
@@ -100,12 +100,13 @@ collections:
         description: Επεξεργασία των καρτών υπηρεσιών της αρχικής σελίδας.
         file: src/data/services.json
         fields:
-          - label: Υπηρεσίες
+          - label: ΥΠΗΡΕΣΙΕΣ
             name: services
             widget: list
             label_singular: Υπηρεσία
             summary: "{{fields.title}}"
             hint: Προσθέστε, διαγράψτε ή σύρετε τις υπηρεσίες για να αλλάξετε τη σειρά εμφάνισης.
+            collapsed: true
             fields:
               - {
                   label: Τίτλος,
@@ -133,16 +134,20 @@ collections:
                   required: false,
                   hint: Προαιρετικό, π.χ. 50 λεπτά ανά συνεδρία.
                 }
-              - label: Ιδανικό για
+              - label: Σε ποιους απευθύνεται
                 name: idealFor
                 widget: list
+                label_singular: Σημείο
+                collapsed: true
                 summary: "{{fields.value}}"
                 hint: Προσθέστε ένα ή περισσότερα σημεία.
                 field: { label: Σημείο, name: value, widget: string }
               - label: Τι να περιμένετε
                 name: whatToExpect
                 widget: list
+                label_singular: Σημείο
                 required: false
+                collapsed: true
                 summary: "{{fields.value}}"
                 hint: Προαιρετικά σημεία που εμφανίζονται στο κάτω μέρος της κάρτας.
                 field: { label: Σημείο, name: value, widget: string }
