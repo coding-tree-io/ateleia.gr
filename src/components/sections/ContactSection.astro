@@ -1,0 +1,100 @@
+---
+import { Mail, Phone, type LucideIcon } from 'lucide-react';
+
+import { BotanicalCluster } from '@/components/decorative/ArtShapes';
+import { GuidingLabyrinthIllustration } from '@/components/decorative/GuidingLabyrinthIllustration';
+import { ParallaxLayer } from '@/components/decorative/ParallaxLayer';
+import { ContactForm } from '@/components/sections/ContactForm';
+import {
+  getContactFormEndpoint,
+  getContactFormSubject,
+  getPrimaryContactEmail,
+} from '@/config/contact';
+import { therapyPracticeWebsiteContent } from '@/content/therapy-practice-website-content';
+
+function selectContactChannelIconByHref(contactChannelHref: string): LucideIcon {
+  if (contactChannelHref.startsWith('mailto:')) {
+    return Mail;
+  }
+
+  return Phone;
+}
+
+const {
+  title,
+  description,
+  contactItems,
+  availabilityNote,
+  privacyNote,
+  formLabels,
+  formMessages,
+} = therapyPracticeWebsiteContent.contact;
+
+const primaryContactEmail = getPrimaryContactEmail();
+const contactFormEndpoint = getContactFormEndpoint();
+const contactFormSubject = getContactFormSubject();
+---
+
+<section id="contact" class="therapy-section-shell">
+  <ParallaxLayer
+    speed={0.16}
+    className="absolute -right-10 -top-6 w-[220px] opacity-45 md:-right-24 md:-top-8 md:w-[560px] md:opacity-100"
+  >
+    <BotanicalCluster />
+  </ParallaxLayer>
+  <ParallaxLayer
+    speed={0.09}
+    className="pointer-events-none absolute -left-8 bottom-[-8%] w-[132px] opacity-45 md:-left-10 md:bottom-[-10%] md:w-[320px] md:opacity-50"
+  >
+    <GuidingLabyrinthIllustration variant="minimal" className="therapy-decorative-animation-float" />
+  </ParallaxLayer>
+
+  <div class="therapy-section-content-width">
+    <div class="grid gap-10 lg:grid-cols-[1fr_0.95fr] lg:gap-16">
+      <div>
+        <h2 class="therapy-section-heading">
+          {title}
+        </h2>
+        <p class="therapy-section-paragraph mt-5">
+          {description}
+        </p>
+
+        <div class="mt-9 space-y-5">
+          {
+            contactItems.map((contactChannel) => {
+              const ContactChannelIcon = selectContactChannelIconByHref(contactChannel.href);
+
+              return (
+                <a
+                  href={contactChannel.href}
+                  class="therapy-contact-channel-link"
+                >
+                  <div class="therapy-contact-channel-icon-shell">
+                    <ContactChannelIcon className="size-5" aria-hidden="true" />
+                  </div>
+                  <span class="font-semibold">{contactChannel.value}</span>
+                </a>
+              );
+            })
+          }
+        </div>
+
+        <p class="therapy-section-supporting-copy mt-8 text-xs">
+          {availabilityNote}
+        </p>
+      </div>
+
+      <div>
+        <ContactForm
+          client:visible={{ rootMargin: '240px' }}
+          formEndpoint={contactFormEndpoint}
+          recipientEmail={primaryContactEmail}
+          subject={contactFormSubject}
+          privacyNote={privacyNote}
+          formLabels={formLabels}
+          formMessages={formMessages}
+        />
+      </div>
+    </div>
+  </div>
+</section>

@@ -17,13 +17,13 @@ const logoImageUrl = createLogoImageUrl();
 
 const desktopBookingButtonClassName = cn(
   buttonVariants({ size: 'lg' }),
-  'rounded-full px-6 opacity-100 transition-[opacity,transform] duration-300 motion-reduce:transition-none md:[.hero-in-view_&]:pointer-events-none md:[.hero-in-view_&]:-translate-y-1 md:[.hero-in-view_&]:opacity-0',
+  'therapy-primary-call-to-action px-6 opacity-100 transition-[opacity,transform] duration-300 motion-reduce:transition-none md:[.hero-in-view_&]:pointer-events-none md:[.hero-in-view_&]:-translate-y-1 md:[.hero-in-view_&]:opacity-0',
 );
 ---
 
 <header class="sticky top-0 z-50 border-b border-border/45 bg-background/90 shadow-sm">
   <div class="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-3.5 sm:px-6 md:px-10">
-    <a href="#hero" class="group flex min-h-11 min-w-0 items-center gap-3 py-0.5" aria-label="Αρχική">
+    <a href="#hero" class="group flex min-h-11 min-w-0 items-center gap-3 py-0.5 md:shrink-0" aria-label="Αρχική">
       <img
         src={logoImageUrl}
         alt="Λογότυπο Ατέλεια"
@@ -37,18 +37,18 @@ const desktopBookingButtonClassName = cn(
       </div>
     </a>
 
-    <nav class="hidden items-center gap-7 md:flex" aria-label="Κύρια πλοήγηση">
+    <nav class="hidden min-w-0 flex-1 items-center justify-center gap-7 md:flex md:pl-3" aria-label="Κύρια πλοήγηση">
       {navigationItems.map((navigationItem) => (
         <a
           href={navigationItem.href}
-          class="relative inline-flex min-h-11 items-center px-1.5 text-sm font-semibold text-muted-foreground transition-colors duration-300 hover:text-foreground after:absolute after:bottom-1 after:left-1.5 after:h-px after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-[calc(100%-0.75rem)]"
+          class="therapy-header-navigation-link"
         >
           {navigationItem.label}
         </a>
       ))}
     </nav>
 
-    <div class="hidden md:flex md:w-[14rem] md:justify-end">
+    <div class="hidden overflow-hidden transition-[width] duration-300 motion-reduce:transition-none md:flex md:w-[14rem] md:shrink-0 md:justify-end md:[.hero-in-view_&]:w-[12rem]">
       <a href="#contact" class={desktopBookingButtonClassName} data-header-cta aria-hidden="true" tabindex="-1">
         {primaryCta}
       </a>

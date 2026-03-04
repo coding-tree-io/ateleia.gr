@@ -1,200 +1,137 @@
 # AGENTS.md - ateleia.gr
 
 ## Purpose
-This file is the agent operating contract for this repository.
-It follows harness-style principles: keep instructions short, enforce invariants in code/config, and verify with objective checks.
+This file is the handoff contract for agents working in this repo.
+It should reflect the actual current product state, not historical intentions.
 
-## Repo Invariants (Do Not Break)
+## Repo Invariants
 - Stack: Astro 5 + React integration + Tailwind CSS v4 + shadcn/ui.
 - Deployment target: GitHub Pages project site.
-- Astro config is static and currently pinned for Pages:
+- Astro config must remain static:
   - `site: "https://coding-tree-io.github.io"`
   - `base: "/ateleia.gr/"`
   - `output: "static"`
-- Theme is locked to the selected brand direction (Terracotta Calm + Nunito).
-- Primary language is Greek-first.
+- Theme lock: Terracotta Calm + Nunito.
+- Primary language: Greek-first.
+- Use `import.meta.env.BASE_URL` for project-path-safe assets and links.
+
+## Current Production Snapshot
+- Homepage is now intentionally reduced to these sections only:
+  - `Hero`
+  - `WhatIs`
+  - `WhoIsItFor`
+  - `About`
+  - `Services`
+  - `Contact`
+- Current homepage composition lives in `src/pages/index.astro`.
+- Active homepage anchors:
+  - `#hero`
+  - `#what-is`
+  - `#who-is-it-for`
+  - `#about`
+  - `#services`
+  - `#contact`
+- Hero state:
+  - old-style decorative composition restored
+  - right-side reflective/mask-like SVG removed from project
+  - dual CTAs restored
+  - big `ConcentricRings` now explicitly visible on mobile
+- Phrase normalization state:
+  - visible phrase is now `Θεραπεία μέσω τέχνης`
+  - `Σε ποιους απευθύνεται` is the enforced wording
+- About section is generic and no longer client-specific, and the old `Αξίες` block has been removed.
+- Services section no longer includes the old closing CTA/contact mini-panel and no longer exposes physical location metadata.
+- Contact section no longer includes address copy or a Google Maps block.
+- Services cards are now backed by an Astro content collection (`src/data/services/*.json`) rather than a hardcoded array in the main content file.
+- Decorative Noun Project icons in Services and Contact now render in source-faithful black using `NounLineArt`, instead of the earlier gradient/blob stylization.
+- Footer uses the `coding-tree-attribution` custom element in `src/components/sections/Footer.tsx`.
+- Production contact form now uses `form.taxi`, matching the service used in `therapycove`.
+- The `mailto:` contact item in `therapyPracticeWebsiteContent.contact.contactItems` is the contact-email source of truth.
+- `PUBLIC_CONTACT_FORM_ENDPOINT` is currently set to `https://form.taxi/s/tb10t33e`.
+- GitHub Pages production builds inject that endpoint from `.github/workflows/pages.yml`.
+- That Form.taxi form is expected to deliver to the same inbox as the configured `mailto:` contact item.
+- Active reusable styling is now centralized in `src/styles/global.css` under long semantic `therapy-*` class names.
+- The site now has a centralized SEO metadata layer in `src/config/site-metadata.ts`.
+- Current SEO mode is intentionally temporary `noindex, nofollow` until the final production domain is known.
+- An initial English privacy-first legal page now exists at `/legal/`.
+- Rule of thumb for styling changes:
+  - use semantic `therapy-*` classes for repeated section shells, cards, links, form controls, and CTA patterns
+  - keep one-off layout, spacing, and decorative positioning inline in the component
+  - do not reintroduce short utility aliases like `paper-panel` or `painted-divider`
+
+## Active Islands
+- `src/components/sections/MobileNavigationMenu.tsx` via `client:media="(max-width: 767px)"`
+- `src/components/sections/HeaderCtaVisibilityObserver.tsx` via `client:load`
+- `src/components/sections/ContactForm.tsx` via `client:visible`
+
+Notes:
+- Keep islands small and leaf-level.
+- Avoid adding new `client:load` islands unless immediate first-paint interaction truly requires it.
 
 ## Source-Of-Truth Map
-- Project setup and runbook: `README.md`
-- Astro deploy/runtime config: `astro.config.mjs`
-- Package scripts and verification commands: `package.json`
-- TypeScript strictness and aliases: `tsconfig.json`
-- shadcn/ui config and aliases: `components.json`
-- Theme tokens and typography lock: `src/config/site-branding.ts`, `src/styles/global.css`
-- Main page entrypoint: `src/pages/index.astro`
-- Production homepage composition: `src/pages/index.astro`, `src/components/sections/SiteHeader.astro`, `src/components/sections/ResourcesSection.astro`, `src/components/sections/HeaderCtaVisibilityObserver.tsx`
+- Runbook and commands: `README.md`
+- Astro config: `astro.config.mjs`
+- SEO config and structured-data helpers: `src/config/site-metadata.ts`
+- Content collections config: `src/content.config.ts`
+- Current homepage entry: `src/pages/index.astro`
+- Shared contact config: `src/config/contact.ts`
+- Legal copy source: `src/config/legal-content.ts`
+- Header shell: `src/components/sections/SiteHeader.astro`
+- Contact shell: `src/components/sections/ContactSection.astro`
+- Footer shell: `src/components/sections/Footer.tsx`
 - Copy source: `src/content/therapy-practice-website-content.ts`
-- Islands policy deep-dive: `ISLANDS_POLICY.md`
-- Performance budget config: `performance-budget.json`
-- Performance budget gate: `scripts/check-lighthouse-budget.mjs`
-- Deployment workflow: `.github/workflows/pages.yml`
-- Design intent/reference docs: `docs/pre-design-checklist.md`, `docs/v0-redesign-brief.md`, `docs/reference-benchmark.md`
-- Sidecar verification stack: `.codex-pipeline/README.md`
+- Services collection helper: `src/content/services.ts`
+- Services data entries: `src/data/services/*.json`
+- Hero visuals: `src/components/sections/Hero.tsx`, `src/components/decorative/ArtShapes.tsx`
+- Noun icon rendering: `src/components/decorative/NounLineArt.tsx`
+- Noun source map: `src/components/decorative/noun-svg-source.ts`
+- Original Noun Project source SVGs:
+  - `docs/noun-abstract-art-4348146.svg`
+  - `docs/noun-labyrinth-5703299.svg`
+- Normalized Noun SVG assets:
+  - `src/assets/noun/normalized/noun-abstract-art-4348146.svg`
+  - `src/assets/noun/normalized/noun-labyrinth-5703299.svg`
+- SVG normalization pipeline: `scripts/svg/normalize-noun-icons.mjs`
+- Layout shell and attribution script loader: `src/layouts/PublicDocumentLayout.astro`
+- Robots generator: `src/pages/robots.txt.ts`
+- Legal page: `src/pages/legal.astro`
+- Verification stack: `.codex-pipeline/README.md`, `.codex-pipeline/package.json`
+- Public env typing: `src/env.d.ts`
+- Public env template: `.env.example`
+- GitHub Pages deploy workflow: `.github/workflows/pages.yml`
 
-## Harness-Aligned Working Rules
-- Keep changes small, reversible, and easy to review.
-- Prefer updating existing abstractions over creating new layers.
-- Do not rely on memory for repo facts; read source files first.
-- Convert repeated mistakes into enforceable guardrails (tests, scripts, or explicit rules in docs/config).
+## Verification Contract
+For non-trivial tasks:
+1. `corepack pnpm check`
+2. `corepack pnpm build`
+3. `corepack pnpm perf:budget`
+4. Set `BASE_URL`
+5. `npm --prefix .codex-pipeline run verify:all`
+
+For visual tasks:
+- Do the DevTools MCP loop on local dev URL.
+- Capture desktop evidence.
+- Capture mobile evidence.
+- Check console.
+- Check network failures.
+- Validate the changed interaction/area only.
+- If visuals intentionally changed, refresh baselines with `npm --prefix .codex-pipeline run visual:update` and rerun `verify:all`.
+
+## Immediate TODOs
+- Replace placeholder contact data if real client contact details become available:
+  - `email@example.com`
+  - `+30 XXX XXX XXXX`
+- When the final domain is ready:
+  - update the canonical origin in `src/config/site-metadata.ts`
+  - switch temporary noindex off in `src/config/site-metadata.ts`
+  - re-check `robots.txt`, sitemap, and canonical tags before deploy
+- If the Form.taxi endpoint changes, update both `.env.example` and `.github/workflows/pages.yml`.
+- If a CMS is introduced later, keep the `services` collection schema stable and swap the loader before changing `Services.tsx`.
+- If new sections are added later, extend the `therapy-*` semantic layer instead of duplicating long Tailwind utility bundles in each section.
+
+## Guardrails
+- Keep changes small and reversible.
+- Prefer updating existing abstractions over introducing new layers.
+- Do not rely on memory for current repo state; read the files above first.
 - If behavior changes, update docs in the same change set.
-- Treat unverified claims as hypotheses; verify or mark as unverified.
-
-## Mandatory Framework MCP Consultation
-- Always consult `astro_docs` MCP before implementing, refactoring, or verifying Astro-specific behavior (routing, islands, config, static output, content collections, integrations, rendering semantics).
-- Always consult `shadcn` MCP before implementing or changing shadcn/ui components, theming, composition patterns, CLI usage, or styling conventions.
-- Treat MCP guidance as required input and then reconcile it with this repo's constraints.
-- If MCP guidance conflicts with pinned project constraints in this file, follow repo invariants and document the tradeoff in the task report.
-
-## Mandatory `.codex-pipeline` Verification Stack
-Use this stack in task verification for every task completion claim.
-
-Required sidecar tools:
-- Style Dictionary + DTCG tokens (`tokens:verify-sync`, `tokens:build`)
-- Storybook build against project components (`storybook:build`)
-- Playwright + axe accessibility checks (`a11y:test`)
-- Playwright visual regression baselines (`visual:test`)
-
-Canonical command sequence:
-1. `npm --prefix .codex-pipeline install`
-2. `npm --prefix .codex-pipeline run setup:browsers`
-3. Set `BASE_URL` to the environment under test
-4. `npm --prefix .codex-pipeline run verify:all`
-
-Rules:
-- `BASE_URL` is mandatory for `a11y:test`, `visual:test`, and `verify:all`.
-- Do not skip sidecar checks when claiming a task is done.
-- For baseline refreshes, use `visual:update` explicitly and report why it changed.
-- Prefer reusing existing DevTools screenshots via `visual:promote-devtools` before recapturing.
-
-## Astro + Islands Policy
-- Default to static Astro rendering; hydrate only where interaction is required.
-- Keep React islands as small leaf boundaries, not page-wide wrappers.
-- Current production islands baseline:
-  - `src/components/sections/MobileNavigationMenu.tsx` via `client:media="(max-width: 767px)"`
-  - `src/components/sections/ResourcesFilters.tsx` via `client:visible`
-  - `src/components/sections/HeaderCtaVisibilityObserver.tsx` via `client:load`
-- For new or refactored interaction, prefer:
-  - `client:visible` for below-the-fold interactive UI.
-  - `client:idle` for non-critical interaction after first paint.
-  - Avoid new `client:load` unless strictly necessary for immediate first-paint interaction.
-- Keep island props serializable and avoid leaking non-serializable runtime state.
-- Keep browser-only APIs (`window`, `document`, `matchMedia`) inside client code paths.
-- Respect `prefers-reduced-motion` for all animations.
-- Canonical deeper guidance: `ISLANDS_POLICY.md`.
-
-## shadcn/ui + Styling Rules
-- Reuse primitives from `src/components/ui/*` before adding new base components.
-- Keep visual tokens in semantic variables (`--primary`, `--background`, etc.), not scattered raw hex values.
-- Match existing style system in `src/styles/global.css` and `components.json`.
-- Keep motion subtle and intentional; avoid gratuitous animation.
-- Preserve accessibility defaults (focus ring visibility, keyboard reachability, contrast).
-
-## GitHub Pages Guardrails
-- Use `import.meta.env.BASE_URL` for static asset and internal path safety.
-- Do not introduce root-absolute URLs that ignore project base path.
-- Do not add server-only runtime features/adapters.
-- Ensure output remains static and publishable from `dist`.
-- Keep CI deployment workflow (`.github/workflows/pages.yml`) compatible with the build.
-
-## Required Workflow Per Non-Trivial Task
-1. Recon
-- Read relevant files and existing conventions before editing.
-
-2. Plan
-- Write a compact KERNEL plan with: Objective, Constraints, Definition of done, Plan steps.
-- Keep steps small and include file paths plus verification per step.
-
-3. Implement
-- Apply minimal diffs first.
-- Avoid drive-by refactors.
-
-4. Verify
-- Run fast core checks after meaningful edits:
-  - `corepack pnpm check`
-  - `corepack pnpm build`
-  - `corepack pnpm perf:budget`
-- Run the mandatory sidecar gate:
-  - `npm --prefix .codex-pipeline run verify:all`
-
-5. Report
-- Summarize changed files, commands run, results, and remaining risks.
-
-## File Inspection Discipline
-- Apply the global bounded-read rules from `C:\Users\SVall\.codex\AGENTS.md`.
-- Never use uncapped reads (`Get-Content <file>` without `-TotalCount` or `-Tail`).
-- If an anchor pattern is known, use bounded search first:
-  - `rg -n -C 2 -m 20 -- <pattern> <path>`
-  - Prefer `git grep -n` for tracked files.
-- If no anchor is known, bootstrap with bounded slices:
-  - `Get-Content <file> -TotalCount 120`
-  - `Get-Content <file> -Tail 120`
-- Keep each single command output under ~200 lines.
-
-## Multi-agent split map (ateleia.gr)
-- Split policy: conservative.
-- Max concurrent agents: `3`.
-- Split strategy: by file domains only.
-- Default domain ownership:
-  - Agent A: `src/components/**`, `src/pages/**` (UI markup/behavior in owned paths)
-  - Agent B: `src/styles/**` and style-token updates in owned style files
-  - Agent C: `tests/**`, `README.md`, `.codex-pipeline/**` and lightweight docs/verification updates.
-- Lead-only shared surfaces (single owner unless task is intentionally single-agent):
-  - `astro.config.*`
-  - `package.json`
-  - lockfiles (`pnpm-lock.yaml`, `package-lock.json`, `yarn.lock`)
-  - `components.json`
-  - `.github/workflows/pages.yml`
-  - shared app shell/layout files (for example `src/layouts/**`).
-- Do not split when any subtask requires the same file as another subtask.
-- Integration protocol:
-  - subagents deliver branches/patches only
-  - lead agent performs all integration.
-- Verification protocol:
-  - each subagent runs path-scoped checks before handoff
-  - lead agent runs full gates once after integration:
-    - `corepack pnpm check`
-    - `corepack pnpm build`
-    - `corepack pnpm perf:budget`
-    - `npm --prefix .codex-pipeline run verify:all`
-  - visual changes must pass the DevTools MCP loop.
-
-## Mandatory DevTools MCP Verification For Visual Changes
-For any UI/layout/style/motion change, do a full DevTools verification loop and iterate until it passes.
-
-Verification loop (repeat until pass):
-1. Open the page under test (local dev URL).
-2. Capture desktop evidence (screenshot and/or targeted snapshot).
-3. Capture mobile evidence for the same changed area.
-4. Check console messages for errors introduced by the change.
-5. Check network requests for failed/blocked critical assets.
-6. Validate changed interactions (hover/click/focus/keyboard) where relevant.
-7. If any visual, behavior, console, or network issue is found, refactor and rerun this loop.
-
-Pass criteria:
-- No new console errors.
-- No critical failed requests.
-- No obvious layout regressions on desktop/mobile for touched areas.
-- Interaction works via keyboard where applicable.
-- Motion respects reduced-motion expectations.
-
-Token discipline for DevTools MCP:
-- Keep each verification pass targeted to changed areas.
-- Prefer 5-10 DevTools MCP calls per pass.
-- Prefer targeted snapshots/evaluations over repeated full-page captures.
-- Do not spam snapshots; gather only evidence needed to decide pass/fail.
-
-## Definition Of Done
-A task is done only when all are true:
-- Requested behavior is implemented.
-- `pnpm check` and `pnpm build` succeed.
-- `corepack pnpm perf:budget` passes.
-- `.codex-pipeline` verification passes (`verify:all`).
-- Visual tasks pass the DevTools MCP loop on desktop and mobile.
-- GitHub Pages base-path/static constraints remain intact.
-- Documentation is updated if commands, behavior, or constraints changed.
-
-## Entropy Control
-- Remove dead code introduced by experiments.
-- Keep one canonical implementation path for each feature.
-- When temporary files/scripts are needed, delete or document them before completion.
-- Keep this file concise; move deep detail to focused docs and link from here.
+- Treat unverified claims as hypotheses until backed by code references or tool output.

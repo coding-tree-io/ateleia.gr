@@ -134,122 +134,130 @@
   --sidebar-ring: #f0847b;
 }
 
-@keyframes fade-up {
+@keyframes therapy-entry-rise {
   from {
     transform: translateY(16px);
   }
+
   to {
     transform: translateY(0);
   }
 }
 
-@keyframes fade-in {
+@keyframes therapy-entry-soft-settle {
   from {
     transform: translateY(6px);
   }
+
   to {
     transform: translateY(0);
   }
 }
 
-@keyframes gentle-float {
+@keyframes therapy-decorative-float {
   0%,
   100% {
     transform: translateY(0) rotate(0deg);
   }
+
   50% {
     transform: translateY(-12px) rotate(1deg);
   }
 }
 
-@keyframes gentle-drift {
+@keyframes therapy-decorative-drift {
   0%,
   100% {
     transform: translateX(0) translateY(0);
   }
+
   33% {
     transform: translateX(8px) translateY(-6px);
   }
+
   66% {
     transform: translateX(-6px) translateY(4px);
   }
 }
 
-@keyframes slow-spin {
+@keyframes therapy-decorative-slow-spin {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
 }
 
-@keyframes card-glow {
+@keyframes therapy-surface-attention-glow {
   0%,
   100% {
     box-shadow: 0 14px 34px -24px rgba(47, 39, 36, 0.2);
   }
+
   50% {
     box-shadow: 0 20px 44px -24px rgba(199, 57, 46, 0.22);
   }
 }
 
-@keyframes alpha-underline {
+@keyframes therapy-brand-wordmark-underline-cycle {
   0%,
   20%,
   100% {
     transform: scaleX(0.5);
     opacity: 0.38;
   }
+
   60% {
     transform: scaleX(1);
     opacity: 0.82;
   }
 }
 
-.animate-alpha-underline {
-  animation: alpha-underline 2.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+.therapy-brand-wordmark-underline-animation {
+  animation: therapy-brand-wordmark-underline-cycle 2.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
 @supports not (will-change: transform) {
-  .animate-alpha-underline {
+  .therapy-brand-wordmark-underline-animation {
     will-change: auto;
   }
 }
 
-.animate-fade-up {
-  animation: fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+.therapy-entrance-animation-rise {
+  animation: therapy-entry-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-.animate-fade-in {
-  animation: fade-in 0.6s ease both;
+.therapy-entrance-animation-soft-settle {
+  animation: therapy-entry-soft-settle 0.6s ease both;
 }
 
-.animate-gentle-float {
-  animation: gentle-float 8s ease-in-out infinite;
+.therapy-decorative-animation-float {
+  animation: therapy-decorative-float 8s ease-in-out infinite;
 }
 
-.animate-gentle-drift {
-  animation: gentle-drift 12s ease-in-out infinite;
+.therapy-decorative-animation-drift {
+  animation: therapy-decorative-drift 12s ease-in-out infinite;
 }
 
-.animate-slow-spin {
-  animation: slow-spin 60s linear infinite;
+.therapy-decorative-animation-slow-spin {
+  animation: therapy-decorative-slow-spin 60s linear infinite;
 }
 
-.animate-card-glow {
-  animation: card-glow 8s ease-in-out infinite;
+.therapy-surface-attention-glow-animation {
+  animation: therapy-surface-attention-glow 8s ease-in-out infinite;
 }
 
-.stagger-1 {
+.therapy-animation-delay-step-one {
   animation-delay: 0.1s;
 }
 
-.stagger-2 {
+.therapy-animation-delay-step-two {
   animation-delay: 0.2s;
 }
 
-.stagger-3 {
+.therapy-animation-delay-step-three {
   animation-delay: 0.3s;
 }
 
@@ -275,12 +283,12 @@
   }
 
   @media (max-width: 767px) {
-    .animate-fade-up,
-    .animate-fade-in,
-    .animate-gentle-float,
-    .animate-gentle-drift,
-    .animate-slow-spin,
-    .animate-card-glow {
+    .therapy-entrance-animation-rise,
+    .therapy-entrance-animation-soft-settle,
+    .therapy-decorative-animation-float,
+    .therapy-decorative-animation-drift,
+    .therapy-decorative-animation-slow-spin,
+    .therapy-surface-attention-glow-animation {
       animation: none;
     }
   }
@@ -300,30 +308,566 @@
   }
 }
 
-@layer utilities {
-  .no-scrollbar {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
+@layer components {
+  .therapy-hero-section-shell {
+    position: relative;
+    overflow: hidden;
+    padding: 4rem 1rem 4rem;
   }
 
-  .no-scrollbar::-webkit-scrollbar {
-    display: none;
+  .therapy-section-shell {
+    position: relative;
+    overflow: hidden;
+    padding: 4rem 1rem;
   }
 
-  .paper-panel {
+  .therapy-section-content-width {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 72rem;
+    margin-inline: auto;
+  }
+
+  .therapy-illustrated-section-divider {
+    display: block;
+    width: 100%;
+    max-width: 80rem;
+    margin-inline: auto;
+    margin-top: -0.25rem;
+  }
+
+  .therapy-illustrated-section-divider-after-hero {
+    height: 0.75rem;
+    opacity: 0.28;
+  }
+
+  .therapy-illustrated-section-divider-standard {
+    height: 0.5rem;
+    opacity: 0.22;
+  }
+
+  .therapy-illustrated-section-divider-inverted {
+    height: 0.5rem;
+    opacity: 0.22;
+    transform: rotate(180deg);
+  }
+
+  .therapy-section-heading {
+    font-family: var(--font-serif);
+    font-size: 1.875rem;
+    font-weight: 700;
+    line-height: 1.08;
+    color: var(--foreground);
+    text-wrap: balance;
+  }
+
+  .therapy-section-paragraph {
+    font-size: 1rem;
+    line-height: 1.78;
+    color: var(--muted-foreground);
+  }
+
+  .therapy-section-supporting-copy {
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    color: var(--muted-foreground);
+  }
+
+  .therapy-section-overline {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .therapy-hero-heading {
+    font-family: var(--font-serif);
+    font-size: 2.25rem;
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: -0.025em;
+    color: var(--foreground);
+    text-wrap: balance;
+  }
+
+  .therapy-hero-summary {
+    max-width: 36rem;
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--muted-foreground);
+  }
+
+  .therapy-surface-paper-card,
+  .therapy-form-shell {
+    border: 1px solid color-mix(in srgb, var(--border) 78%, transparent);
+    border-radius: 1.5rem;
     background: linear-gradient(160deg, rgba(255, 255, 255, 0.84) 0%, rgba(252, 247, 241, 0.78) 100%);
     box-shadow: 0 16px 36px -28px rgba(47, 39, 36, 0.42);
   }
 
-  .painted-divider {
-    display: block;
-    width: 100%;
-    max-width: 1280px;
-    margin-inline: auto;
+  .therapy-surface-paper-card-interactive {
+    border: 1px solid color-mix(in srgb, var(--border) 78%, transparent);
+    border-radius: 1.5rem;
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.84) 0%, rgba(252, 247, 241, 0.78) 100%);
+    box-shadow: 0 16px 36px -28px rgba(47, 39, 36, 0.42);
+    transition: transform 0.5s ease, box-shadow 0.5s ease;
+  }
+
+  .therapy-surface-paper-card-interactive:hover {
+    transform: translateY(-0.25rem);
+    box-shadow: 0 20px 40px -24px rgba(47, 39, 36, 0.24);
+  }
+
+  .therapy-surface-soft-card {
+    border: 1px solid color-mix(in srgb, var(--border) 78%, transparent);
+    border-radius: 1.5rem;
+    background-color: color-mix(in srgb, var(--card) 70%, transparent);
+  }
+
+  .therapy-surface-supporting-card {
+    border: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
+    border-radius: 1rem;
+    background-color: color-mix(in srgb, var(--secondary) 55%, transparent);
+  }
+
+  .therapy-surface-expandable-card {
+    border: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
+    border-radius: 1rem;
+    background-color: color-mix(in srgb, var(--card) 70%, transparent);
+    transition: box-shadow 0.3s ease;
+  }
+
+  .therapy-surface-expandable-card:hover,
+  .therapy-surface-expandable-card[open] {
+    box-shadow: 0 10px 18px -18px rgba(47, 39, 36, 0.45);
+  }
+
+  .therapy-primary-call-to-action {
+    min-height: 3rem;
+    border-radius: 9999px !important;
+    font-size: 1rem;
+    box-shadow: 0 14px 28px -22px rgba(199, 57, 46, 0.55) !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+  }
+
+  .therapy-primary-call-to-action:hover {
+    transform: translateY(-0.125rem);
+    box-shadow: 0 18px 30px -20px rgba(199, 57, 46, 0.65) !important;
+  }
+
+  .therapy-secondary-call-to-action {
+    min-height: 3rem;
+    border-radius: 9999px !important;
+    border-color: color-mix(in srgb, var(--border) 88%, transparent) !important;
+    background-color: color-mix(in srgb, var(--card) 75%, transparent) !important;
+    color: var(--foreground) !important;
+    box-shadow: 0 10px 20px -18px rgba(47, 39, 36, 0.16) !important;
+    backdrop-filter: blur(10px);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease, background-color 0.3s ease;
+  }
+
+  .therapy-secondary-call-to-action:hover {
+    transform: translateY(-0.125rem);
+    border-color: var(--primary) !important;
+    background-color: var(--card) !important;
+    box-shadow: 0 10px 20px -18px rgba(47, 39, 36, 0.45) !important;
+  }
+
+  .therapy-header-navigation-link {
+    position: relative;
+    display: inline-flex;
+    min-height: 2.75rem;
+    align-items: center;
+    padding-inline: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--muted-foreground);
+    transition: color 0.3s ease;
+  }
+
+  .therapy-header-navigation-link::after {
+    content: '';
+    position: absolute;
+    left: 0.375rem;
+    bottom: 0.25rem;
+    height: 1px;
+    width: 0;
+    background-color: var(--primary);
+    transition: width 0.3s ease;
+  }
+
+  .therapy-header-navigation-link:hover {
+    color: var(--foreground);
+  }
+
+  .therapy-header-navigation-link:hover::after {
+    width: calc(100% - 0.75rem);
+  }
+
+  .therapy-footer-navigation-link {
+    display: inline-flex;
+    min-height: 2rem;
+    align-items: center;
+    border: 1px solid transparent;
+    border-radius: 9999px;
+    padding-inline: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--muted-foreground);
+    transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+  }
+
+  .therapy-footer-navigation-link:hover {
+    border-color: color-mix(in srgb, var(--border) 85%, transparent);
+    background-color: color-mix(in srgb, var(--secondary) 70%, transparent);
+    color: var(--foreground);
+  }
+
+  .therapy-mobile-navigation-link {
+    display: flex;
+    min-height: 2.75rem;
+    align-items: center;
+    border: 1px solid color-mix(in srgb, var(--border) 75%, transparent);
+    border-radius: 0.75rem;
+    background-color: color-mix(in srgb, var(--card) 65%, transparent);
+    padding-inline: 1rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--foreground);
+    transition: background-color 0.3s ease;
+  }
+
+  .therapy-mobile-navigation-link:hover {
+    background-color: var(--secondary);
+  }
+
+  .therapy-inline-text-link {
+    display: inline-flex;
+    min-height: 2.75rem;
+    align-items: center;
+    border-radius: 0.25rem;
+    padding-inline: 0.25rem;
+    font-weight: 600;
+    color: var(--foreground);
+    text-decoration: underline;
+    text-underline-offset: 0.25rem;
+    transition: color 0.3s ease;
+  }
+
+  .therapy-inline-text-link:hover {
+    color: var(--primary);
+  }
+
+  .therapy-contact-channel-link {
+    display: flex;
+    min-height: 2.75rem;
+    align-items: center;
+    gap: 1rem;
+    font-size: 1rem;
+    color: var(--foreground);
+    transition: color 0.3s ease;
+  }
+
+  .therapy-contact-channel-link:hover {
+    color: var(--primary);
+  }
+
+  .therapy-contact-channel-icon-shell {
+    display: flex;
+    height: 2.75rem;
+    width: 2.75rem;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.75rem;
+    background-color: color-mix(in srgb, var(--accent) 25%, transparent);
+    color: var(--tone-ink);
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  .therapy-contact-channel-link:hover .therapy-contact-channel-icon-shell {
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+  }
+
+  .therapy-form-shell {
+    padding: 1.5rem;
+  }
+
+  .therapy-form-field-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted-foreground);
+  }
+
+  .therapy-form-field-control {
+    border-color: color-mix(in srgb, var(--border) 78%, transparent);
+    border-radius: 0.75rem;
+    background-color: color-mix(in srgb, var(--background) 70%, transparent);
+  }
+
+  .therapy-form-consent-row {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    cursor: pointer;
+    align-items: center;
+    gap: 1rem;
+    border: 1px solid color-mix(in srgb, var(--border) 80%, transparent);
+    border-radius: 1.25rem;
+    background:
+      radial-gradient(circle at top left, rgba(255, 255, 255, 0.95), transparent 48%),
+      linear-gradient(165deg, rgba(255, 255, 255, 0.92) 0%, rgba(246, 240, 234, 0.86) 100%);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.88),
+      0 14px 30px -26px rgba(47, 39, 36, 0.45);
+    padding: 1rem;
+    transition:
+      border-color 0.25s ease,
+      background-color 0.25s ease,
+      box-shadow 0.25s ease,
+      transform 0.25s ease;
+  }
+
+  .therapy-form-consent-row:hover {
+    border-color: color-mix(in srgb, var(--primary) 30%, var(--border) 70%);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.9),
+      0 18px 34px -26px rgba(47, 39, 36, 0.32);
+    transform: translateY(-1px);
+  }
+
+  .therapy-form-consent-checkbox-shell {
+    display: inline-flex;
+    height: 3rem;
+    width: 3rem;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid color-mix(in srgb, var(--border) 82%, transparent);
+    border-radius: 1rem;
+    background:
+      linear-gradient(145deg, rgba(255, 255, 255, 0.96) 0%, rgba(244, 236, 231, 0.94) 100%);
+    color: transparent;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.88),
+      0 12px 22px -20px rgba(47, 39, 36, 0.34);
+    transition:
+      border-color 0.25s ease,
+      background-color 0.25s ease,
+      color 0.25s ease,
+      box-shadow 0.25s ease,
+      transform 0.25s ease;
+  }
+
+  .therapy-form-consent-copy {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .therapy-form-consent-required-label {
+    font-size: 0.6875rem;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--tone-teal) 78%, var(--foreground) 22%);
+  }
+
+  .therapy-form-consent-text {
+    font-size: 0.8125rem;
+    line-height: 1.65;
+    color: var(--muted-foreground);
+  }
+
+  .therapy-form-consent-row:has(.peer:focus-visible) {
+    border-color: color-mix(in srgb, var(--ring) 48%, transparent);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.9),
+      0 0 0 3px color-mix(in srgb, var(--ring) 16%, transparent),
+      0 18px 34px -26px rgba(47, 39, 36, 0.32);
+  }
+
+  .therapy-form-consent-row:has(.peer:checked) {
+    border-color: color-mix(in srgb, var(--primary) 38%, var(--border) 62%);
+    background:
+      radial-gradient(circle at top left, rgba(255, 255, 255, 0.95), transparent 52%),
+      linear-gradient(165deg, rgba(255, 251, 250, 0.96) 0%, rgba(248, 236, 233, 0.92) 100%);
+  }
+
+  .therapy-form-consent-row:has(.peer:checked) .therapy-form-consent-checkbox-shell {
+    border-color: color-mix(in srgb, var(--primary) 82%, transparent);
+    background: linear-gradient(160deg, rgba(199, 57, 46, 0.96) 0%, rgba(217, 127, 111, 0.96) 100%);
+    color: var(--primary-foreground);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.24),
+      0 18px 26px -22px rgba(199, 57, 46, 0.72);
+    transform: translateY(-1px);
+  }
+
+  .therapy-form-consent-row:has(.peer:checked) .therapy-form-consent-required-label {
+    color: color-mix(in srgb, var(--primary) 74%, var(--tone-teal) 26%);
+  }
+
+  .therapy-form-unavailable-note {
+    border: 1px dashed color-mix(in srgb, var(--border) 85%, transparent);
+    border-radius: 1rem;
+    background-color: color-mix(in srgb, var(--secondary) 45%, transparent);
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    line-height: 1.7;
+    color: var(--muted-foreground);
+  }
+
+  .therapy-form-status-message {
+    min-height: 1.5rem;
+    margin-top: 1rem;
+    font-size: 0.875rem;
+    line-height: 1.7;
+  }
+
+  .therapy-form-status-message-pending {
+    color: var(--tone-ink);
+  }
+
+  .therapy-form-status-message-success {
+    color: #166534;
+  }
+
+  .therapy-form-status-message-error {
+    color: var(--destructive);
+  }
+
+  .therapy-form-privacy-note {
+    margin-top: 0.75rem;
+    text-align: center;
+    font-size: 0.6875rem;
+    line-height: 1.7;
+    color: var(--muted-foreground);
+  }
+
+  .therapy-footer-attribution-shell {
+    display: inline-flex;
+    min-height: 1.5rem;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .therapy-footer-attribution-shell coding-tree-attribution:not(:defined) {
+    display: none;
+  }
+
+  .therapy-footer-attribution-shell coding-tree-attribution:defined + .therapy-footer-attribution-fallback {
+    display: none;
+  }
+
+  .therapy-footer-attribution-fallback {
+    display: inline-flex;
+    color: color-mix(in srgb, var(--foreground) 76%, var(--tone-teal) 24%);
+    font-size: 0.8rem;
+    font-weight: 600;
+    line-height: 1.35;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .therapy-footer-attribution-fallback:hover {
+    color: var(--foreground);
+  }
+
+  .therapy-footer-attribution-fallback:focus-visible {
+    border-radius: 9999px;
+    outline: 2px solid color-mix(in srgb, var(--ring) 52%, transparent);
+    outline-offset: 3px;
+  }
+
+  @media (min-width: 640px) {
+    .therapy-hero-section-shell,
+    .therapy-section-shell {
+      padding-inline: 1.5rem;
+    }
+
+    .therapy-hero-section-shell {
+      padding-top: 5rem;
+      padding-bottom: 5rem;
+    }
+
+    .therapy-section-shell {
+      padding-block: 5rem;
+    }
+
+    .therapy-hero-heading {
+      font-size: 3rem;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .therapy-hero-section-shell {
+      padding-inline: 2.5rem;
+      padding-top: 7rem;
+      padding-bottom: 7rem;
+    }
+
+    .therapy-section-shell {
+      padding-inline: 2.5rem;
+      padding-block: 7rem;
+    }
+
+    .therapy-illustrated-section-divider-after-hero {
+      height: 2.5rem;
+      opacity: 0.6;
+    }
+
+    .therapy-illustrated-section-divider-standard,
+    .therapy-illustrated-section-divider-inverted {
+      height: 2rem;
+      opacity: 0.55;
+    }
+
+    .therapy-section-heading {
+      font-size: 2.25rem;
+    }
+
+    .therapy-section-paragraph,
+    .therapy-section-supporting-copy,
+    .therapy-hero-summary {
+      font-size: 1.125rem;
+    }
+
+    .therapy-hero-heading {
+      font-size: 4.5rem;
+    }
+
+    .therapy-form-shell {
+      padding: 2.25rem;
+    }
+
+    .therapy-form-consent-row {
+      padding: 1.125rem 1.125rem 1.125rem 1rem;
+    }
+
+    .therapy-form-consent-text {
+      font-size: 0.875rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .therapy-hero-section-shell {
+      padding-top: 8rem;
+    }
+
+    .therapy-section-heading {
+      font-size: 3rem;
+    }
   }
 
   @media (max-width: 767px) {
-    .paper-panel {
+    .therapy-surface-paper-card,
+    .therapy-surface-paper-card-interactive,
+    .therapy-form-shell {
       box-shadow: 0 10px 22px -20px rgba(47, 39, 36, 0.32);
     }
   }

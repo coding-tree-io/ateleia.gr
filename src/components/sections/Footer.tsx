@@ -1,9 +1,10 @@
 import { therapyPracticeWebsiteContent } from '@/content/therapy-practice-website-content';
-import { createCreditsPageUrl, createLogoImageUrl } from '@/config/site-branding';
+import { createCreditsPageUrl, createLogoImageUrl, createProjectRelativeUrl } from '@/config/site-branding';
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
   const creditsPageUrl = createCreditsPageUrl();
+  const legalPageUrl = createProjectRelativeUrl('legal/');
   const logoImageUrl = createLogoImageUrl();
   const { brandName, navigationItems } = therapyPracticeWebsiteContent;
 
@@ -30,16 +31,22 @@ export function Footer() {
               <a
                 key={navigationItem.label}
                 href={navigationItem.href}
-                className="inline-flex min-h-8 items-center rounded-full border border-transparent px-2 text-sm font-medium text-muted-foreground transition-colors duration-300 hover:border-border/60 hover:bg-secondary/70 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                className="therapy-footer-navigation-link focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
               >
                 {navigationItem.label}
               </a>
             ))}
             <a
               href={creditsPageUrl}
-              className="inline-flex min-h-8 items-center rounded-full border border-transparent px-2 text-sm font-medium text-muted-foreground transition-colors duration-300 hover:border-border/60 hover:bg-secondary/70 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              className="therapy-footer-navigation-link focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             >
               Credits
+            </a>
+            <a
+              href={legalPageUrl}
+              className="therapy-footer-navigation-link focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            >
+              Legal
             </a>
           </nav>
         </div>
@@ -48,12 +55,22 @@ export function Footer() {
           <p className="text-sm text-muted-foreground">© {currentYear}. All rights reserved.</p>
 
           <div className="flex w-full justify-center">
-            <coding-tree-attribution
-              className="origin-center scale-[0.62]"
-              theme="default"
-              size="sm"
-              href="https://github.com/coding-tree-io"
-            ></coding-tree-attribution>
+            <div className="therapy-footer-attribution-shell">
+              <coding-tree-attribution
+                className="origin-center"
+                theme="default"
+                size="lg"
+                href="https://github.com/coding-tree-io"
+              ></coding-tree-attribution>
+              <a
+                className="therapy-footer-attribution-fallback"
+                href="https://github.com/coding-tree-io"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Built by Coding Tree
+              </a>
+            </div>
           </div>
         </div>
       </div>

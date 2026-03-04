@@ -20,7 +20,7 @@ export function ThreadedAlphaWordmark({ className, compact = false }: ThreadedAl
       <span>τέλεια</span>
       <span
         aria-hidden="true"
-        className="animate-alpha-underline pointer-events-none absolute bottom-0 left-[0.15em] h-[2px] w-[95%] origin-left rounded-full bg-gradient-to-r from-primary/0 via-primary/70 to-primary/0 will-change-transform"
+        className="therapy-brand-wordmark-underline-animation pointer-events-none absolute bottom-0 left-[0.15em] h-[2px] w-[95%] origin-left rounded-full bg-gradient-to-r from-primary/0 via-primary/70 to-primary/0 will-change-transform"
       />
     </span>
   );

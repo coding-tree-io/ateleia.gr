@@ -1,0 +1,21 @@
+import { getCollection, type CollectionEntry } from 'astro:content';
+
+type ServicesCollectionEntry = CollectionEntry<'services'>;
+
+export type TherapyService = ServicesCollectionEntry['data'] & {
+  id: ServicesCollectionEntry['id'];
+};
+
+export async function getServices(): Promise<TherapyService[]> {
+  const services = await getCollection('services');
+
+  return services
+    .sort(
+      (left, right) =>
+        left.data.order - right.data.order || left.data.title.localeCompare(right.data.title, 'el'),
+    )
+    .map(({ id, data }) => ({
+      id,
+      ...data,
+    }));
+}

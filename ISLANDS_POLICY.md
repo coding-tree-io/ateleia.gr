@@ -16,8 +16,8 @@ This project follows Astro islands architecture with a static-first baseline.
 
 - `SiteHeader.astro`: static logo + desktop nav + desktop CTA.
 - `MobileNavigationMenu.tsx`: mobile-only island (`client:media`).
-- `ResourcesSection.astro`: static card list and copy.
-- `ResourcesFilters.tsx`: filters/search island (`client:visible`).
+- `HeaderCtaVisibilityObserver.tsx`: visibility toggle island for header CTA (`client:load`).
+- `ContactForm.tsx`: below-the-fold form island (`client:visible`) layered on top of a real HTML `POST` form to `form.taxi`.
 
 ## Performance target
 

@@ -6,10 +6,23 @@ import {
   createProjectRelativeUrl,
   therapyPracticeSiteBranding,
 } from '@/config/site-branding';
+import {
+  createCanonicalUrl,
+  getRobotsDirective,
+  therapyPracticeSiteMetadata,
+} from '@/config/site-metadata';
 
 interface Props {
   pageTitle: string;
   pageDescription: string;
+  canonicalPath?: string;
+  robots?: string;
+  openGraphTitle?: string;
+  openGraphDescription?: string;
+  openGraphImage?: string;
+  openGraphImageAlt?: string;
+  pageType?: 'website' | 'article';
+  structuredData?: Record<string, unknown> | Record<string, unknown>[];
   language?: string;
   htmlClassName?: string;
   bodyClassName?: string;
@@ -19,6 +32,14 @@ interface Props {
 const {
   pageTitle,
   pageDescription,
+  canonicalPath = '',
+  robots = getRobotsDirective(),
+  openGraphTitle = pageTitle,
+  openGraphDescription = pageDescription,
+  openGraphImage = therapyPracticeSiteMetadata.openGraph.fallbackImageRelativePath,
+  openGraphImageAlt = therapyPracticeSiteMetadata.openGraph.fallbackImageAlt,
+  pageType = 'website',
+  structuredData = [],
   language = 'el',
   htmlClassName = '',
   bodyClassName = 'min-h-screen overflow-x-clip bg-background text-foreground',
@@ -28,6 +49,9 @@ const {
 const faviconSvgUrl = createProjectRelativeUrl('favicon.svg');
 const faviconIcoUrl = createProjectRelativeUrl('favicon.ico');
 const codingTreeAttributionScriptUrl = createCodingTreeAttributionScriptUrl();
+const canonicalUrl = createCanonicalUrl(canonicalPath);
+const openGraphImageUrl = createCanonicalUrl(openGraphImage);
+const normalizedStructuredData = Array.isArray(structuredData) ? structuredData : [structuredData];
 ---
 
 <html lang={language} class={htmlClassName}>
@@ -39,9 +63,28 @@ const codingTreeAttributionScriptUrl = createCodingTreeAttributionScriptUrl();
     <link rel="icon" href={faviconIcoUrl} />
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={pageDescription} />
+    <meta name="robots" content={robots} />
+    <link rel="canonical" href={canonicalUrl} />
+    <meta property="og:site_name" content={therapyPracticeSiteMetadata.siteName} />
+    <meta property="og:title" content={openGraphTitle} />
+    <meta property="og:description" content={openGraphDescription} />
+    <meta property="og:type" content={pageType} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={openGraphImageUrl} />
+    <meta property="og:image:alt" content={openGraphImageAlt} />
+    <meta property="og:locale" content={therapyPracticeSiteMetadata.defaultLocale} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={openGraphTitle} />
+    <meta name="twitter:description" content={openGraphDescription} />
+    <meta name="twitter:image" content={openGraphImageUrl} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
     <link href={therapyPracticeSiteBranding.typography.googleFontsStylesheetUrl} rel="stylesheet" />
+    {
+      normalizedStructuredData.map((structuredDataEntry) => (
+        <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredDataEntry)} />
+      ))
+    }
     <slot name="head" />
     <title>{pageTitle}</title>
   </head>

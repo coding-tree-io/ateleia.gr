@@ -1,26 +1,26 @@
-import { ChevronDown, Clock, MapPin, Users } from 'lucide-react';
+import { ChevronDown, Clock, Users } from 'lucide-react';
 
 import { ConcentricRings, PaintSplashes } from '@/components/decorative/ArtShapes';
 import { GrowthThreadIllustration } from '@/components/decorative/GrowthThreadIllustration';
 import { ParallaxLayer } from '@/components/decorative/ParallaxLayer';
-import {
-  therapyPracticeWebsiteContent,
-  type TherapyServiceOffering,
-} from '@/content/therapy-practice-website-content';
+import type { TherapyService } from '@/content/services';
+import { therapyPracticeWebsiteContent } from '@/content/therapy-practice-website-content';
 
 type TherapyServiceCardProps = {
-  therapyServiceOffering: TherapyServiceOffering;
+  service: TherapyService;
 };
 
-function TherapyServiceCard({ therapyServiceOffering }: TherapyServiceCardProps) {
+type ServicesProps = {
+  services: TherapyService[];
+};
+
+function TherapyServiceCard({ service }: TherapyServiceCardProps) {
+  const serviceMeta = [service.format, service.duration].filter(Boolean).join(' / ');
+
   return (
-    <article className="group paper-panel flex flex-col rounded-3xl border border-border/45 p-6 transition-all duration-500 hover:-translate-y-1 hover:shadow-xl md:p-9">
-      <h3 className="break-words font-serif text-2xl font-bold text-foreground md:text-3xl">
-        {therapyServiceOffering.title}
-      </h3>
-      <p className="mt-4 text-base leading-relaxed text-muted-foreground">
-        {therapyServiceOffering.description}
-      </p>
+    <article className="therapy-surface-paper-card-interactive group flex flex-col p-6 md:p-9">
+      <h3 className="break-words font-serif text-2xl font-bold text-foreground md:text-3xl">{service.title}</h3>
+      <p className="therapy-section-paragraph mt-4">{service.description}</p>
 
       <div className="mt-7 space-y-3">
         <div className="flex items-start gap-3 text-sm text-muted-foreground">
@@ -29,35 +29,35 @@ function TherapyServiceCard({ therapyServiceOffering }: TherapyServiceCardProps)
           </div>
           <span>
             <span className="font-semibold text-foreground">{'Ιδανικό για: '}</span>
-            {therapyServiceOffering.idealFor}
+            {service.idealFor.join(' · ')}
           </span>
         </div>
 
-        <div className="flex items-center gap-3 text-sm text-muted-foreground">
-          <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-accent/25 text-[var(--tone-ink)]">
-            <Clock className="size-4" aria-hidden="true" />
+        {serviceMeta ? (
+          <div className="flex items-center gap-3 text-sm text-muted-foreground">
+            <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-accent/25 text-[var(--tone-ink)]">
+              <Clock className="size-4" aria-hidden="true" />
+            </div>
+            <span>{serviceMeta}</span>
           </div>
-          <span>
-            {therapyServiceOffering.format}
-            {' / '}
-            {therapyServiceOffering.duration}
-          </span>
-        </div>
-
-        <div className="flex items-center gap-3 text-sm text-muted-foreground">
-          <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-accent/25 text-[var(--tone-ink)]">
-            <MapPin className="size-4" aria-hidden="true" />
-          </div>
-          <span>{therapyServiceOffering.location}</span>
-        </div>
+        ) : null}
       </div>
 
-      <div className="mt-7 rounded-2xl border border-border/40 bg-secondary/55 p-5">
-        <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Τι να περιμένετε</p>
-        <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-          {therapyServiceOffering.whatToExpect}
-        </p>
-      </div>
+      {service.whatToExpect.length > 0 ? (
+        <div className="therapy-surface-supporting-card mt-7 p-5">
+          <p className="therapy-section-overline tracking-widest text-muted-foreground">Τι να περιμένετε</p>
+          <ul className="therapy-section-supporting-copy mt-3 space-y-2">
+            {service.whatToExpect.map((item) => (
+              <li key={item} className="flex gap-2">
+                <span aria-hidden="true" className="pt-1 text-[var(--tone-ink)]">
+                  •
+                </span>
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
     </article>
   );
 }
@@ -73,7 +73,7 @@ function FrequentlyAskedQuestionsSection() {
         {frequentlyAskedQuestions.map((frequentlyAskedQuestion) => (
           <details
             key={frequentlyAskedQuestion.question}
-            className="group rounded-2xl border border-border/40 bg-card/70 transition-all duration-300 hover:shadow-sm open:shadow-md"
+            className="therapy-surface-expandable-card group"
           >
             <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-4 px-5 py-3 text-base font-semibold text-foreground [&::-webkit-details-marker]:hidden md:px-6 md:py-4">
               {frequentlyAskedQuestion.question}
@@ -83,7 +83,7 @@ function FrequentlyAskedQuestionsSection() {
               />
             </summary>
             <div className="px-5 pb-4 md:px-6 md:pb-5">
-              <p className="text-sm leading-relaxed text-muted-foreground">
+              <p className="therapy-section-supporting-copy">
                 {frequentlyAskedQuestion.answer}
               </p>
             </div>
@@ -94,18 +94,11 @@ function FrequentlyAskedQuestionsSection() {
   );
 }
 
-export function Services() {
-  const {
-    servicesTitle,
-    services,
-    trust: { pullQuote: trustPullQuote },
-  } = therapyPracticeWebsiteContent;
+export function Services({ services }: ServicesProps) {
+  const { servicesTitle } = therapyPracticeWebsiteContent;
 
   return (
-    <section
-      id="services"
-      className="relative overflow-hidden px-4 py-16 sm:px-6 sm:py-20 md:px-10 md:py-28"
-    >
+    <section id="services" className="therapy-section-shell">
       <ParallaxLayer
         speed={0.18}
         className="absolute -right-16 -top-16 w-[260px] opacity-45 md:-right-32 md:-top-24 md:w-[660px] md:opacity-100"
@@ -125,22 +118,16 @@ export function Services() {
         <PaintSplashes />
       </ParallaxLayer>
 
-      <div className="relative z-10 mx-auto max-w-6xl">
-        <div className="grid gap-7 lg:grid-cols-[1.04fr_0.96fr] lg:items-end">
-          <h2 className="font-serif text-3xl font-bold leading-tight text-balance text-foreground md:text-4xl lg:text-5xl">
+      <div className="therapy-section-content-width">
+        <div className="max-w-3xl">
+          <h2 className="therapy-section-heading">
             {servicesTitle}
           </h2>
-          <p className="rounded-2xl border border-border/45 bg-card/70 p-5 text-sm leading-relaxed text-muted-foreground md:text-base">
-            {trustPullQuote}
-          </p>
         </div>
 
         <div className="mt-10 grid gap-6 md:mt-12 md:grid-cols-2 md:gap-8">
-          {services.map((therapyServiceOffering) => (
-            <TherapyServiceCard
-              key={therapyServiceOffering.title}
-              therapyServiceOffering={therapyServiceOffering}
-            />
+          {services.map((service) => (
+            <TherapyServiceCard key={service.id} service={service} />
           ))}
         </div>
 

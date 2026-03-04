@@ -1,7 +1,7 @@
 ---
 import { PaintedEdgeDivider } from '@/components/decorative/ArtShapes';
 import { About } from '@/components/sections/About';
-import { Contact } from '@/components/sections/Contact';
+import ContactSection from '@/components/sections/ContactSection.astro';
 import { Footer } from '@/components/sections/Footer';
 import { HeaderCtaVisibilityObserver } from '@/components/sections/HeaderCtaVisibilityObserver';
 import { Hero } from '@/components/sections/Hero';
@@ -9,17 +9,30 @@ import SiteHeader from '@/components/sections/SiteHeader.astro';
 import { Services } from '@/components/sections/Services';
 import { WhatIs } from '@/components/sections/WhatIs';
 import { WhoIsItFor } from '@/components/sections/WhoIsItFor';
+import {
+  createOrganizationStructuredData,
+  createWebSiteStructuredData,
+  getRobotsDirective,
+} from '@/config/site-metadata';
+import { getServices } from '@/content/services';
 import PublicDocumentLayout from '@/layouts/PublicDocumentLayout.astro';
 
-const topDividerClassName = 'painted-divider -mt-1 h-3 w-full opacity-28 md:h-10 md:opacity-60';
-const sectionDividerClassName = 'painted-divider -mt-1 h-2 w-full opacity-22 md:h-8 md:opacity-55';
+const topDividerClassName = 'therapy-illustrated-section-divider therapy-illustrated-section-divider-after-hero';
+const sectionDividerClassName = 'therapy-illustrated-section-divider therapy-illustrated-section-divider-standard';
 const sectionDividerInvertedClassName =
-  'painted-divider -mt-1 h-2 w-full rotate-180 opacity-22 md:h-8 md:opacity-55';
+  'therapy-illustrated-section-divider therapy-illustrated-section-divider-inverted';
+const services = await getServices();
+const structuredData = [createOrganizationStructuredData(), createWebSiteStructuredData()];
 ---
 
 <PublicDocumentLayout
-  pageTitle="Ατέλεια | Θεραπεία μέσω τέχνης"
-  pageDescription="Ατέλεια — Θεραπεία μέσω τέχνης. Ένας ασφαλής και δημιουργικός χώρος για προσωπική εξέλιξη μέσα από τη δημιουργική έκφραση."
+  pageTitle="Ατέλεια | Θεραπεία μέσω τέχνης για ενήλικες"
+  pageDescription="Θεραπεία μέσω τέχνης για ενήλικες στην Ατέλεια. Ένας ασφαλής χώρος προσωπικής διερεύνησης μέσα από δημιουργική έκφραση, art therapy και σύγχρονη ψυχοθεραπευτική πρακτική."
+  canonicalPath=""
+  robots={getRobotsDirective()}
+  openGraphTitle="Ατέλεια | Θεραπεία μέσω τέχνης για ενήλικες"
+  openGraphDescription="Ατέλεια — Θεραπεία μέσω τέχνης για ενήλικες, με δημιουργική έκφραση, art therapy και σταθερό θεραπευτικό πλαίσιο."
+  structuredData={structuredData}
   htmlClassName="hero-in-view"
   includeCodingTreeAttributionScript
 >
@@ -44,10 +57,10 @@ const sectionDividerInvertedClassName =
       <About />
       <PaintedEdgeDivider className={sectionDividerInvertedClassName} />
 
-      <Services />
+      <Services services={services} />
       <PaintedEdgeDivider className={sectionDividerClassName} />
 
-      <Contact />
+      <ContactSection />
     </main>
 
     <Footer />

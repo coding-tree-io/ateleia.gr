@@ -53,7 +53,7 @@ export function MobileNavigationMenu({
             <SheetClose asChild key={navigationEntry.label}>
               <a
                 href={navigationEntry.href}
-                className="flex min-h-11 items-center rounded-xl border border-border/40 bg-card/65 px-4 text-base font-semibold text-foreground transition-colors hover:bg-secondary"
+                className="therapy-mobile-navigation-link"
               >
                 {navigationEntry.label}
               </a>
@@ -63,7 +63,7 @@ export function MobileNavigationMenu({
 
         <div className="mt-auto pt-5">
           <SheetClose asChild>
-            <Button asChild className="w-full rounded-full text-base">
+            <Button asChild className="therapy-primary-call-to-action w-full text-base">
               <a href="#contact">{primaryActionLabel}</a>
             </Button>
           </SheetClose>
