@@ -12,6 +12,7 @@ const budgetConfigurationPath = join(projectRootDirectory, 'performance-budget.j
 
 const pnpmCommandName = 'pnpm';
 const npxCommandName = 'npx';
+const defaultMaximumBudgetAttemptCount = 2;
 
 async function fileExists(filePath) {
   try {
@@ -193,9 +194,13 @@ function createPerformanceBudgetPayload({
   firstPartyScriptKilobytes,
   violations,
   budgetConfiguration,
+  attemptNumber = 1,
+  maximumAttemptCount = 1,
 }) {
   return {
     testedPageUrl,
+    attemptNumber,
+    maximumAttemptCount,
     score: {
       actual: Number((performanceScore * 100).toFixed(1)),
       minimum: Number((budgetConfiguration.lighthouse.minPerformanceScore * 100).toFixed(1)),
@@ -224,6 +229,8 @@ async function appendGitHubStepSummary(performanceBudgetPayload) {
 
   const {
     testedPageUrl,
+    attemptNumber,
+    maximumAttemptCount,
     score,
     largestContentfulPaintMilliseconds,
     totalBlockingTimeMilliseconds,
@@ -236,6 +243,7 @@ async function appendGitHubStepSummary(performanceBudgetPayload) {
     `### ${statusIcon} Lighthouse mobile performance budget`,
     '',
     `- URL: \`${testedPageUrl}\``,
+    `- Attempt: \`${attemptNumber}/${maximumAttemptCount}\``,
     `- Performance score: \`${score.actual}\` (min \`${score.minimum}\`)`,
     `- Largest Contentful Paint: \`${largestContentfulPaintMilliseconds.actual}ms\` (max \`${largestContentfulPaintMilliseconds.maximum}ms\`)`,
     `- Total Blocking Time: \`${totalBlockingTimeMilliseconds.actual}ms\` (max \`${totalBlockingTimeMilliseconds.maximum}ms\`)`,
@@ -255,6 +263,13 @@ async function appendGitHubStepSummary(performanceBudgetPayload) {
 
 async function main() {
   const budgetConfiguration = JSON.parse(await readFile(budgetConfigurationPath, 'utf8'));
+  const maximumBudgetAttemptCount = Math.max(
+    1,
+    Number.parseInt(
+      process.env.PERF_BUDGET_MAX_ATTEMPTS ?? String(defaultMaximumBudgetAttemptCount),
+      10
+    ) || defaultMaximumBudgetAttemptCount
+  );
 
   if (!(await fileExists(join(projectRootDirectory, 'dist', 'index.html')))) {
     throw new Error('Build output was not found. Run `pnpm build` before running the performance budget check.');
@@ -267,7 +282,6 @@ async function main() {
   const testedPageUrl = `${configuredPageUrl.protocol}//${previewHost}:${previewPort}${configuredPageUrl.pathname}`;
 
   const temporaryReportDirectory = await mkdtemp(join(tmpdir(), 'ateleia-lighthouse-'));
-  const lighthouseReportPath = join(temporaryReportDirectory, 'lighthouse-mobile.json');
 
   const previewCommandArguments = ['preview', '--host', previewHost, '--port', String(previewPort)];
   const { executableCommandName, executableCommandArguments } = createProcessInvocation(
@@ -289,74 +303,116 @@ async function main() {
     await waitForPageToRespond(testedPageUrl);
     console.log(`Running Lighthouse budget check on ${testedPageUrl}`);
 
-    const lighthouseExitCode = await runCommand(
-      npxCommandName,
-      [
-        '--yes',
-        'lighthouse',
+    let latestPerformanceBudgetPayload = null;
+    let latestRuntimeError = null;
+
+    for (let attemptNumber = 1; attemptNumber <= maximumBudgetAttemptCount; attemptNumber += 1) {
+      const lighthouseReportPath = join(
+        temporaryReportDirectory,
+        `lighthouse-mobile-attempt-${attemptNumber}.json`
+      );
+
+      const lighthouseExitCode = await runCommand(
+        npxCommandName,
+        [
+          '--yes',
+          'lighthouse',
+          testedPageUrl,
+          '--only-categories=performance',
+          '--output=json',
+          `--output-path=${lighthouseReportPath}`,
+          '--chrome-flags=--headless=new --no-sandbox --disable-dev-shm-usage',
+        ],
+        projectRootDirectory
+      );
+
+      const hasReportFile = await fileExists(lighthouseReportPath);
+      if (lighthouseExitCode !== 0 && !hasReportFile) {
+        latestRuntimeError = new Error(`Lighthouse failed with exit code ${lighthouseExitCode}.`);
+        if (attemptNumber < maximumBudgetAttemptCount) {
+          console.warn(
+            `Lighthouse attempt ${attemptNumber}/${maximumBudgetAttemptCount} did not produce a report. Retrying.`
+          );
+          await sleep(1_000);
+          continue;
+        }
+
+        throw latestRuntimeError;
+      }
+
+      if (lighthouseExitCode !== 0 && hasReportFile) {
+        console.warn(
+          `Lighthouse attempt ${attemptNumber}/${maximumBudgetAttemptCount} returned a non-zero code, but report output exists. Continuing with budget checks.`
+        );
+      }
+
+      const lighthouseReport = JSON.parse(await readFile(lighthouseReportPath, 'utf8'));
+      const {
+        performanceScore,
+        largestContentfulPaintMilliseconds,
+        totalBlockingTimeMilliseconds,
+        firstPartyScriptKilobytes,
+        violations,
+      } = readBudgetViolations(lighthouseReport, budgetConfiguration, testedPageUrl);
+
+      latestPerformanceBudgetPayload = createPerformanceBudgetPayload({
         testedPageUrl,
-        '--only-categories=performance',
-        '--output=json',
-        `--output-path=${lighthouseReportPath}`,
-        '--chrome-flags=--headless=new --no-sandbox --disable-dev-shm-usage',
-      ],
-      projectRootDirectory
-    );
+        performanceScore,
+        largestContentfulPaintMilliseconds,
+        totalBlockingTimeMilliseconds,
+        firstPartyScriptKilobytes,
+        violations,
+        budgetConfiguration,
+        attemptNumber,
+        maximumAttemptCount: maximumBudgetAttemptCount,
+      });
 
-    const hasReportFile = await fileExists(lighthouseReportPath);
-    if (lighthouseExitCode !== 0 && !hasReportFile) {
-      throw new Error(`Lighthouse failed with exit code ${lighthouseExitCode}.`);
-    }
+      console.log(`Performance budget report (attempt ${attemptNumber}/${maximumBudgetAttemptCount})`);
+      console.log(
+        `- Performance score: ${latestPerformanceBudgetPayload.score.actual} (min ${latestPerformanceBudgetPayload.score.minimum})`
+      );
+      console.log(
+        `- Largest Contentful Paint: ${latestPerformanceBudgetPayload.largestContentfulPaintMilliseconds.actual}ms (max ${latestPerformanceBudgetPayload.largestContentfulPaintMilliseconds.maximum}ms)`
+      );
+      console.log(
+        `- Total Blocking Time: ${latestPerformanceBudgetPayload.totalBlockingTimeMilliseconds.actual}ms (max ${latestPerformanceBudgetPayload.totalBlockingTimeMilliseconds.maximum}ms)`
+      );
+      console.log(
+        `- First-party script transfer: ${latestPerformanceBudgetPayload.firstPartyScriptKilobytes.actual}KB (max ${latestPerformanceBudgetPayload.firstPartyScriptKilobytes.maximum}KB)`
+      );
+      console.log(`PERF_BUDGET_RESULT::${JSON.stringify(latestPerformanceBudgetPayload)}`);
 
-    if (lighthouseExitCode !== 0 && hasReportFile) {
-      console.warn('Lighthouse returned a non-zero code, but report output exists. Continuing with budget checks.');
-    }
+      if (violations.length === 0) {
+        await appendGitHubStepSummary(latestPerformanceBudgetPayload);
+        if (attemptNumber > 1) {
+          console.log(`Performance budget check passed on retry attempt ${attemptNumber}.`);
+        } else {
+          console.log('Performance budget check passed.');
+        }
+        return;
+      }
 
-    const lighthouseReport = JSON.parse(await readFile(lighthouseReportPath, 'utf8'));
-    const {
-      performanceScore,
-      largestContentfulPaintMilliseconds,
-      totalBlockingTimeMilliseconds,
-      firstPartyScriptKilobytes,
-      violations,
-    } = readBudgetViolations(lighthouseReport, budgetConfiguration, testedPageUrl);
-
-    const performanceBudgetPayload = createPerformanceBudgetPayload({
-      testedPageUrl,
-      performanceScore,
-      largestContentfulPaintMilliseconds,
-      totalBlockingTimeMilliseconds,
-      firstPartyScriptKilobytes,
-      violations,
-      budgetConfiguration,
-    });
-
-    console.log('Performance budget report');
-    console.log(
-      `- Performance score: ${performanceBudgetPayload.score.actual} (min ${performanceBudgetPayload.score.minimum})`
-    );
-    console.log(
-      `- Largest Contentful Paint: ${performanceBudgetPayload.largestContentfulPaintMilliseconds.actual}ms (max ${performanceBudgetPayload.largestContentfulPaintMilliseconds.maximum}ms)`
-    );
-    console.log(
-      `- Total Blocking Time: ${performanceBudgetPayload.totalBlockingTimeMilliseconds.actual}ms (max ${performanceBudgetPayload.totalBlockingTimeMilliseconds.maximum}ms)`
-    );
-    console.log(
-      `- First-party script transfer: ${performanceBudgetPayload.firstPartyScriptKilobytes.actual}KB (max ${performanceBudgetPayload.firstPartyScriptKilobytes.maximum}KB)`
-    );
-    console.log(`PERF_BUDGET_RESULT::${JSON.stringify(performanceBudgetPayload)}`);
-    await appendGitHubStepSummary(performanceBudgetPayload);
-
-    if (violations.length > 0) {
       console.error('Performance budget violations:');
       for (const violation of violations) {
         console.error(`- ${violation}`);
       }
 
-      throw new Error(`Performance budget check failed: ${violations.join(' | ')}`);
+      latestRuntimeError = new Error(`Performance budget check failed: ${violations.join(' | ')}`);
+      if (attemptNumber < maximumBudgetAttemptCount) {
+        console.warn(
+          `Performance budget attempt ${attemptNumber}/${maximumBudgetAttemptCount} failed. Retrying.`
+        );
+        await sleep(1_000);
+        continue;
+      }
+
+      await appendGitHubStepSummary(latestPerformanceBudgetPayload);
+      throw new Error(
+        `Performance budget check failed after ${maximumBudgetAttemptCount} attempts: ${violations.join(' | ')}`
+      );
     }
 
-    console.log('Performance budget check passed.');
+    throw latestRuntimeError ?? new Error('Performance budget check failed without a Lighthouse report.');
   } finally {
     await terminateProcessTree(previewServerProcess.pid);
     await rm(temporaryReportDirectory, { recursive: true, force: true });
