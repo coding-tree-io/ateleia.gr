@@ -7,12 +7,12 @@ const faviconIcoUrl = createProjectRelativeUrl('favicon.ico');
 ---
 
 <!doctype html>
-<html lang="el">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex" />
-    <title>Ατέλεια CMS</title>
+    <title>Ateleia CMS</title>
     <link rel="icon" type="image/svg+xml" href={faviconSvgUrl} />
     <link rel="icon" href={faviconIcoUrl} />
     <link rel="cms-config-url" type="text/yaml" href={adminConfigUrl} />
@@ -80,13 +80,14 @@ const faviconIcoUrl = createProjectRelativeUrl('favicon.ico');
     <main class="cms-loading">
       <div class="cms-loading__panel">
         <p class="cms-loading__eyebrow">Admin</p>
-        <h1 class="cms-loading__title">Ατέλεια CMS</h1>
+        <h1 class="cms-loading__title">Ateleia CMS</h1>
         <p class="cms-loading__body">
-          Σε τοπικό περιβάλλον το CMS χρησιμοποιεί local backend και δεν χρειάζεται σύνδεση.
-          Στο production η σύνδεση γίνεται μέσω DecapBridge PKCE με Google login.
+          Local development uses the Decap proxy backend and does not require DecapBridge or
+          Google login. The deployed GitHub Pages admin uses DecapBridge PKCE when configured
+          online.
         </p>
         <p class="cms-loading__note">
-          Το σωστό production login URL για αυτό το GitHub Pages project site είναι
+          The production login URL for this GitHub Pages project site is
           `https://coding-tree-io.github.io/ateleia.gr/admin/index.html`.
         </p>
       </div>

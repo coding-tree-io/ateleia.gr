@@ -79,6 +79,7 @@ corepack pnpm cms:dev
 ```
 
 This starts the Astro dev server on `http://localhost:4322/ateleia.gr/` and the local Decap proxy on `http://127.0.0.1:8082/api/v1`, so the admin works without live login at `http://localhost:4322/ateleia.gr/admin/`.
+The generated admin config uses `backend: proxy` on localhost, so local editing works without DecapBridge. Production builds emit the DecapBridge `git-gateway` config instead.
 
 ## Verification (Required)
 
@@ -174,7 +175,12 @@ This repo includes a static Decap CMS admin configured for the services section 
 - content schema/query helpers: `src/content.config.ts`, `src/content/services.ts`
 - local unauthenticated mode: `corepack pnpm cms:dev`
 
-Production login uses DecapBridge PKCE for Google login.
+Local development and production intentionally use different backends:
+
+- localhost: `backend: proxy` via `decap-server`, with no DecapBridge dependency
+- deployed GitHub Pages: DecapBridge PKCE via `git-gateway`, for Google login
+
+Decap editor labels remain Greek only where the client edits homepage service content. The surrounding code, docs, and configuration stay in English.
 
 - correct GitHub Pages login URL: `https://coding-tree-io.github.io/ateleia.gr/admin/index.html`
 - `site_url` in the generated CMS config intentionally includes `/ateleia.gr/`, because this repo is deployed as a GitHub Pages project site, not a root site

@@ -18,7 +18,7 @@ function ensureTrailingSlash(value: string): string {
 
 function resolveSiteRootUrl(): string {
   const configuredSiteUrl = import.meta.env.DECAP_SITE_URL?.trim();
-  if (configuredSiteUrl) {
+  if (!import.meta.env.DEV && configuredSiteUrl) {
     return ensureTrailingSlash(configuredSiteUrl);
   }
 
@@ -31,9 +31,10 @@ function escapeYamlScalar(value: string): string {
 }
 
 export const GET: APIRoute = () => {
+  const isLocalDevelopment = import.meta.env.DEV;
   const siteRootUrl = resolveSiteRootUrl();
-  const repository = import.meta.env.DECAP_REPOSITORY?.trim() || defaultRepository;
   const branch = import.meta.env.DECAP_BRANCH?.trim() || defaultBranch;
+  const repository = import.meta.env.DECAP_REPOSITORY?.trim() || defaultRepository;
   const baseUrl = import.meta.env.DECAPBRIDGE_BASE_URL?.trim() || defaultDecapBridgeBaseUrl;
   const authEndpoint =
     import.meta.env.DECAPBRIDGE_AUTH_ENDPOINT?.trim() || defaultDecapBridgeAuthEndpoint;
@@ -41,8 +42,13 @@ export const GET: APIRoute = () => {
     import.meta.env.DECAPBRIDGE_AUTH_TOKEN_ENDPOINT?.trim() || defaultDecapBridgeAuthTokenEndpoint;
   const gatewayUrl = import.meta.env.DECAPBRIDGE_GATEWAY_URL?.trim() || defaultDecapBridgeGatewayUrl;
   const logoUrl = import.meta.env.DECAP_LOGO_URL?.trim() || defaultLogoUrl;
-
-  const yaml = `# Use DecapBridge PKCE auth (required)
+  const backendConfig = isLocalDevelopment
+    ? `# Local development uses the Decap proxy server. No DecapBridge login is required.
+backend:
+  name: proxy
+  proxy_url: ${escapeYamlScalar(`http://127.0.0.1:${localBackendPort}/api/v1`)}
+  branch: ${escapeYamlScalar(branch)}`
+    : `# Production uses DecapBridge PKCE.
 backend:
   name: git-gateway
   repo: ${escapeYamlScalar(repository)}
@@ -60,22 +66,24 @@ backend:
     delete: "Delete {{collection}} \\"{{slug}}\\" - {{author-name}} <{{author-login}}> via DecapBridge"
     uploadMedia: "Upload \\"{{path}}\\" - {{author-name}} <{{author-login}}> via DecapBridge"
     deleteMedia: "Delete \\"{{path}}\\" - {{author-name}} <{{author-login}}> via DecapBridge"
-    openAuthoring: "Message {{message}} - {{author-name}} <{{author-login}}> via DecapBridge"
+    openAuthoring: "Message {{message}} - {{author-name}} <{{author-login}}> via DecapBridge"`;
+  const authConfig = isLocalDevelopment
+    ? ''
+    : `
 
-# Local editing on localhost uses the unauthenticated local backend proxy instead.
-local_backend:
-  url: ${escapeYamlScalar(`http://127.0.0.1:${localBackendPort}/api/v1`)}
-
-publish_mode: simple
-media_folder: public/images/uploads
-public_folder: ${escapeYamlScalar(`${import.meta.env.BASE_URL}images/uploads`)}
-
-# Enable PKCE fields (optional, recommended)
+# PKCE identity mapping (recommended)
 auth:
   email_claim: email
   first_name_claim: first_name
   last_name_claim: last_name
-  avatar_url_claim: avatar_url
+  avatar_url_claim: avatar_url`;
+
+  const yaml = `${backendConfig}
+
+publish_mode: simple
+media_folder: public/images/uploads
+public_folder: ${escapeYamlScalar(`${import.meta.env.BASE_URL}images/uploads`)}
+${authConfig}
 
 site_url: ${escapeYamlScalar(siteRootUrl)}
 display_url: ${escapeYamlScalar(siteRootUrl)}
