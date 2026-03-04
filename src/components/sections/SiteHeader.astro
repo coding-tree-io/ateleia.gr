@@ -69,6 +69,7 @@ const desktopBookingButtonClassName = cn(
     const heroSectionId = 'hero';
     const heroInViewClassName = 'hero-in-view';
     const headerCtaSelector = '[data-header-cta]';
+    const hiddenHeaderCtaClassNames = ['opacity-0', '-translate-y-1', 'pointer-events-none'];
     const dialogSelector = '[data-mobile-nav-dialog]';
     const triggerSelector = '[data-mobile-nav-trigger]';
     const closeSelector = '[data-mobile-nav-close]';
@@ -78,8 +79,9 @@ const desktopBookingButtonClassName = cn(
     const triggerElement = document.querySelector(triggerSelector);
     const closeElement = document.querySelector(closeSelector);
     const mobileNavigationLinks = document.querySelectorAll(linkSelector);
-    const heroSectionElement = document.getElementById(heroSectionId);
     const headerCtaElement = document.querySelector(headerCtaSelector);
+    let heroSectionElement = document.getElementById(heroSectionId);
+    let heroVisibilityObserver = null;
 
     const applyHeaderCtaAccessibilityState = (shouldHideHeaderCta) => {
       if (!headerCtaElement) {
@@ -87,11 +89,13 @@ const desktopBookingButtonClassName = cn(
       }
 
       if (shouldHideHeaderCta) {
+        headerCtaElement.classList.add(...hiddenHeaderCtaClassNames);
         headerCtaElement.setAttribute('aria-hidden', 'true');
         headerCtaElement.setAttribute('tabindex', '-1');
         return;
       }
 
+      headerCtaElement.classList.remove(...hiddenHeaderCtaClassNames);
       headerCtaElement.removeAttribute('aria-hidden');
       headerCtaElement.removeAttribute('tabindex');
     };
@@ -101,6 +105,10 @@ const desktopBookingButtonClassName = cn(
     };
 
     const isHeroCurrentlyVisible = () => {
+      if (!heroSectionElement || !heroSectionElement.isConnected) {
+        heroSectionElement = document.getElementById(heroSectionId);
+      }
+
       if (!heroSectionElement) {
         return false;
       }
@@ -126,8 +134,20 @@ const desktopBookingButtonClassName = cn(
 
     syncHeaderCtaVisibilityState();
 
-    if (heroSectionElement && 'IntersectionObserver' in window) {
-      const heroVisibilityObserver = new IntersectionObserver(
+    const ensureHeroVisibilityObserver = () => {
+      if (!('IntersectionObserver' in window) || heroVisibilityObserver) {
+        return;
+      }
+
+      if (!heroSectionElement || !heroSectionElement.isConnected) {
+        heroSectionElement = document.getElementById(heroSectionId);
+      }
+
+      if (!heroSectionElement) {
+        return;
+      }
+
+      heroVisibilityObserver = new IntersectionObserver(
         ([heroVisibilityEntry]) => {
           latestHeroVisibilityState = heroVisibilityEntry?.isIntersecting ?? false;
           syncHeaderCtaVisibilityState();
@@ -136,6 +156,15 @@ const desktopBookingButtonClassName = cn(
       );
 
       heroVisibilityObserver.observe(heroSectionElement);
+      latestHeroVisibilityState = isHeroCurrentlyVisible();
+      syncHeaderCtaVisibilityState();
+    };
+
+    ensureHeroVisibilityObserver();
+
+    if (!heroSectionElement) {
+      document.addEventListener('DOMContentLoaded', ensureHeroVisibilityObserver, { once: true });
+      window.addEventListener('load', ensureHeroVisibilityObserver, { once: true });
     }
 
     desktopViewportMediaQueryList.addEventListener('change', () => {
