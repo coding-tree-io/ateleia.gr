@@ -105,7 +105,7 @@ collections:
             widget: list
             label_singular: Υπηρεσία
             summary: "{{fields.title}}"
-            hint: Προσθέστε, διαγράψτε ή σύρετε τις υπηρεσίες για να αλλάξετε τη σειρά εμφάνισης των καρτών.
+            hint: Προσθέστε, αφαιρέστε ή αλλάξτε τη σειρά των καρτών υπηρεσιών όπως θα εμφανιστούν στην αρχική σελίδα.
             collapsed: true
             fields:
               - {
@@ -137,20 +137,20 @@ collections:
               - label: Σε ποιους απευθύνεται
                 name: idealFor
                 widget: list
-                label_singular: Σημείο
+                label_singular: Στοιχείο
                 collapsed: true
                 summary: "{{fields.value}}"
-                hint: Προσθέστε σύντομα σημεία που περιγράφουν σε ποιους απευθύνεται η υπηρεσία.
-                field: { label: Σημείο, name: value, widget: string }
+                hint: Προσθέστε σύντομα στοιχεία που περιγράφουν σε ποιους ανθρώπους απευθύνεται η υπηρεσία.
+                field: { label: Στοιχείο, name: value, widget: string }
               - label: Τι να περιμένετε
                 name: whatToExpect
                 widget: list
-                label_singular: Σημείο
+                label_singular: Στοιχείο
                 required: false
                 collapsed: true
                 summary: "{{fields.value}}"
-                hint: Προαιρετικά σημεία που εμφανίζονται στο κάτω μέρος της κάρτας.
-                field: { label: Σημείο, name: value, widget: string }
+                hint: Προαιρετικά στοιχεία που εμφανίζονται στο βοηθητικό πλαίσιο στο κάτω μέρος της κάρτας.
+                field: { label: Στοιχείο, name: value, widget: string }
 `;
 
   return new Response(yaml, {

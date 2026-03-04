@@ -28,14 +28,66 @@ const googleFontsStylesheetUrl = therapyPracticeSiteBranding.typography.googleFo
     <link rel="cms-config-url" type="text/yaml" href={adminConfigUrl} />
   </head>
   <body>
+    <script is:inline>
+      window.CMS_MANUAL_INIT = true;
+    </script>
     <script src="https://unpkg.com/decap-cms@3.10.1/dist/decap-cms.js"></script>
     <script is:inline define:vars={{ adminStyleUrl, previewStyleUrl }}>
-      const registerServicesPreview = () => {
-        if (!window.CMS || !window.createClass || !window.h) {
+      const registerServicesEditor = () => {
+        if (!window.CMS || !window.createClass || !window.h || !window.initCMS) {
+          window.setTimeout(registerServicesEditor, 30);
           return;
         }
 
         const h = window.h;
+        const numberWords = {
+          feminine: {
+            0: 'μηδέν',
+            1: 'μία',
+            2: 'δύο',
+            3: 'τρεις',
+            4: 'τέσσερις',
+            5: 'πέντε',
+            6: 'έξι',
+            7: 'επτά',
+            8: 'οκτώ',
+            9: 'εννέα',
+            10: 'δέκα',
+          },
+          neuter: {
+            0: 'μηδέν',
+            1: 'ένα',
+            2: 'δύο',
+            3: 'τρία',
+            4: 'τέσσερα',
+            5: 'πέντε',
+            6: 'έξι',
+            7: 'επτά',
+            8: 'οκτώ',
+            9: 'εννέα',
+            10: 'δέκα',
+          },
+        };
+        const countLabels = [
+          {
+            aliases: ['υπηρεσια', 'υπηρεσιες'],
+            singular: 'υπηρεσία',
+            plural: 'υπηρεσίες',
+            gender: 'feminine',
+          },
+          {
+            aliases: ['στοιχειο', 'στοιχεια'],
+            singular: 'στοιχείο',
+            plural: 'στοιχεία',
+            gender: 'neuter',
+          },
+          {
+            aliases: ['τι να περιμενετε'],
+            singular: 'στοιχείο',
+            plural: 'στοιχεία',
+            gender: 'neuter',
+          },
+        ];
 
         const toArray = (value) => {
           if (!value) {
@@ -48,54 +100,313 @@ const googleFontsStylesheetUrl = therapyPracticeSiteBranding.typography.googleFo
 
           return Array.isArray(value) ? value : [];
         };
+        const toPlainObject = (value) => JSON.parse(JSON.stringify(value ?? {}));
+        const deepMerge = (target, source) => {
+          Object.entries(source).forEach(([key, value]) => {
+            if (Array.isArray(value)) {
+              target[key] = value.slice();
+              return;
+            }
+
+            if (value && typeof value === 'object') {
+              const nextTarget =
+                target[key] && typeof target[key] === 'object' && !Array.isArray(target[key])
+                  ? target[key]
+                  : {};
+              target[key] = deepMerge(nextTarget, value);
+              return;
+            }
+
+            target[key] = value;
+          });
+
+          return target;
+        };
+        const normalizeForMatch = (value) =>
+          String(value ?? '')
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .toLowerCase()
+            .replace(/\s+/g, ' ')
+            .trim();
+        const toGreekCount = (count, gender) => numberWords[gender]?.[count] ?? String(count);
+        const translateRenderedText = (value) => {
+          const normalized = normalizeForMatch(value);
+          const directReplacements = {
+            'add υπηρεσια': 'Προσθέστε Υπηρεσία',
+            'add στοιχειο': 'Προσθέστε Στοιχείο',
+            'add στοιχεια': 'Προσθέστε Στοιχείο',
+            'προσθεστε υπηρεσια': 'Προσθέστε Υπησία',
+            'προσθεστε στοιχειο': 'Προσθέστε Στοιχείο',
+            'προσθεστε στοιχεια': 'Προσθέστε Στοιχείο',
+            '1 τι να περιμενετε': 'ένα στοιχείο',
+            '2 τι να περιμενετε': 'δύο στοιχεία',
+          };
+
+          if (directReplacements[normalized]) {
+            return directReplacements[normalized];
+          }
+
+          const countMatch = normalized.match(/^(\d+)\s+(.+)$/);
+          if (!countMatch) {
+            return value;
+          }
+
+          const count = Number(countMatch[1]);
+          const noun = countMatch[2];
+          const labelDefinition = countLabels.find(({ aliases }) => aliases.includes(noun));
+          if (!labelDefinition) {
+            return value;
+          }
+
+          return `${toGreekCount(count, labelDefinition.gender)} ${
+            count === 1 ? labelDefinition.singular : labelDefinition.plural
+          }`;
+        };
+        const localizeAdminText = () => {
+          const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+            acceptNode(node) {
+              if (!node.textContent || !node.textContent.trim()) {
+                return NodeFilter.FILTER_REJECT;
+              }
+
+              const parentElement = node.parentElement;
+              if (!parentElement || parentElement.closest('script, style')) {
+                return NodeFilter.FILTER_REJECT;
+              }
+
+              return NodeFilter.FILTER_ACCEPT;
+            },
+          });
+          const textNodes = [];
+
+          while (walker.nextNode()) {
+            textNodes.push(walker.currentNode);
+          }
+
+          textNodes.forEach((textNode) => {
+            const localizedText = translateRenderedText(textNode.textContent);
+            if (localizedText !== textNode.textContent) {
+              textNode.textContent = localizedText;
+            }
+          });
+
+          document.querySelectorAll('[aria-label]').forEach((element) => {
+            const currentLabel = element.getAttribute('aria-label');
+            const localizedLabel = translateRenderedText(currentLabel);
+            if (localizedLabel !== currentLabel) {
+              element.setAttribute('aria-label', localizedLabel);
+            }
+          });
+        };
+        const installAdminTextLocalizer = () => {
+          let isScheduled = false;
+          const scheduleLocalization = () => {
+            if (isScheduled) {
+              return;
+            }
+
+            isScheduled = true;
+            requestAnimationFrame(() => {
+              isScheduled = false;
+              localizeAdminText();
+            });
+          };
+
+          new MutationObserver(scheduleLocalization).observe(document.body, {
+            childList: true,
+            subtree: true,
+            characterData: true,
+          });
+
+          scheduleLocalization();
+        };
+        const registerGreekLocale = () => {
+          const englishLocale = toPlainObject(window.CMS.getLocale('en'));
+          const greekLocale = deepMerge(englishLocale, {
+            app: {
+              header: {
+                content: 'Περιεχόμενο',
+                media: 'Πολυμέσα',
+                quickAdd: 'Γρήγορη προσθήκη',
+              },
+            },
+            collection: {
+              sidebar: {
+                collections: 'Συλλογές',
+                allCollections: 'Όλες οι συλλογές',
+                searchAll: 'Αναζήτηση σε όλα',
+                searchIn: 'Αναζήτηση σε',
+              },
+              collectionTop: {
+                newButton: 'Προσθέστε %{collectionLabel}',
+                sortBy: 'Ταξινόμηση κατά',
+                viewAs: 'Προβολή ως',
+                viewAsList: 'Προβολή λίστας',
+                viewAsGrid: 'Προβολή πλέγματος',
+              },
+              entries: {
+                loadingEntries: 'Φόρτωση καταχωρίσεων...',
+                cachingEntries: 'Προετοιμασία καταχωρίσεων...',
+                noEntries: 'Δεν υπάρχουν καταχωρίσεις',
+              },
+            },
+            editor: {
+              editor: {
+                loadingEntry: 'Φόρτωση καταχώρισης...',
+              },
+              editorControl: {
+                field: {
+                  optional: 'προαιρετικό',
+                },
+              },
+              editorControlPane: {
+                widget: {
+                  rangeCount:
+                    'Το πεδίο %{fieldLabel} πρέπει να περιλαμβάνει από %{minCount} έως %{maxCount} στοιχεία.',
+                  rangeCountExact:
+                    'Το πεδίο %{fieldLabel} πρέπει να περιλαμβάνει ακριβώς %{count} στοιχεία.',
+                  rangeMin:
+                    'Το πεδίο %{fieldLabel} πρέπει να περιλαμβάνει τουλάχιστον %{minCount} στοιχεία.',
+                  rangeMax:
+                    'Το πεδίο %{fieldLabel} πρέπει να περιλαμβάνει έως %{maxCount} στοιχεία.',
+                },
+              },
+              editorToolbar: {
+                publishAndCreateNew: 'Δημοσίευση και νέα καταχώριση',
+                deleteUnpublishedChanges: 'Διαγραφή αδημοσίευτων αλλαγών',
+                deleteUnpublishedEntry: 'Διαγραφή αδημοσίευτης καταχώρισης',
+                deletePublishedEntry: 'Διαγραφή δημοσιευμένης καταχώρισης',
+                deleteEntry: 'Διαγραφή καταχώρισης',
+              },
+              editorWidgets: {
+                list: {
+                  add: 'Προσθέστε %{item}',
+                  addType: 'Προσθέστε %{item}',
+                },
+                object: {
+                  expand: 'Ανάπτυξη',
+                  collapse: 'Σύμπτυξη',
+                },
+                image: {
+                  addMore: 'Προσθέστε περισσότερες εικόνες',
+                  remove: 'Αφαίρεση εικόνας',
+                  removeAll: 'Αφαίρεση όλων των εικόνων',
+                },
+                file: {
+                  addMore: 'Προσθέστε περισσότερα αρχεία',
+                  remove: 'Αφαίρεση αρχείου',
+                  removeAll: 'Αφαίρεση όλων των αρχείων',
+                },
+              },
+            },
+            ui: {
+              settingsDropdown: {
+                account: 'Επιλογές λογαριασμού',
+              },
+              toast: {
+                entrySaved: 'Η καταχώριση αποθηκεύτηκε',
+                entryPublished: 'Η καταχώριση δημοσιεύτηκε',
+                entryUnpublished: 'Η καταχώριση αποδημοσιεύτηκε',
+                entryUpdated: 'Η κατάσταση ενημερώθηκε',
+              },
+            },
+          });
+
+          window.CMS.registerLocale('el', greekLocale);
+        };
+        const joinNonEmpty = (value, separator = ' · ') => toArray(value).filter(Boolean).join(separator);
 
         const ServicesPreview = window.createClass({
           render() {
             const services = toArray(this.props.entry.getIn(['data', 'services']));
 
-            return h('div', { className: 'decap-services-preview' }, [
-              h('p', { className: 'decap-services-preview__eyebrow', key: 'eyebrow' }, 'Προεπισκόπηση ενότητας'),
-              h('h1', { className: 'decap-services-preview__title', key: 'title' }, 'Υπηρεσίες'),
-              h(
-                'div',
-                { className: 'decap-services-preview__grid', key: 'grid' },
-                services.length > 0
-                  ? services.map((service, index) =>
-                      h('article', { className: 'decap-services-preview__card', key: `${service.title ?? 'service'}-${index}` }, [
-                        h('h2', { className: 'decap-services-preview__card-title', key: 'title' }, service.title || 'Νέα υπηρεσία'),
-                        h('p', { className: 'decap-services-preview__card-copy', key: 'description' }, service.description || 'Σύντομη περιγραφή υπηρεσίας.'),
+            return h('section', { className: 'decap-services-preview' }, [
+              h('div', { className: 'decap-services-preview__shell', key: 'shell' }, [
+                h('div', { className: 'decap-services-preview__intro', key: 'intro' }, [
+                  h('p', { className: 'decap-services-preview__eyebrow', key: 'eyebrow' }, 'ΠΡΟΕΠΙΣΚΟΠΗΣΗ ΕΝΟΤΗΤΑΣ'),
+                  h('h1', { className: 'decap-services-preview__title', key: 'title' }, 'Υπηρεσίες'),
+                  h(
+                    'p',
+                    { className: 'decap-services-preview__lead', key: 'lead' },
+                    'Η προεπισκόπηση ακολουθεί την αισθητική των καρτών της ζωντανής σελίδας και δείχνει πώς θα διαβαστεί η ενότητα όταν δημοσιευτεί.',
+                  ),
+                ]),
+                h(
+                  'div',
+                  { className: 'decap-services-preview__grid', key: 'grid' },
+                  services.length > 0
+                    ? services.map((service, index) => {
+                        const serviceMeta = [service.format, service.duration].filter(Boolean).join(' / ');
+                        const audienceSummary = joinNonEmpty(service.idealFor);
+                        const supportItems = toArray(service.whatToExpect).filter(Boolean);
+
+                        return h(
+                          'article',
+                          {
+                            className: 'decap-services-preview__card',
+                            key: `${service.title ?? 'service'}-${index}`,
+                          },
+                          [
+                            h('span', { className: 'decap-services-preview__card-glow', key: 'glow', 'aria-hidden': 'true' }),
+                            h('h2', { className: 'decap-services-preview__card-title', key: 'title' }, service.title || 'Νέα υπηρεσία'),
+                            h(
+                              'p',
+                              { className: 'decap-services-preview__card-copy', key: 'description' },
+                              service.description || 'Σύντομη περιγραφή υπηρεσίας.',
+                            ),
+                            h('div', { className: 'decap-services-preview__facts', key: 'facts' }, [
+                              h('div', { className: 'decap-services-preview__fact', key: 'audience' }, [
+                                h('span', { className: 'decap-services-preview__fact-icon', key: 'audience-icon', 'aria-hidden': 'true' }, '◎'),
+                                h('p', { className: 'decap-services-preview__fact-copy', key: 'audience-copy' }, [
+                                  h('strong', { key: 'audience-label' }, 'Σε ποιους απευθύνεται: '),
+                                  audienceSummary || 'Σύντομη περιγραφή κοινού.',
+                                ]),
+                              ]),
+                              serviceMeta
+                                ? h('div', { className: 'decap-services-preview__fact', key: 'meta' }, [
+                                    h('span', { className: 'decap-services-preview__fact-icon', key: 'meta-icon', 'aria-hidden': 'true' }, '◌'),
+                                    h('p', { className: 'decap-services-preview__fact-copy decap-services-preview__meta', key: 'meta-copy' }, serviceMeta),
+                                  ])
+                                : null,
+                            ].filter(Boolean)),
+                            supportItems.length > 0
+                              ? h('div', { className: 'decap-services-preview__support', key: 'support' }, [
+                                  h('p', { className: 'decap-services-preview__support-title', key: 'support-title' }, 'ΤΙ ΝΑ ΠΕΡΙΜΕΝΕΤΕ'),
+                                  h(
+                                    'ul',
+                                    { className: 'decap-services-preview__support-list', key: 'support-list' },
+                                    supportItems.map((item, itemIndex) =>
+                                      h('li', { key: `${item}-${itemIndex}` }, item),
+                                    ),
+                                  ),
+                                ])
+                              : null,
+                          ].filter(Boolean),
+                        );
+                      })
+                    : [
                         h(
-                          'p',
-                          { className: 'decap-services-preview__meta', key: 'meta' },
-                          [service.format, service.duration].filter(Boolean).join(' / ') || 'Μορφή και διάρκεια'
+                          'div',
+                          { className: 'decap-services-preview__empty', key: 'empty' },
+                          'Προσθέστε υπηρεσίες για να εμφανιστεί εδώ η ζωντανή προεπισκόπηση των καρτών.',
                         ),
-                        h(
-                          'ul',
-                          { className: 'decap-services-preview__list', key: 'ideal-for' },
-                          toArray(service.idealFor).map((item, itemIndex) =>
-                            h('li', { key: `${item}-${itemIndex}` }, item),
-                          ),
-                        ),
-                      ]),
-                    )
-                  : [
-                      h(
-                        'div',
-                        { className: 'decap-services-preview__empty', key: 'empty' },
-                        'Προσθέστε υπηρεσίες για να εμφανιστεί η προεπισκόπηση των καρτών.',
-                      ),
-                    ],
-              ),
+                      ],
+                ),
+              ]),
             ]);
           },
         });
 
+        registerGreekLocale();
         window.CMS.registerPreviewStyle(adminStyleUrl);
         window.CMS.registerPreviewStyle(previewStyleUrl);
         window.CMS.registerPreviewTemplate('services', ServicesPreview);
+        window.initCMS({ config: { locale: 'el' } });
+        installAdminTextLocalizer();
       };
 
-      registerServicesPreview();
+      registerServicesEditor();
     </script>
   </body>
 </html>
