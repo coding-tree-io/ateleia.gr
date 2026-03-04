@@ -1,6 +1,4 @@
 ---
-import { Footer } from '@/components/sections/Footer';
-import SiteHeader from '@/components/sections/SiteHeader.astro';
 import { createProjectRelativeUrl } from '@/config/site-branding';
 import { getRobotsDirective } from '@/config/site-metadata';
 import { therapyPracticeLegalContent } from '@/config/legal-content';
@@ -19,43 +17,37 @@ const homePageHref = createProjectRelativeUrl('');
   robots={robots}
   openGraphTitle={`${therapyPracticeLegalContent.pageTitle} | Ateleia`}
   openGraphDescription={therapyPracticeLegalContent.pageDescription}
+  bodyClassName="min-h-screen bg-background text-foreground"
   includeCodingTreeAttributionScript
 >
-  <div class="min-h-screen overflow-x-clip bg-background font-sans text-foreground">
-    <SiteHeader />
+  <main class="mx-auto w-full max-w-4xl px-4 py-10 sm:px-6 md:px-10 md:py-16">
+    <a
+      href={homePageHref}
+      class="therapy-inline-text-link rounded-xl px-3 text-sm text-muted-foreground hover:text-foreground"
+    >
+      Back to home
+    </a>
 
-    <main class="therapy-section-shell">
-      <div class="therapy-section-content-width max-w-4xl">
-        <a
-          href={homePageHref}
-          class="therapy-inline-text-link rounded-xl px-3 text-sm text-muted-foreground hover:text-foreground"
-        >
-          Back to home
-        </a>
+    <header class="mt-4 border-b border-border/60 pb-6">
+      <h1 class="font-serif text-4xl font-bold leading-tight text-foreground md:text-5xl">
+        {therapyPracticeLegalContent.heading}
+      </h1>
+      <p class="therapy-section-paragraph mt-3">{therapyPracticeLegalContent.introduction}</p>
+    </header>
 
-        <header class="mt-4 border-b border-border/60 pb-6">
-          <p class="therapy-section-overline text-[var(--tone-teal)]">Legal</p>
-          <h1 class="therapy-section-heading mt-3">{therapyPracticeLegalContent.heading}</h1>
-          <p class="therapy-section-paragraph mt-4">{therapyPracticeLegalContent.introduction}</p>
-        </header>
-
-        <article class="mt-8 space-y-5">
-          {
-            therapyPracticeLegalContent.sections.map((section) => (
-              <section class="therapy-surface-soft-card p-6 md:p-8">
-                <h2 class="font-serif text-2xl font-semibold text-foreground">{section.title}</h2>
-                <div class="mt-4 space-y-3">
-                  {section.paragraphs.map((paragraph) => (
-                    <p class="therapy-section-supporting-copy md:text-base">{paragraph}</p>
-                  ))}
-                </div>
-              </section>
-            ))
-          }
-        </article>
-      </div>
-    </main>
-
-    <Footer />
-  </div>
+    <article class="mt-8 space-y-6">
+      {
+        therapyPracticeLegalContent.sections.map((section) => (
+          <section class="therapy-surface-soft-card p-6 md:p-8">
+            <h2 class="font-serif text-2xl font-semibold text-foreground">{section.title}</h2>
+            <div class="mt-4 space-y-3">
+              {section.paragraphs.map((paragraph) => (
+                <p class="therapy-section-supporting-copy md:text-base">{paragraph}</p>
+              ))}
+            </div>
+          </section>
+        ))
+      }
+    </article>
+  </main>
 </PublicDocumentLayout>
