@@ -15,6 +15,9 @@ type ServicesProps = {
 };
 
 function TherapyServiceCard({ service }: TherapyServiceCardProps) {
+  const {
+    servicesSection: { audienceLabel, expectationsLabel },
+  } = therapyPracticeWebsiteContent;
   const serviceMeta = [service.format, service.duration].filter(Boolean).join(' / ');
 
   return (
@@ -28,7 +31,7 @@ function TherapyServiceCard({ service }: TherapyServiceCardProps) {
             <Users className="size-4" aria-hidden="true" />
           </div>
           <span>
-            <span className="font-semibold text-foreground">{'Ιδανικό για: '}</span>
+            <span className="font-semibold text-foreground">{`${audienceLabel}: `}</span>
             {service.idealFor.join(' · ')}
           </span>
         </div>
@@ -45,7 +48,7 @@ function TherapyServiceCard({ service }: TherapyServiceCardProps) {
 
       {service.whatToExpect.length > 0 ? (
         <div className="therapy-surface-supporting-card mt-7 p-5">
-          <p className="therapy-section-overline tracking-widest text-muted-foreground">Τι να περιμένετε</p>
+          <p className="therapy-section-overline tracking-widest text-muted-foreground">{expectationsLabel}</p>
           <ul className="therapy-section-supporting-copy mt-3 space-y-2">
             {service.whatToExpect.map((item: string) => (
               <li key={item} className="flex gap-2">

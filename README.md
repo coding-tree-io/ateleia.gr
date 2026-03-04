@@ -167,12 +167,12 @@ The CMS admin is served from the same deployment at:
 
 ## Decap CMS
 
-This repo includes a static Decap CMS admin configured for the services section only.
+This repo includes a static Decap CMS admin configured for the full client-editable homepage/site copy plus the services section.
 
 - admin entry: `src/pages/admin/index.astro`
 - generated config: `src/pages/admin/config.yml.ts`
-- editable content: `src/data/services.json`
-- content schema/query helpers: `src/content.config.ts`, `src/content/services.ts`
+- editable content: `src/data/site-content.json`, `src/data/services.json`
+- content schema/query helpers: `src/content.config.ts`, `src/content/therapy-practice-website-content.ts`, `src/content/services.ts`
 - local unauthenticated mode: `corepack pnpm cms:dev`
 
 Local development and production intentionally use different backends:
@@ -180,8 +180,11 @@ Local development and production intentionally use different backends:
 - localhost: `backend: proxy` via `decap-server`, with no DecapBridge dependency
 - deployed GitHub Pages: DecapBridge PKCE via `git-gateway`, for Google login
 
-Decap editor labels remain Greek only where the client edits homepage service content. The surrounding code, docs, and configuration stay in English.
-The services editor is a single list-based document so the client can add, delete, and drag to reorder service cards without managing separate files.
+Decap editor labels remain Greek only where the client edits site content. The surrounding code, docs, and configuration stay in English.
+The CMS is split into two documents:
+
+- `Περιεχόμενο ιστοσελίδας`: branding, navigation, hero, what-is, who-is-it-for, about, FAQ, contact, footer, and homepage SEO copy
+- `Υπηρεσίες`: a single list-based document so the client can add, delete, and drag to reorder service cards without managing separate files
 
 - correct GitHub Pages login URL: `https://coding-tree-io.github.io/ateleia.gr/admin/index.html`
 - `site_url` in the generated CMS config intentionally includes `/ateleia.gr/`, because this repo is deployed as a GitHub Pages project site, not a root site
@@ -247,10 +250,12 @@ It covers:
 - `src/config/site-metadata.ts`: canonical origin, robots mode, OG defaults, structured-data helpers
 - `src/config/contact.ts`: shared contact email extraction and Form.taxi endpoint wiring
 - `src/config/legal-content.ts`: English privacy/legal copy source
-- `src/content/therapy-practice-website-content.ts`: Greek-first homepage copy and shared labels
+- `src/content/therapy-practice-website-content.ts`: typed site-content adapter consumed by the homepage sections and metadata
+- `src/content/site-content-schema.ts`: shared Zod schema for the editable site-content document
 - `src/content.config.ts`: Astro content-collection definitions
 - `src/content/services.ts`: ordered services collection query helper
-- `src/data/services/*.json`: one data entry per service card, ready for future CMS mapping
+- `src/data/site-content.json`: editable site-wide homepage content and shared labels
+- `src/data/services.json`: editable services document used by the services cards
 - `src/components/sections/SiteHeader.astro`: static header shell with mobile menu island boundary
 - `src/components/sections/MobileNavigationMenu.tsx`: mobile-only shadcn Sheet island
 - `src/components/sections/HeaderCtaVisibilityObserver.tsx`: CTA visibility island tied to hero/header state

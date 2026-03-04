@@ -40,7 +40,7 @@ export function WhatIs() {
           ))}
 
           <aside className="therapy-surface-soft-card p-5 md:p-6">
-            <p className="therapy-section-overline text-[var(--tone-teal)]">Πρακτική σημείωση</p>
+            <p className="therapy-section-overline text-[var(--tone-teal)]">{whatIs.practiceNoteLabel}</p>
             <p className="therapy-section-supporting-copy mt-3">{whatIs.practiceNote}</p>
           </aside>
         </div>

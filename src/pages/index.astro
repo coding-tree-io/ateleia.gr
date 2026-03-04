@@ -14,6 +14,7 @@ import {
   createWebSiteStructuredData,
   getRobotsDirective,
 } from '@/config/site-metadata';
+import { therapyPracticeWebsiteContent } from '@/content/therapy-practice-website-content';
 import { getServices } from '@/content/services';
 import PublicDocumentLayout from '@/layouts/PublicDocumentLayout.astro';
 
@@ -23,15 +24,16 @@ const sectionDividerInvertedClassName =
   'therapy-illustrated-section-divider therapy-illustrated-section-divider-inverted';
 const services = await getServices();
 const structuredData = [createOrganizationStructuredData(), createWebSiteStructuredData()];
+const { seo } = therapyPracticeWebsiteContent;
 ---
 
 <PublicDocumentLayout
-  pageTitle="Ατέλεια | Θεραπεία μέσω τέχνης για ενήλικες"
-  pageDescription="Θεραπεία μέσω τέχνης για ενήλικες στην Ατέλεια. Ένας ασφαλής χώρος προσωπικής διερεύνησης μέσα από δημιουργική έκφραση, art therapy και σύγχρονη ψυχοθεραπευτική πρακτική."
+  pageTitle={seo.pageTitle}
+  pageDescription={seo.pageDescription}
   canonicalPath=""
   robots={getRobotsDirective()}
-  openGraphTitle="Ατέλεια | Θεραπεία μέσω τέχνης για ενήλικες"
-  openGraphDescription="Ατέλεια — Θεραπεία μέσω τέχνης για ενήλικες, με δημιουργική έκφραση, art therapy και σταθερό θεραπευτικό πλαίσιο."
+  openGraphTitle={seo.openGraphTitle}
+  openGraphDescription={seo.openGraphDescription}
   structuredData={structuredData}
   htmlClassName="hero-in-view"
   includeCodingTreeAttributionScript

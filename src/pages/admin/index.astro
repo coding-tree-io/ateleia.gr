@@ -76,9 +76,33 @@ const googleFontsStylesheetUrl = therapyPracticeSiteBranding.typography.googleFo
             gender: 'feminine',
           },
           {
+            aliases: ['παραγραφος', 'παραγραφοι'],
+            singular: 'παράγραφος',
+            plural: 'παράγραφοι',
+            gender: 'feminine',
+          },
+          {
+            aliases: ['ερωτηση', 'ερωτησεις', 'συχνες ερωτησεις'],
+            singular: 'ερώτηση',
+            plural: 'συχνές ερωτήσεις',
+            gender: 'feminine',
+          },
+          {
             aliases: ['στοιχειο', 'στοιχεια'],
             singular: 'στοιχείο',
             plural: 'στοιχεία',
+            gender: 'neuter',
+          },
+          {
+            aliases: ['στοιχειο λιστας', 'στοιχεια λιστας'],
+            singular: 'στοιχείο λίστας',
+            plural: 'στοιχεία λίστας',
+            gender: 'neuter',
+          },
+          {
+            aliases: ['στοιχειο επικοινωνιας', 'στοιχεια επικοινωνιας'],
+            singular: 'στοιχείο επικοινωνίας',
+            plural: 'στοιχεία επικοινωνίας',
             gender: 'neuter',
           },
           {
@@ -134,9 +158,13 @@ const googleFontsStylesheetUrl = therapyPracticeSiteBranding.typography.googleFo
           const normalized = normalizeForMatch(value);
           const directReplacements = {
             'add υπηρεσια': 'Προσθέστε Υπηρεσία',
+            'add παραγραφος': 'Προσθέστε Παράγραφο',
+            'add ερωτηση': 'Προσθέστε Ερώτηση',
             'add στοιχειο': 'Προσθέστε Στοιχείο',
             'add στοιχεια': 'Προσθέστε Στοιχείο',
-            'προσθεστε υπηρεσια': 'Προσθέστε Υπησία',
+            'προσθεστε υπηρεσια': 'Προσθέστε Υπηρεσία',
+            'προσθεστε παραγραφος': 'Προσθέστε Παράγραφο',
+            'προσθεστε ερωτηση': 'Προσθέστε Ερώτηση',
             'προσθεστε στοιχειο': 'Προσθέστε Στοιχείο',
             'προσθεστε στοιχεια': 'Προσθέστε Στοιχείο',
             '1 τι να περιμενετε': 'ένα στοιχείο',

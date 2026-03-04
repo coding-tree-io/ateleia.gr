@@ -72,7 +72,7 @@ export function Hero() {
         <aside className="relative mt-3 lg:mt-0">
           <div className="therapy-surface-attention-glow-animation therapy-surface-paper-card rounded-[1.75rem] p-6 md:rounded-[2rem] md:p-10">
             <p className="therapy-section-overline tracking-[0.16em] text-[var(--tone-teal)]">
-              Therapeutic Atelier
+              {hero.spotlightEyebrow}
             </p>
             <blockquote className="mt-4 font-serif text-[1.85rem] font-semibold leading-tight text-[var(--tone-ink)] md:text-[2.2rem]">
               «{whatIs.pullQuote.text}»

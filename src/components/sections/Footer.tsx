@@ -6,7 +6,11 @@ export function Footer() {
   const creditsPageUrl = createCreditsPageUrl();
   const legalPageUrl = createProjectRelativeUrl('legal/');
   const logoImageUrl = createLogoImageUrl();
-  const { brandName, navigationItems } = therapyPracticeWebsiteContent;
+  const {
+    brandName,
+    navigationItems,
+    footer: { creditsLabel, legalLabel, rightsReserved },
+  } = therapyPracticeWebsiteContent;
 
   return (
     <footer className="relative border-t border-border/60 bg-background/95 px-4 py-3 sm:px-6 md:px-10 md:py-4">
@@ -40,19 +44,19 @@ export function Footer() {
               href={creditsPageUrl}
               className="therapy-footer-navigation-link focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             >
-              Credits
+              {creditsLabel}
             </a>
             <a
               href={legalPageUrl}
               className="therapy-footer-navigation-link focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             >
-              Legal
+              {legalLabel}
             </a>
           </nav>
         </div>
 
         <div className="mx-auto mt-2.5 flex w-full max-w-6xl flex-col items-center gap-0.5 border-t border-border/45 pt-1.5 text-center">
-          <p className="text-sm text-muted-foreground">© {currentYear}. All rights reserved.</p>
+          <p className="text-sm text-muted-foreground">© {currentYear}. {rightsReserved}</p>
 
           <div className="flex w-full justify-center">
             <div className="therapy-footer-attribution-shell">

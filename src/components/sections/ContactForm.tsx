@@ -10,6 +10,14 @@ type ContactFormLabels = {
   message: string;
   consent: string;
   submit: string;
+  required: string;
+  submitting: string;
+};
+
+type ContactFormPlaceholders = {
+  name: string;
+  email: string;
+  message: string;
 };
 
 type ContactFormMessages = {
@@ -26,6 +34,7 @@ type ContactFormProps = {
   subject: string;
   privacyNote: string;
   formLabels: ContactFormLabels;
+  formPlaceholders: ContactFormPlaceholders;
   formMessages: ContactFormMessages;
 };
 
@@ -50,6 +59,7 @@ export function ContactForm({
   subject,
   privacyNote,
   formLabels,
+  formPlaceholders,
   formMessages,
 }: ContactFormProps) {
   const [submissionStatus, setSubmissionStatus] = useState<SubmissionStatus>(null);
@@ -146,7 +156,7 @@ export function ContactForm({
             autoComplete="name"
             minLength={2}
             required
-            placeholder="Το ονοματεπώνυμό σας"
+            placeholder={formPlaceholders.name}
             className="therapy-form-field-control"
           />
         </div>
@@ -164,7 +174,7 @@ export function ContactForm({
             type="email"
             autoComplete="email"
             required
-            placeholder="email@example.com"
+            placeholder={formPlaceholders.email}
             className="therapy-form-field-control"
           />
         </div>
@@ -182,7 +192,7 @@ export function ContactForm({
             minLength={10}
             maxLength={1000}
             required
-            placeholder="Γράψτε το μήνυμά σας..."
+            placeholder={formPlaceholders.message}
             className="therapy-form-field-control min-h-32"
           />
         </div>
@@ -200,7 +210,7 @@ export function ContactForm({
             </svg>
           </span>
           <span className="therapy-form-consent-copy">
-            <span className="therapy-form-consent-required-label">Required</span>
+            <span className="therapy-form-consent-required-label">{formLabels.required}</span>
             <span className="therapy-form-consent-text">{formLabels.consent}</span>
           </span>
         </label>
@@ -222,7 +232,7 @@ export function ContactForm({
           disabled={isSubmitting || !hasConfiguredEndpoint}
           className="therapy-primary-call-to-action w-full text-base"
         >
-          {isSubmitting ? 'Αποστολή...' : formLabels.submit}
+          {isSubmitting ? formLabels.submitting : formLabels.submit}
         </Button>
       </form>
 

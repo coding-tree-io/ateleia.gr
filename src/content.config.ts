@@ -2,6 +2,20 @@ import { defineCollection } from 'astro:content';
 import { file } from 'astro/loaders';
 import { z } from 'astro/zod';
 
+import { siteContentCollectionSchema } from './content/site-content-schema';
+
+const siteContent = defineCollection({
+  loader: file('src/data/site-content.json', {
+    parser: (text) => [
+      {
+        id: 'site-content',
+        ...JSON.parse(text),
+      },
+    ],
+  }),
+  schema: siteContentCollectionSchema,
+});
+
 const services = defineCollection({
   loader: file('src/data/services.json', {
     parser: (text) => {
@@ -26,4 +40,4 @@ const services = defineCollection({
   }),
 });
 
-export const collections = { services };
+export const collections = { siteContent, services };
