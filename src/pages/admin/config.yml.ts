@@ -105,7 +105,7 @@ collections:
             widget: list
             label_singular: Υπηρεσία
             summary: "{{fields.title}}"
-            hint: Προσθέστε, διαγράψτε ή σύρετε τις υπηρεσίες για να αλλάξετε τη σειρά εμφάνισης.
+            hint: Προσθέστε, διαγράψτε ή σύρετε τις υπηρεσίες για να αλλάξετε τη σειρά εμφάνισης των καρτών.
             collapsed: true
             fields:
               - {
@@ -140,7 +140,7 @@ collections:
                 label_singular: Σημείο
                 collapsed: true
                 summary: "{{fields.value}}"
-                hint: Προσθέστε ένα ή περισσότερα σημεία.
+                hint: Προσθέστε σύντομα σημεία που περιγράφουν σε ποιους απευθύνεται η υπηρεσία.
                 field: { label: Σημείο, name: value, widget: string }
               - label: Τι να περιμένετε
                 name: whatToExpect

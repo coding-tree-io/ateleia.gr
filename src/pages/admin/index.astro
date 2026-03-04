@@ -1,10 +1,15 @@
 ---
-import { createProjectRelativeUrl } from '@/config/site-branding';
+import {
+  createProjectRelativeUrl,
+  therapyPracticeSiteBranding,
+} from '@/config/site-branding';
 
 const adminConfigUrl = createProjectRelativeUrl('admin/config.yml');
 const faviconSvgUrl = createProjectRelativeUrl('favicon.svg');
 const faviconIcoUrl = createProjectRelativeUrl('favicon.ico');
+const adminStyleUrl = createProjectRelativeUrl('admin/admin.css');
 const previewStyleUrl = createProjectRelativeUrl('admin/preview.css');
+const googleFontsStylesheetUrl = therapyPracticeSiteBranding.typography.googleFontsStylesheetUrl;
 ---
 
 <!doctype html>
@@ -14,13 +19,17 @@ const previewStyleUrl = createProjectRelativeUrl('admin/preview.css');
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex" />
     <title>Ateleia CMS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+    <link rel="stylesheet" href={googleFontsStylesheetUrl} />
+    <link rel="stylesheet" href={adminStyleUrl} />
     <link rel="icon" type="image/svg+xml" href={faviconSvgUrl} />
     <link rel="icon" href={faviconIcoUrl} />
     <link rel="cms-config-url" type="text/yaml" href={adminConfigUrl} />
   </head>
   <body>
     <script src="https://unpkg.com/decap-cms@3.10.1/dist/decap-cms.js"></script>
-    <script is:inline define:vars={{ previewStyleUrl }}>
+    <script is:inline define:vars={{ adminStyleUrl, previewStyleUrl }}>
       const registerServicesPreview = () => {
         if (!window.CMS || !window.createClass || !window.h) {
           return;
@@ -81,6 +90,7 @@ const previewStyleUrl = createProjectRelativeUrl('admin/preview.css');
           },
         });
 
+        window.CMS.registerPreviewStyle(adminStyleUrl);
         window.CMS.registerPreviewStyle(previewStyleUrl);
         window.CMS.registerPreviewTemplate('services', ServicesPreview);
       };
