@@ -38,7 +38,7 @@ Use that branch only if you intentionally want to revisit palette/font explorati
 corepack pnpm install
 ```
 
-Copy `.env.example` to `.env` before expecting the public contact form to submit:
+Copy `.env.example` to `.env` before expecting the public contact form to submit or the local CMS config to use project-specific overrides:
 
 ```sh
 Copy-Item .env.example .env
@@ -49,6 +49,8 @@ Required variable:
 - `PUBLIC_CONTACT_FORM_ENDPOINT`: the site-specific `form.taxi` endpoint for the public contact form. It must be configured in Form.taxi to deliver to the same inbox used by the `mailto:` contact item in `src/content/therapy-practice-website-content.ts`.
 - The current configured endpoint is `https://form.taxi/s/tb10t33e`.
 - GitHub Pages production builds inject the same endpoint from `.github/workflows/pages.yml`.
+
+Optional Decap/DecapBridge overrides are also documented in `.env.example`.
 
 ## Local development
 
@@ -69,6 +71,14 @@ corepack pnpm clean:dev-cache
 ```
 
 Cache targets: `.astro`, `node_modules/.astro`, `node_modules/.vite`.
+
+CMS local development on an isolated port:
+
+```sh
+corepack pnpm cms:dev
+```
+
+This starts the Astro dev server on `http://localhost:4322/ateleia.gr/` and the local Decap proxy on `http://127.0.0.1:8082/api/v1`, so the admin works without live login at `http://localhost:4322/ateleia.gr/admin/`.
 
 ## Verification (Required)
 
@@ -150,6 +160,46 @@ Deployment workflow on `main` publishes the homepage artifact from `dist` to:
 
 - `https://coding-tree-io.github.io/ateleia.gr/`
 
+The CMS admin is served from the same deployment at:
+
+- `https://coding-tree-io.github.io/ateleia.gr/admin/`
+
+## Decap CMS
+
+This repo includes a static Decap CMS admin configured for the services section only.
+
+- admin entry: `src/pages/admin/index.astro`
+- generated config: `src/pages/admin/config.yml.ts`
+- editable content: `src/data/services/*.json`
+- content schema/query helpers: `src/content.config.ts`, `src/content/services.ts`
+- local unauthenticated mode: `corepack pnpm cms:dev`
+
+Production login uses DecapBridge PKCE for Google login.
+
+- correct GitHub Pages login URL: `https://coding-tree-io.github.io/ateleia.gr/admin/index.html`
+- `site_url` in the generated CMS config intentionally includes `/ateleia.gr/`, because this repo is deployed as a GitHub Pages project site, not a root site
+
+Optional build-time overrides:
+
+- `DECAPBRIDGE_BASE_URL`
+- `DECAPBRIDGE_AUTH_ENDPOINT`
+- `DECAPBRIDGE_AUTH_TOKEN_ENDPOINT`
+- `DECAPBRIDGE_GATEWAY_URL`
+- `DECAP_LOGO_URL`
+- `DECAP_REPOSITORY`, `DECAP_BRANCH`, `DECAP_SITE_URL`
+
+Committed defaults target the current DecapBridge site:
+
+- `base_url: https://auth.decapbridge.com`
+- `auth_endpoint: /sites/1731d52f-3a01-4de9-8c6f-98598c438922/pkce`
+- `auth_token_endpoint: /sites/1731d52f-3a01-4de9-8c6f-98598c438922/token`
+- `gateway_url: https://gateway.decapbridge.com`
+
+Remaining DecapBridge dashboard checks:
+
+- confirm Google is the only enabled sign-in provider
+- confirm the DecapBridge site login URL is exactly `https://coding-tree-io.github.io/ateleia.gr/admin/index.html`
+
 ## SEO and indexing status
 
 The project now has a centralized metadata layer in:
@@ -199,9 +249,13 @@ It covers:
 - `src/components/sections/HeaderCtaVisibilityObserver.tsx`: CTA visibility island tied to hero/header state
 - `src/components/sections/ContactSection.astro`: production contact section shell
 - `src/components/sections/ContactForm.tsx`: visible-on-demand contact form island that posts to Form.taxi
+- `src/pages/admin/index.astro`: static Decap admin shell
+- `src/pages/admin/config.yml.ts`: generated Decap config with local backend and DecapBridge settings
 - `src/pages/legal.astro`: initial English privacy/legal notice
 - `src/pages/robots.txt.ts`: generated robots file
 - `src/pages/index.astro`: production entry page
+- `scripts/start-cms-dev.mjs`: isolated local CMS/dev runner on port `4322`
+- `scripts/start-decap-proxy.mjs`: local Decap proxy runner on port `8082`
 - `performance-budget.json`: mobile performance budget thresholds
 - `scripts/check-lighthouse-budget.mjs`: budget enforcement script
 - `.codex-pipeline/README.md`: sidecar verification details and visual baseline workflow
