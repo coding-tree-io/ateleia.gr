@@ -1,0 +1,115 @@
+---
+import { buttonVariants } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+
+interface NavigationEntry {
+  label: string;
+  href: string;
+}
+
+interface Props {
+  brandName: string;
+  brandSubtitle: string;
+  primaryActionLabel: string;
+  navigationEntries: readonly NavigationEntry[];
+}
+
+const { brandName, brandSubtitle, primaryActionLabel, navigationEntries } = Astro.props;
+
+const triggerClassName = cn(
+  buttonVariants({ variant: 'outline', size: 'icon' }),
+  'inline-flex rounded-xl border-border/55 bg-card/80 md:hidden',
+);
+---
+
+<div class="md:hidden">
+  <button
+    type="button"
+    class={triggerClassName}
+    aria-label="Άνοιγμα μενού"
+    aria-haspopup="dialog"
+    aria-expanded="false"
+    aria-controls="mobile-navigation-dialog"
+    data-mobile-nav-trigger
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="size-5"
+      aria-hidden="true"
+    >
+      <path d="M4 5h16"></path>
+      <path d="M4 12h16"></path>
+      <path d="M4 19h16"></path>
+    </svg>
+  </button>
+
+  <dialog
+    id="mobile-navigation-dialog"
+    class="therapy-mobile-navigation-dialog"
+    aria-labelledby="mobile-navigation-title"
+    data-mobile-nav-dialog
+  >
+    <div class="therapy-mobile-navigation-panel">
+      <button
+        type="button"
+        class="therapy-mobile-navigation-close"
+        aria-label="Κλείσιμο μενού"
+        data-mobile-nav-close
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="size-5"
+          aria-hidden="true"
+        >
+          <path d="m18 6-12 12"></path>
+          <path d="m6 6 12 12"></path>
+        </svg>
+      </button>
+
+      <div class="flex flex-col border-border/60 bg-background/95 px-5 pb-6 pt-14">
+        <div>
+          <h2 id="mobile-navigation-title" class="font-serif text-2xl font-semibold tracking-tight text-foreground">
+            {brandName}
+          </h2>
+          <p class="mt-2 text-sm leading-6 text-muted-foreground">{brandSubtitle}</p>
+        </div>
+
+        <nav class="mt-6 flex flex-col gap-2" aria-label="Κινητή πλοήγηση">
+          {
+            navigationEntries.map((navigationEntry) => (
+              <a
+                href={navigationEntry.href}
+                class="therapy-mobile-navigation-link"
+                data-mobile-nav-link
+              >
+                {navigationEntry.label}
+              </a>
+            ))
+          }
+        </nav>
+
+        <div class="mt-auto pt-5">
+          <a href="#contact" class="therapy-primary-call-to-action inline-flex min-h-11 w-full items-center justify-center rounded-md px-4 py-2 text-base font-medium" data-mobile-nav-link>
+            {primaryActionLabel}
+          </a>
+        </div>
+      </div>
+    </div>
+  </dialog>
+</div>

@@ -3,7 +3,7 @@ import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { createLogoImageUrl } from '@/config/site-branding';
 import { therapyPracticeWebsiteContent } from '@/content/therapy-practice-website-content';
-import { MobileNavigationMenu } from '@/components/sections/MobileNavigationMenu';
+import MobileNavigationMenu from '@/components/sections/MobileNavigationMenu.astro';
 import { ThreadedAlphaWordmark } from '@/components/brand/ThreadedAlphaWordmark';
 
 const {
@@ -55,7 +55,6 @@ const desktopBookingButtonClassName = cn(
     </div>
 
     <MobileNavigationMenu
-      client:media="(max-width: 767px)"
       brandName={brandName}
       brandSubtitle={brandSubtitle}
       primaryActionLabel={primaryCta}
@@ -63,3 +62,147 @@ const desktopBookingButtonClassName = cn(
     />
   </div>
 </header>
+
+<script is:inline>
+  (() => {
+    const desktopMediaQuery = '(min-width: 768px)';
+    const heroSectionId = 'hero';
+    const heroInViewClassName = 'hero-in-view';
+    const headerCtaSelector = '[data-header-cta]';
+    const dialogSelector = '[data-mobile-nav-dialog]';
+    const triggerSelector = '[data-mobile-nav-trigger]';
+    const closeSelector = '[data-mobile-nav-close]';
+    const linkSelector = '[data-mobile-nav-link]';
+
+    const dialogElement = document.querySelector(dialogSelector);
+    const triggerElement = document.querySelector(triggerSelector);
+    const closeElement = document.querySelector(closeSelector);
+    const mobileNavigationLinks = document.querySelectorAll(linkSelector);
+    const heroSectionElement = document.getElementById(heroSectionId);
+    const headerCtaElement = document.querySelector(headerCtaSelector);
+
+    const applyHeaderCtaAccessibilityState = (shouldHideHeaderCta) => {
+      if (!headerCtaElement) {
+        return;
+      }
+
+      if (shouldHideHeaderCta) {
+        headerCtaElement.setAttribute('aria-hidden', 'true');
+        headerCtaElement.setAttribute('tabindex', '-1');
+        return;
+      }
+
+      headerCtaElement.removeAttribute('aria-hidden');
+      headerCtaElement.removeAttribute('tabindex');
+    };
+
+    const removeHeroVisibilityClass = () => {
+      document.documentElement.classList.remove(heroInViewClassName);
+    };
+
+    const isHeroCurrentlyVisible = () => {
+      if (!heroSectionElement) {
+        return false;
+      }
+
+      const heroSectionBounds = heroSectionElement.getBoundingClientRect();
+      return heroSectionBounds.bottom > 0 && heroSectionBounds.top < window.innerHeight;
+    };
+
+    const desktopViewportMediaQueryList = window.matchMedia(desktopMediaQuery);
+    let latestHeroVisibilityState = isHeroCurrentlyVisible();
+
+    const syncHeaderCtaVisibilityState = () => {
+      const shouldHideHeaderCta = !desktopViewportMediaQueryList.matches || latestHeroVisibilityState;
+      applyHeaderCtaAccessibilityState(shouldHideHeaderCta);
+
+      if (!desktopViewportMediaQueryList.matches) {
+        removeHeroVisibilityClass();
+        return;
+      }
+
+      document.documentElement.classList.toggle(heroInViewClassName, latestHeroVisibilityState);
+    };
+
+    syncHeaderCtaVisibilityState();
+
+    if (heroSectionElement && 'IntersectionObserver' in window) {
+      const heroVisibilityObserver = new IntersectionObserver(
+        ([heroVisibilityEntry]) => {
+          latestHeroVisibilityState = heroVisibilityEntry?.isIntersecting ?? false;
+          syncHeaderCtaVisibilityState();
+        },
+        { threshold: 0.05 },
+      );
+
+      heroVisibilityObserver.observe(heroSectionElement);
+    }
+
+    desktopViewportMediaQueryList.addEventListener('change', () => {
+      latestHeroVisibilityState = isHeroCurrentlyVisible();
+      syncHeaderCtaVisibilityState();
+
+      if (desktopViewportMediaQueryList.matches && dialogElement?.open) {
+        dialogElement.close();
+      }
+    });
+
+    if (!(dialogElement instanceof HTMLDialogElement) || !(triggerElement instanceof HTMLButtonElement)) {
+      return;
+    }
+
+    const setDocumentScrollLock = (shouldLockScroll) => {
+      document.documentElement.classList.toggle('therapy-mobile-navigation-open', shouldLockScroll);
+      document.body.classList.toggle('therapy-mobile-navigation-open', shouldLockScroll);
+    };
+
+    const syncTriggerState = () => {
+      triggerElement.setAttribute('aria-expanded', dialogElement.open ? 'true' : 'false');
+    };
+
+    const closeDialog = () => {
+      if (!dialogElement.open) {
+        return;
+      }
+
+      dialogElement.close();
+    };
+
+    triggerElement.addEventListener('click', () => {
+      if (dialogElement.open) {
+        closeDialog();
+        return;
+      }
+
+      dialogElement.showModal();
+      syncTriggerState();
+      setDocumentScrollLock(true);
+      closeElement instanceof HTMLButtonElement && closeElement.focus();
+    });
+
+    closeElement instanceof HTMLButtonElement &&
+      closeElement.addEventListener('click', () => {
+        closeDialog();
+      });
+
+    mobileNavigationLinks.forEach((linkElement) => {
+      linkElement.addEventListener('click', () => {
+        closeDialog();
+      });
+    });
+
+    dialogElement.addEventListener('click', (event) => {
+      if (event.target === dialogElement) {
+        closeDialog();
+      }
+    });
+
+    dialogElement.addEventListener('close', () => {
+      syncTriggerState();
+      setDocumentScrollLock(false);
+      triggerElement.focus();
+    });
+
+    syncTriggerState();
+  })();
+</script>

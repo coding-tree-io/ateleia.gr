@@ -542,6 +542,59 @@
     background-color: var(--secondary);
   }
 
+  .therapy-mobile-navigation-dialog {
+    margin: 0 0 0 auto;
+    height: 100dvh;
+    width: min(100%, 24rem);
+    max-width: none;
+    border: none;
+    padding: 0;
+    background: transparent;
+    color: inherit;
+  }
+
+  .therapy-mobile-navigation-dialog::backdrop {
+    background: rgba(61, 53, 52, 0.42);
+    backdrop-filter: blur(4px);
+  }
+
+  .therapy-mobile-navigation-panel {
+    position: relative;
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    border-left: 1px solid color-mix(in srgb, var(--border) 65%, transparent);
+    background:
+      radial-gradient(circle at top right, rgba(199, 57, 46, 0.09), transparent 30%),
+      linear-gradient(180deg, color-mix(in srgb, var(--background) 96%, white 4%) 0%, color-mix(in srgb, var(--background) 92%, var(--accent) 8%) 100%);
+    box-shadow: -18px 0 40px rgba(61, 53, 52, 0.18);
+  }
+
+  .therapy-mobile-navigation-close {
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    display: inline-flex;
+    min-height: 2.75rem;
+    min-width: 2.75rem;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--card) 72%, transparent);
+    color: var(--foreground);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+  }
+
+  .therapy-mobile-navigation-close:hover {
+    border-color: color-mix(in srgb, var(--border) 90%, transparent);
+    background: color-mix(in srgb, var(--secondary) 80%, transparent);
+  }
+
+  .therapy-mobile-navigation-open {
+    overflow: hidden;
+  }
+
   .therapy-inline-text-link {
     display: inline-flex;
     min-height: 2.75rem;
@@ -666,20 +719,21 @@
     display: flex;
     min-width: 0;
     flex-direction: column;
-    gap: 0.25rem;
+    gap: 0.125rem;
   }
 
   .therapy-form-consent-required-label {
-    font-size: 0.6875rem;
+    font-size: 0.625rem;
     font-weight: 800;
-    letter-spacing: 0.18em;
+    letter-spacing: 0.14em;
+    line-height: 1.2;
     text-transform: uppercase;
     color: color-mix(in srgb, var(--tone-teal) 78%, var(--foreground) 22%);
   }
 
   .therapy-form-consent-text {
-    font-size: 0.8125rem;
-    line-height: 1.65;
+    font-size: 0.75rem;
+    line-height: 1.55;
     color: var(--muted-foreground);
   }
 
@@ -850,7 +904,7 @@
     }
 
     .therapy-form-consent-text {
-      font-size: 0.875rem;
+      font-size: 0.78125rem;
     }
   }
 

@@ -3,7 +3,6 @@ import { PaintedEdgeDivider } from '@/components/decorative/ArtShapes';
 import { About } from '@/components/sections/About';
 import ContactSection from '@/components/sections/ContactSection.astro';
 import { Footer } from '@/components/sections/Footer';
-import { HeaderCtaVisibilityObserver } from '@/components/sections/HeaderCtaVisibilityObserver';
 import { Hero } from '@/components/sections/Hero';
 import SiteHeader from '@/components/sections/SiteHeader.astro';
 import { Services } from '@/components/sections/Services';
@@ -40,7 +39,6 @@ const { seo } = therapyPracticeWebsiteContent;
 >
   <div class="min-h-screen overflow-x-clip bg-background font-sans text-foreground">
     <SiteHeader />
-    <HeaderCtaVisibilityObserver client:load />
 
     <main class="relative overflow-x-clip overflow-y-visible">
       <Hero />
