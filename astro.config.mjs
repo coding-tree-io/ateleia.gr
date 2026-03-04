@@ -10,6 +10,9 @@ export default defineConfig({
 	site: 'https://coding-tree-io.github.io',
 	base: '/ateleia.gr/',
 	output: 'static',
+	build: {
+		inlineStylesheets: 'always',
+	},
 	integrations: [react(), sitemap()],
 	vite: {
 		plugins: [tailwindcss()],
