@@ -64,6 +64,16 @@ const servicesSectionSchema = z.object({
   frequentlyAskedQuestions: z.array(frequentlyAskedQuestionSchema).min(1),
 });
 
+const announcementsSectionSchema = z.object({
+  title: z.string().min(1),
+  intro: z.string().min(1),
+  kindLabels: z.object({
+    workshop: z.string().min(1),
+    group: z.string().min(1),
+    announcement: z.string().min(1),
+  }),
+});
+
 const contactItemSchema = z.object({
   label: z.string().min(1),
   value: z.string().min(1),
@@ -76,7 +86,6 @@ const contactFormLabelsSchema = z.object({
   message: z.string().min(1),
   consent: z.string().min(1),
   submit: z.string().min(1),
-  required: z.string().min(1),
   submitting: z.string().min(1),
 });
 
@@ -122,6 +131,7 @@ export const siteContentSchema = z.object({
   whoIsItFor: whoIsItForSchema,
   about: aboutSchema,
   servicesSection: servicesSectionSchema,
+  announcementsSection: announcementsSectionSchema,
   contact: contactSchema,
   footer: footerSchema,
 });

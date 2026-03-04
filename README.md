@@ -129,6 +129,7 @@ The production homepage is intentionally limited to:
 - `WhoIsItFor`
 - `About`
 - `Services`
+- `Announcements`
 - `Contact`
 
 ## Islands architecture
@@ -167,12 +168,12 @@ The CMS admin is served from the same deployment at:
 
 ## Decap CMS
 
-This repo includes a static Decap CMS admin configured for the full client-editable homepage/site copy plus the services section.
+This repo includes a static Decap CMS admin configured for the full client-editable homepage/site copy plus the services and announcements sections.
 
 - admin entry: `src/pages/admin/index.astro`
 - generated config: `src/pages/admin/config.yml.ts`
-- editable content: `src/data/site-content.json`, `src/data/services.json`
-- content schema/query helpers: `src/content.config.ts`, `src/content/therapy-practice-website-content.ts`, `src/content/services.ts`
+- editable content: `src/data/site-content.json`, `src/data/services.json`, `src/data/announcements.json`
+- content schema/query helpers: `src/content.config.ts`, `src/content/therapy-practice-website-content.ts`, `src/content/services.ts`, `src/content/announcements.ts`
 - local unauthenticated mode: `corepack pnpm cms:dev`
 
 Local development and production intentionally use different backends:
@@ -181,10 +182,11 @@ Local development and production intentionally use different backends:
 - deployed GitHub Pages: DecapBridge PKCE via `git-gateway`, for Google login
 
 Decap editor labels remain Greek only where the client edits site content. The surrounding code, docs, and configuration stay in English.
-The CMS is split into two documents:
+The CMS is split into three documents:
 
 - `Περιεχόμενο ιστοσελίδας`: branding, navigation, hero, what-is, who-is-it-for, about, FAQ, contact, footer, and homepage SEO copy
 - `Υπηρεσίες`: a single list-based document so the client can add, delete, and drag to reorder service cards without managing separate files
+- `Νέα & Ανακοινώσεις`: a small list-based document for current workshops, group launches, or short site notices; the homepage shows the first two published entries
 
 - correct GitHub Pages login URL: `https://coding-tree-io.github.io/ateleia.gr/admin/index.html`
 - `site_url` in the generated CMS config intentionally includes `/ateleia.gr/`, because this repo is deployed as a GitHub Pages project site, not a root site
@@ -253,8 +255,10 @@ It covers:
 - `src/content/therapy-practice-website-content.ts`: typed site-content adapter consumed by the homepage sections and metadata
 - `src/content/site-content-schema.ts`: shared Zod schema for the editable site-content document
 - `src/content.config.ts`: Astro content-collection definitions
+- `src/content/announcements.ts`: ordered announcements collection query helper
 - `src/content/services.ts`: ordered services collection query helper
 - `src/data/site-content.json`: editable site-wide homepage content and shared labels
+- `src/data/announcements.json`: editable announcements document used by the homepage notices section
 - `src/data/services.json`: editable services document used by the services cards
 - `src/components/sections/SiteHeader.astro`: static header shell with mobile menu island boundary
 - `src/components/sections/MobileNavigationMenu.tsx`: mobile-only shadcn Sheet island

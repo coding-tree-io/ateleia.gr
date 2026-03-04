@@ -180,6 +180,19 @@ auth:
                 fields:
                   - { label: Ερώτηση, name: question, widget: string }
                   - { label: Απάντηση, name: answer, widget: text }
+          - label: Νέα & Ανακοινώσεις
+            name: announcementsSection
+            widget: object
+            fields:
+              - { label: Τίτλος ενότητας, name: title, widget: string }
+              - { label: Εισαγωγικό κείμενο, name: intro, widget: text }
+              - label: Ετικέτες τύπων
+                name: kindLabels
+                widget: object
+                fields:
+                  - { label: Εργαστήριο, name: workshop, widget: string }
+                  - { label: Ομάδα, name: group, widget: string }
+                  - { label: Ανακοίνωση, name: announcement, widget: string }
           - label: Ενότητα επικοινωνίας
             name: contact
             widget: object
@@ -207,7 +220,6 @@ auth:
                   - { label: Πεδίο μηνύματος, name: message, widget: string }
                   - { label: Κείμενο συναίνεσης, name: consent, widget: text }
                   - { label: Κουμπί αποστολής, name: submit, widget: string }
-                  - { label: Ετικέτα υποχρεωτικού πεδίου, name: required, widget: string }
                   - { label: Κείμενο κατά την αποστολή, name: submitting, widget: string }
               - label: Placeholders φόρμας
                 name: formPlaceholders
@@ -308,6 +320,56 @@ ${siteContentFields}
                 summary: "{{fields.value}}"
                 hint: Προαιρετικά στοιχεία που εμφανίζονται στο βοηθητικό πλαίσιο στο κάτω μέρος της κάρτας.
                 field: { label: Στοιχείο, name: value, widget: string }
+      - name: announcements
+        label: Νέα & Ανακοινώσεις
+        description: Σύντομες ανακοινώσεις για εργαστήρια, ομάδες ή άλλα τρέχοντα νέα.
+        file: src/data/announcements.json
+        fields:
+          - label: ΑΝΑΚΟΙΝΩΣΕΙΣ
+            name: announcements
+            widget: list
+            label_singular: Ανακοίνωση
+            summary: "{{fields.title}}"
+            hint: Προσθέστε τις δύο πρώτες δημοσιευμένες ανακοινώσεις που θέλετε να εμφανίζονται στην αρχική σελίδα.
+            collapsed: true
+            fields:
+              - { label: Τίτλος, name: title, widget: string }
+              - { label: Σύντομη περιγραφή, name: summary, widget: text }
+              - label: Τύπος
+                name: kind
+                widget: select
+                options:
+                  - { label: Βιωματικό εργαστήριο, value: workshop }
+                  - { label: Ομάδα, value: group }
+                  - { label: Ανακοίνωση, value: announcement }
+              - {
+                  label: Χρονική ένδειξη,
+                  name: dateLabel,
+                  widget: string,
+                  required: false,
+                  hint: Προαιρετικό, π.χ. Μάιος 2026 ή Νέος κύκλος εγγραφών.
+                }
+              - {
+                  label: Κείμενο συνδέσμου,
+                  name: callToActionLabel,
+                  widget: string,
+                  required: false,
+                  hint: Προαιρετικό, π.χ. Δηλώστε ενδιαφέρον.
+                }
+              - {
+                  label: Σύνδεσμος,
+                  name: callToActionHref,
+                  widget: string,
+                  required: false,
+                  hint: Προαιρετικό, π.χ. #contact ή μια πλήρης διεύθυνση.
+                }
+              - {
+                  label: Δημοσιευμένο,
+                  name: isPublished,
+                  widget: boolean,
+                  default: true,
+                  required: false
+                }
 `;
 
   return new Response(yaml, {

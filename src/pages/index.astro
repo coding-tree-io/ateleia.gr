@@ -1,5 +1,6 @@
 ---
 import { PaintedEdgeDivider } from '@/components/decorative/ArtShapes';
+import { Announcements } from '@/components/sections/Announcements';
 import { About } from '@/components/sections/About';
 import ContactSection from '@/components/sections/ContactSection.astro';
 import { Footer } from '@/components/sections/Footer';
@@ -13,6 +14,7 @@ import {
   createWebSiteStructuredData,
   getRobotsDirective,
 } from '@/config/site-metadata';
+import { getAnnouncements } from '@/content/announcements';
 import { therapyPracticeWebsiteContent } from '@/content/therapy-practice-website-content';
 import { getServices } from '@/content/services';
 import PublicDocumentLayout from '@/layouts/PublicDocumentLayout.astro';
@@ -21,6 +23,8 @@ const topDividerClassName = 'therapy-illustrated-section-divider therapy-illustr
 const sectionDividerClassName = 'therapy-illustrated-section-divider therapy-illustrated-section-divider-standard';
 const sectionDividerInvertedClassName =
   'therapy-illustrated-section-divider therapy-illustrated-section-divider-inverted';
+const announcements = (await getAnnouncements()).slice(0, 2);
+const hasAnnouncements = announcements.length > 0;
 const services = await getServices();
 const structuredData = [createOrganizationStructuredData(), createWebSiteStructuredData()];
 const { seo } = therapyPracticeWebsiteContent;
@@ -59,6 +63,13 @@ const { seo } = therapyPracticeWebsiteContent;
 
       <Services services={services} />
       <PaintedEdgeDivider className={sectionDividerClassName} />
+
+      {hasAnnouncements ? (
+        <>
+          <Announcements announcements={announcements} />
+          <PaintedEdgeDivider className={sectionDividerInvertedClassName} />
+        </>
+      ) : null}
 
       <ContactSection />
     </main>

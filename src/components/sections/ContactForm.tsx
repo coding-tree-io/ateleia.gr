@@ -10,7 +10,6 @@ type ContactFormLabels = {
   message: string;
   consent: string;
   submit: string;
-  required: string;
   submitting: string;
 };
 
@@ -205,12 +204,11 @@ export function ContactForm({
             className="peer sr-only"
           />
           <span className="therapy-form-consent-checkbox-shell" aria-hidden="true">
-            <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth="2.4">
+            <svg viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="2.4">
               <path d="M5.5 12.5 10 17l8.5-9" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </span>
           <span className="therapy-form-consent-copy">
-            <span className="therapy-form-consent-required-label">{formLabels.required}</span>
             <span className="therapy-form-consent-text">{formLabels.consent}</span>
           </span>
         </label>

@@ -40,4 +40,29 @@ const services = defineCollection({
   }),
 });
 
-export const collections = { siteContent, services };
+const announcements = defineCollection({
+  loader: file('src/data/announcements.json', {
+    parser: (text) => {
+      const document = JSON.parse(text) as {
+        announcements?: Array<Record<string, unknown>>;
+      };
+
+      return (document.announcements ?? []).map((announcement, index) => ({
+        id: `announcement-${String(index + 1).padStart(3, '0')}`,
+        ...announcement,
+      }));
+    },
+  }),
+  schema: z.object({
+    id: z.string(),
+    title: z.string().min(1),
+    summary: z.string().min(1),
+    kind: z.enum(['workshop', 'group', 'announcement']),
+    dateLabel: z.string().min(1).optional(),
+    callToActionLabel: z.string().min(1).optional(),
+    callToActionHref: z.string().min(1).optional(),
+    isPublished: z.boolean().default(true),
+  }),
+});
+
+export const collections = { siteContent, services, announcements };
