@@ -18,7 +18,7 @@ const { brandName, brandSubtitle, primaryActionLabel, navigationEntries } = Astr
 
 const triggerClassName = cn(
   buttonVariants({ variant: 'outline', size: 'icon' }),
-  'inline-flex rounded-xl border-border/55 bg-card/80 md:hidden',
+  'therapy-mobile-navigation-trigger inline-flex rounded-xl md:hidden',
 );
 ---
 
@@ -82,15 +82,38 @@ const triggerClassName = cn(
         </svg>
       </button>
 
-      <div class="flex flex-col border-border/60 bg-background/95 px-5 pb-6 pt-14">
-        <div>
-          <h2 id="mobile-navigation-title" class="font-serif text-2xl font-semibold tracking-tight text-foreground">
-            {brandName}
-          </h2>
-          <p class="mt-2 text-sm leading-6 text-muted-foreground">{brandSubtitle}</p>
+      <div class="therapy-mobile-navigation-content">
+        <div class="therapy-mobile-navigation-branding">
+          <p class="therapy-mobile-navigation-eyebrow">Θεραπεία μέσω τέχνης</p>
+          <h2 id="mobile-navigation-title" class="therapy-mobile-navigation-title">{brandName}</h2>
+          <p class="therapy-mobile-navigation-subtitle">{brandSubtitle}</p>
         </div>
 
-        <nav class="mt-6 flex flex-col gap-2" aria-label="Κινητή πλοήγηση">
+        <a href="#contact" class="therapy-mobile-navigation-booking-card" data-mobile-nav-link>
+          <p class="therapy-mobile-navigation-booking-kicker">ΑΜΕΣΗ ΕΠΙΚΟΙΝΩΝΙΑ</p>
+          <p class="therapy-mobile-navigation-booking-title">{primaryActionLabel}</p>
+          <p class="therapy-mobile-navigation-booking-note">Συνήθως απάντηση εντός 24 ωρών</p>
+          <span class="therapy-mobile-navigation-booking-arrow" aria-hidden="true">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="size-4"
+            >
+              <path d="m5 12 14 0"></path>
+              <path d="m13 6 6 6-6 6"></path>
+            </svg>
+          </span>
+        </a>
+
+        <p class="therapy-mobile-navigation-section-label">Πλοήγηση</p>
+        <nav class="mt-3 flex flex-col gap-2" aria-label="Κινητή πλοήγηση">
           {
             navigationEntries.map((navigationEntry) => (
               <a
@@ -98,17 +121,28 @@ const triggerClassName = cn(
                 class="therapy-mobile-navigation-link"
                 data-mobile-nav-link
               >
-                {navigationEntry.label}
+                <span class="therapy-mobile-navigation-link-title">{navigationEntry.label}</span>
+                <span class="therapy-mobile-navigation-link-arrow" aria-hidden="true">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="size-4"
+                  >
+                    <path d="M7 17L17 7"></path>
+                    <path d="M7 7h10v10"></path>
+                  </svg>
+                </span>
               </a>
             ))
           }
         </nav>
-
-        <div class="mt-auto pt-5">
-          <a href="#contact" class="therapy-primary-call-to-action inline-flex min-h-11 w-full items-center justify-center rounded-md px-4 py-2 text-base font-medium" data-mobile-nav-link>
-            {primaryActionLabel}
-          </a>
-        </div>
       </div>
     </div>
   </dialog>

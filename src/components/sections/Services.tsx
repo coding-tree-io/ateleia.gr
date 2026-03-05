@@ -1,8 +1,10 @@
-import { ChevronDown, Clock, Users } from 'lucide-react';
+import { Clock, Users } from 'lucide-react';
 
 import { ConcentricRings, PaintSplashes } from '@/components/decorative/ArtShapes';
 import { GrowthThreadIllustration } from '@/components/decorative/GrowthThreadIllustration';
 import { ParallaxLayer } from '@/components/decorative/ParallaxLayer';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { Card } from '@/components/ui/card';
 import type { TherapyService } from '@/content/services';
 import { therapyPracticeWebsiteContent } from '@/content/therapy-practice-website-content';
 
@@ -21,47 +23,51 @@ function TherapyServiceCard({ service }: TherapyServiceCardProps) {
   const serviceMeta = [service.format, service.duration].filter(Boolean).join(' / ');
 
   return (
-    <article className="therapy-surface-paper-card-interactive group flex flex-col p-6 md:p-9">
-      <h3 className="break-words font-serif text-2xl font-bold text-foreground md:text-3xl">{service.title}</h3>
-      <p className="therapy-section-paragraph mt-4">{service.description}</p>
+    <Card asChild className="therapy-surface-paper-card-interactive group">
+      <article className="flex flex-col p-6 md:p-9">
+        <h3 className="break-words font-serif text-2xl font-bold text-foreground md:text-3xl">{service.title}</h3>
+        <p className="therapy-section-paragraph mt-4">{service.description}</p>
 
-      <div className="mt-7 space-y-3">
-        <div className="flex items-start gap-3 text-sm text-muted-foreground">
-          <div className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg bg-accent/25 text-[var(--tone-ink)]">
-            <Users className="size-4" aria-hidden="true" />
-          </div>
-          <span>
-            <span className="font-semibold text-foreground">{`${audienceLabel}: `}</span>
-            {service.idealFor.join(' · ')}
-          </span>
-        </div>
-
-        {serviceMeta ? (
-          <div className="flex items-center gap-3 text-sm text-muted-foreground">
-            <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-accent/25 text-[var(--tone-ink)]">
-              <Clock className="size-4" aria-hidden="true" />
+        <div className="mt-7 space-y-3">
+          <div className="flex items-start gap-3 text-sm text-muted-foreground">
+            <div className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg bg-accent/25 text-[var(--tone-ink)]">
+              <Users className="size-4" aria-hidden="true" />
             </div>
-            <span>{serviceMeta}</span>
+            <span>
+              <span className="font-semibold text-foreground">{`${audienceLabel}: `}</span>
+              {service.idealFor.join(' · ')}
+            </span>
           </div>
-        ) : null}
-      </div>
 
-      {service.whatToExpect.length > 0 ? (
-        <div className="therapy-surface-supporting-card mt-7 p-5">
-          <p className="therapy-section-overline tracking-widest text-muted-foreground">{expectationsLabel}</p>
-          <ul className="therapy-section-supporting-copy mt-3 space-y-2">
-            {service.whatToExpect.map((item: string) => (
-              <li key={item} className="flex gap-2">
-                <span aria-hidden="true" className="pt-1 text-[var(--tone-ink)]">
-                  •
-                </span>
-                <span>{item}</span>
-              </li>
-            ))}
-          </ul>
+          {serviceMeta ? (
+            <div className="flex items-center gap-3 text-sm text-muted-foreground">
+              <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-accent/25 text-[var(--tone-ink)]">
+                <Clock className="size-4" aria-hidden="true" />
+              </div>
+              <span>{serviceMeta}</span>
+            </div>
+          ) : null}
         </div>
-      ) : null}
-    </article>
+
+        {service.whatToExpect.length > 0 ? (
+          <Card asChild className="therapy-surface-supporting-card mt-7 p-5">
+            <div>
+              <p className="therapy-section-overline tracking-widest text-muted-foreground">{expectationsLabel}</p>
+              <ul className="therapy-section-supporting-copy mt-3 space-y-2">
+                {service.whatToExpect.map((item: string) => (
+                  <li key={item} className="flex gap-2">
+                    <span aria-hidden="true" className="pt-1 text-[var(--tone-ink)]">
+                      •
+                    </span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </Card>
+        ) : null}
+      </article>
+    </Card>
   );
 }
 
@@ -72,27 +78,24 @@ function FrequentlyAskedQuestionsSection() {
     <div className="mt-16 md:mt-20">
       <h3 className="font-serif text-2xl font-bold text-foreground md:text-3xl">{frequentlyAskedQuestionsTitle}</h3>
 
-      <div className="mt-8 space-y-3">
+      <Accordion type="multiple" className="mt-8 space-y-3">
         {frequentlyAskedQuestions.map((frequentlyAskedQuestion) => (
-          <details
+          <AccordionItem
             key={frequentlyAskedQuestion.question}
-            className="therapy-surface-expandable-card group"
+            value={frequentlyAskedQuestion.question}
+            className="therapy-surface-expandable-card group border-0"
           >
-            <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-4 px-5 py-3 text-base font-semibold text-foreground [&::-webkit-details-marker]:hidden md:px-6 md:py-4">
+            <AccordionTrigger className="min-h-11 cursor-pointer px-5 py-3 text-base font-semibold text-foreground hover:no-underline md:px-6 md:py-4">
               {frequentlyAskedQuestion.question}
-              <ChevronDown
-                className="size-4 shrink-0 text-muted-foreground transition-transform duration-300 group-open:rotate-180"
-                aria-hidden="true"
-              />
-            </summary>
-            <div className="px-5 pb-4 md:px-6 md:pb-5">
+            </AccordionTrigger>
+            <AccordionContent className="px-5 md:px-6 md:pb-5">
               <p className="therapy-section-supporting-copy">
                 {frequentlyAskedQuestion.answer}
               </p>
-            </div>
-          </details>
+            </AccordionContent>
+          </AccordionItem>
         ))}
-      </div>
+      </Accordion>
     </div>
   );
 }

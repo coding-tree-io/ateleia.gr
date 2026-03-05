@@ -1,6 +1,7 @@
 import { therapyPracticeWebsiteContent } from '@/content/therapy-practice-website-content';
 import { AbstractFace, HandCircle } from '@/components/decorative/ArtShapes';
 import { ParallaxLayer } from '@/components/decorative/ParallaxLayer';
+import { Card } from '@/components/ui/card';
 
 export function WhoIsItFor() {
   const { whoIsItFor } = therapyPracticeWebsiteContent;
@@ -19,14 +20,16 @@ export function WhoIsItFor() {
           {whoIsItFor.title}
         </h2>
 
-        <ul className="therapy-surface-soft-card space-y-5 p-6 md:p-9" role="list">
-          {whoIsItFor.items.map((item) => (
-            <li key={item} className="therapy-section-paragraph flex items-start gap-4">
-              <span className="mt-2.5 flex size-2.5 shrink-0 rounded-full bg-accent/70" aria-hidden="true" />
-              <span className="break-words">{item}</span>
-            </li>
-          ))}
-        </ul>
+        <Card asChild className="therapy-surface-soft-card p-6 md:p-9">
+          <ul className="space-y-5" role="list">
+            {whoIsItFor.items.map((item) => (
+              <li key={item} className="therapy-section-paragraph flex items-start gap-4">
+                <span className="mt-2.5 flex size-2.5 shrink-0 rounded-full bg-accent/70" aria-hidden="true" />
+                <span className="break-words">{item}</span>
+              </li>
+            ))}
+          </ul>
+        </Card>
       </div>
     </section>
   );

@@ -1,5 +1,7 @@
 import { ArrowUpRight } from 'lucide-react';
 
+import { Badge } from '@/components/ui/badge';
+import { Card } from '@/components/ui/card';
 import type { TherapyAnnouncement } from '@/content/announcements';
 import { therapyPracticeWebsiteContent } from '@/content/therapy-practice-website-content';
 
@@ -25,33 +27,49 @@ const kindLabelByAnnouncementKind = (
   }
 };
 
+const kindBadgeClassByAnnouncementKind = (announcementKind: TherapyAnnouncement['kind']): string => {
+  switch (announcementKind) {
+    case 'workshop':
+      return 'therapy-announcements-kind-badge-workshop';
+    case 'group':
+      return 'therapy-announcements-kind-badge-group';
+    default:
+      return '';
+  }
+};
+
 function AnnouncementCard({ announcement }: AnnouncementCardProps) {
   const { kindLabels } = therapyPracticeWebsiteContent.announcementsSection;
   const shouldRenderCallToAction = Boolean(announcement.callToActionLabel && announcement.callToActionHref);
 
   return (
-    <article className="therapy-announcements-card group">
-      <div className="therapy-announcements-meta-row">
-        {announcement.dateLabel ? (
-          <p className="therapy-announcements-date-label">{announcement.dateLabel}</p>
-        ) : (
-          <span aria-hidden="true" />
-        )}
-        <span className="therapy-announcements-kind-badge">
-          {kindLabelByAnnouncementKind(kindLabels, announcement.kind)}
-        </span>
-      </div>
+    <Card asChild className="therapy-announcements-card group">
+      <article>
+        <div className="therapy-announcements-meta-row">
+          {announcement.dateLabel ? (
+            <p className="therapy-announcements-date-label">{announcement.dateLabel}</p>
+          ) : (
+            <span aria-hidden="true" />
+          )}
+          <Badge
+            variant="secondary"
+            className={`therapy-announcements-kind-badge ${kindBadgeClassByAnnouncementKind(announcement.kind)}`}
+          >
+            {kindLabelByAnnouncementKind(kindLabels, announcement.kind)}
+          </Badge>
+        </div>
 
-      <h3 className="therapy-announcements-title">{announcement.title}</h3>
-      <p className="therapy-announcements-summary">{announcement.summary}</p>
+        <h3 className="therapy-announcements-title">{announcement.title}</h3>
+        <p className="therapy-announcements-summary">{announcement.summary}</p>
 
-      {shouldRenderCallToAction ? (
-        <a href={announcement.callToActionHref} className="therapy-announcements-link">
-          <span>{announcement.callToActionLabel}</span>
-          <ArrowUpRight className="size-3.5 shrink-0 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-        </a>
-      ) : null}
-    </article>
+        {shouldRenderCallToAction ? (
+          <a href={announcement.callToActionHref} className="therapy-announcements-link">
+            <span>{announcement.callToActionLabel}</span>
+            <ArrowUpRight className="size-3.5 shrink-0 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          </a>
+        ) : null}
+      </article>
+    </Card>
   );
 }
 

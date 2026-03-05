@@ -1,6 +1,7 @@
 import { therapyPracticeWebsiteContent } from '@/content/therapy-practice-website-content';
 import { AbstractFace, OrganicDivider } from '@/components/decorative/ArtShapes';
 import { ParallaxLayer } from '@/components/decorative/ParallaxLayer';
+import { Card } from '@/components/ui/card';
 
 export function About() {
   const { about } = therapyPracticeWebsiteContent;
@@ -32,16 +33,23 @@ export function About() {
         </div>
 
         <aside className="space-y-6">
-          <blockquote className="therapy-surface-paper-card p-6 font-serif text-2xl leading-tight text-[var(--tone-ink)] md:p-8 md:text-[1.95rem]">
-            «{about.pullQuote}»
-          </blockquote>
+          <Card
+            asChild
+            className="therapy-surface-paper-card p-6 font-serif text-2xl leading-tight text-[var(--tone-ink)] md:p-8 md:text-[1.95rem]"
+          >
+            <blockquote>
+              «{about.pullQuote}»
+            </blockquote>
+          </Card>
 
-          <div className="therapy-surface-soft-card p-6 md:p-8">
-            <h3 className="font-serif text-2xl font-semibold text-foreground">{about.approach.title}</h3>
-            <p className="therapy-section-supporting-copy mt-4">
-              {about.approach.description}
-            </p>
-          </div>
+          <Card asChild className="therapy-surface-soft-card p-6 md:p-8">
+            <div>
+              <h3 className="font-serif text-2xl font-semibold text-foreground">{about.approach.title}</h3>
+              <p className="therapy-section-supporting-copy mt-4">
+                {about.approach.description}
+              </p>
+            </div>
+          </Card>
         </aside>
       </div>
     </section>

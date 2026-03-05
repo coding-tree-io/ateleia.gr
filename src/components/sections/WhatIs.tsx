@@ -1,6 +1,7 @@
 import { therapyPracticeWebsiteContent } from '@/content/therapy-practice-website-content';
 import { OrganicDivider, PaintSplashes } from '@/components/decorative/ArtShapes';
 import { ParallaxLayer } from '@/components/decorative/ParallaxLayer';
+import { Card } from '@/components/ui/card';
 
 export function WhatIs() {
   const { whatIs } = therapyPracticeWebsiteContent;
@@ -19,14 +20,16 @@ export function WhatIs() {
 
           <OrganicDivider className="h-4 w-44 sm:w-52" />
 
-          <div className="therapy-surface-paper-card p-6 md:p-8">
-            <p className="font-serif text-2xl leading-tight text-[var(--tone-ink)] md:text-3xl">
-              «{whatIs.pullQuote.text}»
-            </p>
-            <p className="therapy-section-overline mt-4 text-[var(--tone-ochre)]">
-              {whatIs.pullQuote.attribution}
-            </p>
-          </div>
+          <Card asChild className="therapy-surface-paper-card p-6 md:p-8">
+            <div>
+              <p className="font-serif text-2xl leading-tight text-[var(--tone-ink)] md:text-3xl">
+                «{whatIs.pullQuote.text}»
+              </p>
+              <p className="therapy-section-overline mt-4 text-[var(--tone-ochre)]">
+                {whatIs.pullQuote.attribution}
+              </p>
+            </div>
+          </Card>
         </div>
 
         <div className="space-y-6">
@@ -39,10 +42,12 @@ export function WhatIs() {
             </p>
           ))}
 
-          <aside className="therapy-surface-soft-card p-5 md:p-6">
-            <p className="therapy-section-overline text-[var(--tone-teal)]">{whatIs.practiceNoteLabel}</p>
-            <p className="therapy-section-supporting-copy mt-3">{whatIs.practiceNote}</p>
-          </aside>
+          <Card asChild className="therapy-surface-soft-card p-5 md:p-6">
+            <aside>
+              <p className="therapy-section-overline text-[var(--tone-teal)]">{whatIs.practiceNoteLabel}</p>
+              <p className="therapy-section-supporting-copy mt-3">{whatIs.practiceNote}</p>
+            </aside>
+          </Card>
         </div>
       </div>
     </section>
