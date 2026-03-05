@@ -43,9 +43,9 @@ export const therapyPracticeSiteMetadata = {
     isTemporaryNoindexEnabled: true,
   },
   openGraph: {
-    fallbackImageRelativePath: 'images/client-review/hero-therapy-4k.jpg',
+    fallbackImageRelativePath: 'images/social/og-b3-terracotta.png',
     fallbackImageAlt:
-      'Creative therapy studio atmosphere for Ateleia, focused on art therapy and reflective practice.',
+      'Ateleia Art Therapy social preview image in terracotta editorial style.',
   },
   legalPageRelativePath: 'legal/',
   organization: {
