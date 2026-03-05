@@ -161,3 +161,76 @@ label {
   background: rgba(199, 57, 46, 0.08) !important;
   border-radius: 1rem !important;
 }
+
+[class*='CollectionTopContainer'],
+[class*='EditorToolbar'],
+[class*='SidebarContainer'],
+[class*='PaneContainer'] {
+  backdrop-filter: blur(10px);
+}
+
+[class*='SidebarContainer'] {
+  border-right: 1px solid var(--ateleia-line);
+}
+
+[class*='PaneContainer'] {
+  border: 1px solid var(--ateleia-line) !important;
+  border-radius: 1rem !important;
+  overflow: clip;
+}
+
+[class*='EditorContainer'] [class*='ObjectControl'],
+[class*='EditorContainer'] [class*='ListControl'],
+[class*='EditorContainer'] [class*='WidgetControl'] {
+  border: 1px solid var(--ateleia-line);
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.86);
+}
+
+[class*='EditorContainer'] [class*='ObjectControl'],
+[class*='EditorContainer'] [class*='ListControl'] {
+  margin-block: 0.65rem;
+  padding: 0.45rem;
+}
+
+[class*='EditorContainer'] [class*='ListControl'] [class*='ListItem'],
+[class*='EditorContainer'] [class*='ObjectControl'] [class*='ListItem'] {
+  border: 1px solid rgba(61, 53, 52, 0.12);
+  border-radius: 0.9rem;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 8px 20px rgba(61, 53, 52, 0.06);
+}
+
+[class*='EditorContainer'] [class*='ListControl'] [class*='ListItem'] + [class*='ListItem'],
+[class*='EditorContainer'] [class*='ObjectControl'] [class*='ListItem'] + [class*='ListItem'] {
+  margin-top: 0.55rem;
+}
+
+[class*='EditorContainer'] [class*='ListControl'] [class*='ListItemTopBar'],
+[class*='EditorContainer'] [class*='ObjectControl'] [class*='ListItemTopBar'] {
+  border-radius: 0.7rem;
+  background: rgba(248, 241, 235, 0.8);
+}
+
+[class*='EditorContainer'] [class*='ListControl'] [class*='Summary'] {
+  font-weight: 700;
+  color: color-mix(in srgb, var(--ateleia-ink) 80%, var(--ateleia-teal) 20%) !important;
+}
+
+[class*='EditorContainer'] [class*='FieldHint'],
+[class*='EditorContainer'] [class*='WidgetHint'] {
+  margin-top: 0.25rem !important;
+}
+
+[class*='PreviewPaneContainer'] {
+  border-left: 1px solid var(--ateleia-line);
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 0;
+  box-shadow: 0 0 0 3px var(--ateleia-focus) !important;
+}

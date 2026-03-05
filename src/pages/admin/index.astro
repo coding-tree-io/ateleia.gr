@@ -350,6 +350,180 @@ const previewStyleUrl = createProjectRelativeUrl('admin/preview.css');
           window.CMS.registerLocale('el', greekLocale);
         };
         const joinNonEmpty = (value, separator = ' · ') => toArray(value).filter(Boolean).join(separator);
+        const toText = (value, fallback = '') => {
+          if (typeof value === 'string') {
+            const normalized = value.trim();
+            return normalized.length > 0 ? normalized : fallback;
+          }
+
+          if (value === null || value === undefined) {
+            return fallback;
+          }
+
+          const normalized = String(value).trim();
+          return normalized.length > 0 ? normalized : fallback;
+        };
+        const getEntryText = (entry, path, fallback = '') => toText(entry?.getIn?.(path), fallback);
+        const announcementKindLabelByValue = {
+          workshop: 'Εργαστήριο',
+          group: 'Ομάδα',
+          announcement: 'Ανακοίνωση',
+        };
+        const announcementKindClassByValue = {
+          workshop: 'decap-announcements-preview__badge--workshop',
+          group: 'decap-announcements-preview__badge--group',
+          announcement: 'decap-announcements-preview__badge--announcement',
+        };
+        const resolveHomePagePreviewKind = (entry) => {
+          const routeHash = toText(window?.parent?.location?.hash).toLowerCase();
+          if (routeHash.includes('/entries/services')) {
+            return 'services';
+          }
+
+          if (routeHash.includes('/entries/announcements')) {
+            return 'announcements';
+          }
+
+          if (routeHash.includes('/entries/site-content')) {
+            return 'site-content';
+          }
+
+          const hasSeoField = entry?.getIn?.(['data', 'seo']) !== undefined;
+          const hasAnnouncementsField = entry?.getIn?.(['data', 'announcements']) !== undefined;
+          const hasServicesField = entry?.getIn?.(['data', 'services']) !== undefined;
+
+          if (hasSeoField) {
+            return 'site-content';
+          }
+
+          if (hasAnnouncementsField) {
+            return 'announcements';
+          }
+
+          if (hasServicesField) {
+            return 'services';
+          }
+
+          const entryPath = toText(entry?.get?.('path')).toLowerCase();
+          const entrySlug = toText(entry?.get?.('slug')).toLowerCase();
+
+          if (entryPath.includes('services.json') || entrySlug === 'services') {
+            return 'services';
+          }
+
+          if (entryPath.includes('announcements.json') || entrySlug === 'announcements') {
+            return 'announcements';
+          }
+
+          return 'site-content';
+        };
+
+        const SiteContentPreview = window.createClass({
+          render() {
+            const entryData = this.props.entry.get('data');
+            const navigation = entryData.get('navigation');
+            const hero = entryData.get('hero');
+            const contact = entryData.get('contact');
+            const contactItems = toArray(contact?.get?.('contactItems')).filter(
+              (item) => toText(item?.value).length > 0,
+            );
+            const overviewBlocks = [
+              {
+                key: 'what-is',
+                label: 'Τι είναι',
+                title: getEntryText(entryData, ['whatIs', 'title'], 'Τι είναι η Θεραπεία μέσω τέχνης'),
+                summary: getEntryText(entryData, ['whatIs', 'practiceNote'], 'Σύντομη πρακτική σημείωση.'),
+              },
+              {
+                key: 'who-is-it-for',
+                label: 'Σε ποιους απευθύνεται',
+                title: getEntryText(entryData, ['whoIsItFor', 'title'], 'Σε ποιους απευθύνεται'),
+                summary: joinNonEmpty(entryData.getIn(['whoIsItFor', 'items'])) || 'Στόχος κοινού και βασικές ενδείξεις.',
+              },
+              {
+                key: 'about',
+                label: 'Σχετικά',
+                title: getEntryText(entryData, ['about', 'title'], 'Σχετικά'),
+                summary:
+                  getEntryText(entryData, ['about', 'pullQuote'], '') ||
+                  getEntryText(entryData, ['about', 'approach', 'description'], 'Περιγραφή θεραπευτικής προσέγγισης.'),
+              },
+              {
+                key: 'contact',
+                label: 'Επικοινωνία',
+                title: getEntryText(entryData, ['contact', 'title'], 'Επικοινωνία'),
+                summary: getEntryText(entryData, ['contact', 'description'], 'Περιγραφή επικοινωνίας.'),
+              },
+            ];
+
+            return h('section', { className: 'decap-site-preview' }, [
+              h('div', { className: 'decap-site-preview__shell', key: 'shell' }, [
+                h('header', { className: 'decap-site-preview__header', key: 'header' }, [
+                  h('p', { className: 'decap-site-preview__eyebrow', key: 'eyebrow' }, 'ΠΡΟΕΠΙΣΚΟΠΗΣΗ ΑΡΧΙΚΗΣ'),
+                  h('h1', { className: 'decap-site-preview__title', key: 'title' }, getEntryText(entryData, ['brandName'], 'Ατέλεια')),
+                  h(
+                    'p',
+                    { className: 'decap-site-preview__subtitle', key: 'subtitle' },
+                    getEntryText(entryData, ['brandSubtitle'], 'Θεραπεία μέσω τέχνης'),
+                  ),
+                  h(
+                    'div',
+                    { className: 'decap-site-preview__nav-chips', key: 'navigation' },
+                    [
+                      getEntryText(navigation, ['whatIs'], 'Τι είναι'),
+                      getEntryText(navigation, ['whoIsItFor'], 'Σε ποιους απευθύνεται'),
+                      getEntryText(navigation, ['about'], 'Σχετικά'),
+                      getEntryText(navigation, ['services'], 'Υπηρεσίες'),
+                      getEntryText(navigation, ['contact'], 'Επικοινωνία'),
+                    ].map((navigationLabel, index) =>
+                      h('span', { className: 'decap-site-preview__nav-chip', key: `nav-chip-${index}` }, navigationLabel),
+                    ),
+                  ),
+                ]),
+                h('article', { className: 'decap-site-preview__hero-card', key: 'hero' }, [
+                  h('p', { className: 'decap-site-preview__hero-kicker', key: 'hero-kicker' }, 'Hero'),
+                  h(
+                    'h2',
+                    { className: 'decap-site-preview__hero-headline', key: 'hero-headline' },
+                    getEntryText(hero, ['headline'], 'Θεραπεία μέσω τέχνης'),
+                  ),
+                  h(
+                    'p',
+                    { className: 'decap-site-preview__hero-copy', key: 'hero-copy' },
+                    getEntryText(hero, ['subheadline'], 'Περιγραφή εισαγωγικού hero.'),
+                  ),
+                  h('div', { className: 'decap-site-preview__hero-actions', key: 'hero-actions' }, [
+                    h('span', { className: 'decap-site-preview__hero-action decap-site-preview__hero-action--primary', key: 'hero-primary' }, getEntryText(hero, ['primaryCta'], 'Κλείστε ραντεβού')),
+                    h('span', { className: 'decap-site-preview__hero-action', key: 'hero-secondary' }, getEntryText(hero, ['secondaryCta'], 'Στείλτε μήνυμα')),
+                  ]),
+                ]),
+                h(
+                  'div',
+                  { className: 'decap-site-preview__overview-grid', key: 'overview-grid' },
+                  overviewBlocks.map((overviewBlock) =>
+                    h('article', { className: 'decap-site-preview__overview-card', key: overviewBlock.key }, [
+                      h('p', { className: 'decap-site-preview__overview-label', key: `${overviewBlock.key}-label` }, overviewBlock.label),
+                      h('h3', { className: 'decap-site-preview__overview-title', key: `${overviewBlock.key}-title` }, overviewBlock.title),
+                      h('p', { className: 'decap-site-preview__overview-copy', key: `${overviewBlock.key}-summary` }, overviewBlock.summary),
+                    ]),
+                  ),
+                ),
+                h('section', { className: 'decap-site-preview__contact-strip', key: 'contact-strip' }, [
+                  h('p', { className: 'decap-site-preview__contact-strip-title', key: 'contact-strip-title' }, 'Στοιχεία επικοινωνίας'),
+                  h(
+                    'div',
+                    { className: 'decap-site-preview__contact-strip-items', key: 'contact-strip-items' },
+                    contactItems.length > 0
+                      ? contactItems.slice(0, 3).map((item, itemIndex) =>
+                          h('p', { className: 'decap-site-preview__contact-strip-item', key: `contact-item-${itemIndex}` }, `${toText(item.label, 'Στοιχείο')}: ${item.value}`),
+                        )
+                      : [h('p', { className: 'decap-site-preview__contact-strip-item', key: 'contact-item-empty' }, 'Προσθέστε στοιχεία επικοινωνίας για την προεπισκόπηση.')],
+                  ),
+                ]),
+              ]),
+            ]);
+          },
+        });
 
         const ServicesPreview = window.createClass({
           render() {
@@ -432,10 +606,109 @@ const previewStyleUrl = createProjectRelativeUrl('admin/preview.css');
           },
         });
 
+        const AnnouncementsPreview = window.createClass({
+          render() {
+            const announcements = toArray(this.props.entry.getIn(['data', 'announcements']));
+
+            return h('section', { className: 'decap-announcements-preview' }, [
+              h('div', { className: 'decap-announcements-preview__shell', key: 'shell' }, [
+                h('div', { className: 'decap-announcements-preview__intro', key: 'intro' }, [
+                  h('p', { className: 'decap-announcements-preview__eyebrow', key: 'eyebrow' }, 'ΠΡΟΕΠΙΣΚΟΠΗΣΗ ΕΝΟΤΗΤΑΣ'),
+                  h('h1', { className: 'decap-announcements-preview__title', key: 'title' }, 'Νέα & Ανακοινώσεις'),
+                  h(
+                    'p',
+                    { className: 'decap-announcements-preview__lead', key: 'lead' },
+                    'Η προεπισκόπηση εμφανίζει τις δημοσιευμένες ανακοινώσεις όπως διαβάζονται στην αρχική σελίδα.',
+                  ),
+                ]),
+                h(
+                  'div',
+                  { className: 'decap-announcements-preview__grid', key: 'grid' },
+                  announcements.length > 0
+                    ? announcements.map((announcement, index) => {
+                        const announcementKind = toText(announcement.kind, 'announcement');
+                        const announcementKindLabel =
+                          announcementKindLabelByValue[announcementKind] ??
+                          announcementKindLabelByValue.announcement;
+                        const announcementKindClass =
+                          announcementKindClassByValue[announcementKind] ??
+                          announcementKindClassByValue.announcement;
+                        const shouldShowCallToAction = toText(announcement.callToActionLabel).length > 0;
+
+                        return h(
+                          'article',
+                          {
+                            className: 'decap-announcements-preview__card',
+                            key: `${announcement.title ?? 'announcement'}-${index}`,
+                          },
+                          [
+                            h('div', { className: 'decap-announcements-preview__meta', key: 'meta' }, [
+                              h(
+                                'p',
+                                { className: 'decap-announcements-preview__date', key: 'date' },
+                                toText(announcement.dateLabel, 'Χωρίς ημερομηνία'),
+                              ),
+                              h(
+                                'span',
+                                { className: `decap-announcements-preview__badge ${announcementKindClass}`, key: 'kind' },
+                                announcementKindLabel,
+                              ),
+                            ]),
+                            h(
+                              'h2',
+                              { className: 'decap-announcements-preview__card-title', key: 'title' },
+                              toText(announcement.title, 'Νέα ανακοίνωση'),
+                            ),
+                            h(
+                              'p',
+                              { className: 'decap-announcements-preview__card-copy', key: 'summary' },
+                              toText(announcement.summary, 'Προσθέστε σύντομη περιγραφή για την ανακοίνωση.'),
+                            ),
+                            shouldShowCallToAction
+                              ? h(
+                                  'p',
+                                  { className: 'decap-announcements-preview__cta', key: 'cta' },
+                                  `${announcement.callToActionLabel} ↗`,
+                                )
+                              : null,
+                          ].filter(Boolean),
+                        );
+                      })
+                    : [
+                        h(
+                          'div',
+                          { className: 'decap-announcements-preview__empty', key: 'empty' },
+                          'Προσθέστε ανακοινώσεις για να εμφανιστεί η προεπισκόπηση.',
+                        ),
+                      ],
+                ),
+              ]),
+            ]);
+          },
+        });
+        const HomePageCollectionPreview = window.createClass({
+          render() {
+            const previewKind = resolveHomePagePreviewKind(this.props.entry);
+
+            if (previewKind === 'services') {
+              return h(ServicesPreview, this.props);
+            }
+
+            if (previewKind === 'announcements') {
+              return h(AnnouncementsPreview, this.props);
+            }
+
+            return h(SiteContentPreview, this.props);
+          },
+        });
+
         registerGreekLocale();
         window.CMS.registerPreviewStyle(adminStyleUrl);
         window.CMS.registerPreviewStyle(previewStyleUrl);
-        window.CMS.registerPreviewTemplate('services', ServicesPreview);
+        window.CMS.registerPreviewTemplate('homepage', HomePageCollectionPreview);
+        window.CMS.registerPreviewTemplate('site-content', HomePageCollectionPreview);
+        window.CMS.registerPreviewTemplate('services', HomePageCollectionPreview);
+        window.CMS.registerPreviewTemplate('announcements', HomePageCollectionPreview);
         window.initCMS({ config: { locale: 'el' } });
         installAdminTextLocalizer();
       };
