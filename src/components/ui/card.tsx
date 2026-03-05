@@ -1,13 +1,20 @@
 import * as React from 'react';
+import { Slot } from '@radix-ui/react-slot';
 
 import { cn } from '@/lib/utils';
 
-function Card({ className, ...props }: React.ComponentProps<'div'>) {
+type CardProps = React.ComponentProps<'div'> & {
+  asChild?: boolean;
+};
+
+function Card({ className, asChild = false, ...props }: CardProps) {
+  const Comp = asChild ? Slot : 'div';
+
   return (
-    <div
+    <Comp
       data-slot="card"
       className={cn(
-        'flex flex-col gap-6 rounded-xl border bg-card py-6 text-card-foreground shadow-xs',
+        'rounded-xl border bg-card text-card-foreground shadow-xs',
         className
       )}
       {...props}
