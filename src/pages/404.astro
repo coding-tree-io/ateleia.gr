@@ -14,8 +14,12 @@ import { createProjectRelativeUrl } from '@/config/site-branding';
 
 const homeHref = createProjectRelativeUrl('');
 const contactHref = createProjectRelativeUrl('#contact');
-const faviconSvgUrl = createProjectRelativeUrl('favicon.svg');
+const favicon16Url = createProjectRelativeUrl('favicon-16x16.png');
+const favicon32Url = createProjectRelativeUrl('favicon-32x32.png');
 const faviconIcoUrl = createProjectRelativeUrl('favicon.ico');
+const appleTouchIconUrl = createProjectRelativeUrl('apple-touch-icon.png');
+const webManifestUrl = createProjectRelativeUrl('site.webmanifest');
+const browserConfigUrl = createProjectRelativeUrl('browserconfig.xml');
 const notFoundTokenStylesheetUrl = createProjectRelativeUrl('assets/404/tokens.css');
 const notFoundAteleiaStylesheetUrl = createProjectRelativeUrl('assets/404/ateleia.css');
 const notFoundPageStylesheetUrl = createProjectRelativeUrl('assets/404/404.css');
@@ -28,9 +32,15 @@ const pageTitle = '404 | Page Not Found | Ateleia';
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#C7392E" />
+    <meta name="msapplication-TileColor" content="#C7392E" />
+    <meta name="msapplication-config" content={browserConfigUrl} />
+    <link rel="apple-touch-icon" sizes="180x180" href={appleTouchIconUrl} />
+    <link rel="icon" type="image/png" sizes="32x32" href={favicon32Url} />
+    <link rel="icon" type="image/png" sizes="16x16" href={favicon16Url} />
     <title>{pageTitle}</title>
-    <link rel="icon" type="image/svg+xml" href={faviconSvgUrl} />
     <link rel="icon" href={faviconIcoUrl} />
+    <link rel="manifest" href={webManifestUrl} />
     <meta name="description" content="The page you requested was not found on Ateleia." />
     <link rel="stylesheet" href={notFoundTokenStylesheetUrl} />
     <link rel="stylesheet" href={notFoundAteleiaStylesheetUrl} />

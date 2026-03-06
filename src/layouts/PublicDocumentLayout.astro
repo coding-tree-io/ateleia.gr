@@ -56,8 +56,12 @@ const {
   includeCodingTreeAttributionScript = false,
 } = Astro.props;
 
-const faviconSvgUrl = createProjectRelativeUrl('favicon.svg');
+const favicon16Url = createProjectRelativeUrl('favicon-16x16.png');
+const favicon32Url = createProjectRelativeUrl('favicon-32x32.png');
 const faviconIcoUrl = createProjectRelativeUrl('favicon.ico');
+const appleTouchIconUrl = createProjectRelativeUrl('apple-touch-icon.png');
+const webManifestUrl = createProjectRelativeUrl('site.webmanifest');
+const browserConfigUrl = createProjectRelativeUrl('browserconfig.xml');
 const codingTreeAttributionScriptUrl = createCodingTreeAttributionScriptUrl();
 const canonicalUrl = createCanonicalUrl(canonicalPath);
 const openGraphImageUrl = createCanonicalUrl(openGraphImage);
@@ -69,8 +73,13 @@ const normalizedStructuredData = Array.isArray(structuredData) ? structuredData 
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content={therapyPracticeSiteBranding.visualIdentity.themeColorHex} />
-    <link rel="icon" type="image/svg+xml" href={faviconSvgUrl} />
+    <meta name="msapplication-TileColor" content={therapyPracticeSiteBranding.visualIdentity.themeColorHex} />
+    <meta name="msapplication-config" content={browserConfigUrl} />
+    <link rel="apple-touch-icon" sizes="180x180" href={appleTouchIconUrl} />
+    <link rel="icon" type="image/png" sizes="32x32" href={favicon32Url} />
+    <link rel="icon" type="image/png" sizes="16x16" href={favicon16Url} />
     <link rel="icon" href={faviconIcoUrl} />
+    <link rel="manifest" href={webManifestUrl} />
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={pageDescription} />
     <meta name="robots" content={robots} />

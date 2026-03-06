@@ -15,8 +15,12 @@ import {
 } from '@/config/site-branding';
 
 const adminConfigUrl = createProjectRelativeUrl('admin/config.yml');
-const faviconSvgUrl = createProjectRelativeUrl('favicon.svg');
+const favicon16Url = createProjectRelativeUrl('favicon-16x16.png');
+const favicon32Url = createProjectRelativeUrl('favicon-32x32.png');
 const faviconIcoUrl = createProjectRelativeUrl('favicon.ico');
+const appleTouchIconUrl = createProjectRelativeUrl('apple-touch-icon.png');
+const webManifestUrl = createProjectRelativeUrl('site.webmanifest');
+const browserConfigUrl = createProjectRelativeUrl('browserconfig.xml');
 const adminStyleUrl = createProjectRelativeUrl('admin/admin.css');
 const previewStyleUrl = createProjectRelativeUrl('admin/preview.css');
 ---
@@ -27,10 +31,16 @@ const previewStyleUrl = createProjectRelativeUrl('admin/preview.css');
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex" />
+    <meta name="theme-color" content="#C7392E" />
+    <meta name="msapplication-TileColor" content="#C7392E" />
+    <meta name="msapplication-config" content={browserConfigUrl} />
+    <link rel="apple-touch-icon" sizes="180x180" href={appleTouchIconUrl} />
+    <link rel="icon" type="image/png" sizes="32x32" href={favicon32Url} />
+    <link rel="icon" type="image/png" sizes="16x16" href={favicon16Url} />
     <title>Ateleia CMS</title>
     <link rel="stylesheet" href={adminStyleUrl} />
-    <link rel="icon" type="image/svg+xml" href={faviconSvgUrl} />
     <link rel="icon" href={faviconIcoUrl} />
+    <link rel="manifest" href={webManifestUrl} />
     <link rel="cms-config-url" type="text/yaml" href={adminConfigUrl} />
   </head>
   <body>
