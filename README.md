@@ -184,7 +184,7 @@ Local development and production intentionally use different backends:
 Decap editor labels remain Greek only where the client edits site content. The surrounding code, docs, and configuration stay in English.
 The CMS is split into three documents:
 
-- `Περιεχόμενο ιστοσελίδας`: branding, navigation, hero, what-is, who-is-it-for, about, FAQ, contact, footer, and homepage SEO copy
+- `Περιεχόμενο ιστοσελίδας`: branding, navigation, hero, what-is, who-is-it-for, about, contact, footer, and homepage SEO copy
 - `Υπηρεσίες`: a single list-based document so the client can add, delete, and drag to reorder service cards without managing separate files
 - `Νέα & Ανακοινώσεις`: a small list-based document for current workshops, group launches, or short site notices; the homepage shows the first two published entries
 
@@ -224,6 +224,8 @@ Current strategy:
 - canonical, Open Graph, Twitter metadata, and JSON-LD emitted from `PublicDocumentLayout.astro`
 - `robots.txt` generated from `src/pages/robots.txt.ts`
 - sitemap generation enabled via `@astrojs/sitemap`
+- production social preview image is now the B3 terracotta asset at `public/images/social/og-b3-terracotta.png`, wired through `src/config/site-metadata.ts`
+- full favicon/app icon set is now wired globally from the selected Base B asset (`favicon.svg`, `favicon.ico`, `favicon-16x16.png`, `favicon-32x32.png`, `apple-touch-icon.png`, `android-chrome-192x192.png`, `android-chrome-512x512.png`, `site.webmanifest`, `browserconfig.xml`)
 
 Launch-day SEO switch:
 
@@ -250,6 +252,8 @@ It covers:
 
 - `src/config/site-branding.ts`: frozen Terracotta Calm + Nunito brand/typography configuration
 - `src/config/site-metadata.ts`: canonical origin, robots mode, OG defaults, structured-data helpers
+- `public/images/social/og-b3-terracotta.png`: current Open Graph/Twitter fallback social preview asset
+- `public/site.webmanifest`: PWA/app icon metadata (GitHub Pages scoped)
 - `src/config/contact.ts`: shared contact email extraction and Form.taxi endpoint wiring
 - `src/config/legal-content.ts`: English privacy/legal copy source
 - `src/content/therapy-practice-website-content.ts`: typed site-content adapter consumed by the homepage sections and metadata
