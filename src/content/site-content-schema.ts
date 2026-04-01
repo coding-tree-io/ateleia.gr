@@ -15,7 +15,26 @@ const navigationSchema = z.object({
   contact: z.string().min(1),
 });
 
-const heroSchema = z.object({
+const footerSchema = z.object({
+  copyright: z.string().min(1),
+  rightsReserved: z.string().min(1),
+  creditsLabel: z.string().min(1),
+  legalLabel: z.string().min(1),
+});
+
+export const siteGlobalSchema = z.object({
+  seo: seoSchema,
+  brandName: z.string().min(1),
+  brandSubtitle: z.string().min(1),
+  navigation: navigationSchema,
+  footer: footerSchema,
+});
+
+export const siteGlobalCollectionSchema = siteGlobalSchema.extend({
+  id: z.string().min(1),
+});
+
+export const heroSchema = z.object({
   headline: z.string().min(1),
   subheadline: z.string().min(1),
   primaryCta: z.string().min(1),
@@ -23,12 +42,16 @@ const heroSchema = z.object({
   spotlightEyebrow: z.string().min(1),
 });
 
+export const heroCollectionSchema = heroSchema.extend({
+  id: z.string().min(1),
+});
+
 const pullQuoteSchema = z.object({
   text: z.string().min(1),
   attribution: z.string().min(1),
 });
 
-const whatIsSchema = z.object({
+export const whatIsSchema = z.object({
   title: z.string().min(1),
   pullQuote: pullQuoteSchema,
   paragraphs: z.array(z.string().min(1)).min(1),
@@ -36,12 +59,20 @@ const whatIsSchema = z.object({
   practiceNote: z.string().min(1),
 });
 
-const whoIsItForSchema = z.object({
+export const whatIsCollectionSchema = whatIsSchema.extend({
+  id: z.string().min(1),
+});
+
+export const whoIsItForSchema = z.object({
   title: z.string().min(1),
   items: z.array(z.string().min(1)).min(1),
 });
 
-const aboutSchema = z.object({
+export const whoIsItForCollectionSchema = whoIsItForSchema.extend({
+  id: z.string().min(1),
+});
+
+export const aboutSchema = z.object({
   title: z.string().min(1),
   pullQuote: z.string().min(1),
   bio: z.array(z.string().min(1)).min(1),
@@ -51,20 +82,58 @@ const aboutSchema = z.object({
   }),
 });
 
+export const aboutCollectionSchema = aboutSchema.extend({
+  id: z.string().min(1),
+});
+
 const frequentlyAskedQuestionSchema = z.object({
   question: z.string().min(1),
   answer: z.string().min(1),
 });
 
-const servicesSectionSchema = z.object({
+const serviceItemSchema = z.object({
+  title: z.string().min(1),
+  description: z.string().min(1),
+  idealFor: z.array(z.string().min(1)).min(1),
+  format: z.string().min(1).optional(),
+  duration: z.string().min(1).optional(),
+  whatToExpect: z.array(z.string().min(1)).default([]),
+});
+
+export const serviceCollectionEntrySchema = serviceItemSchema.extend({
+  id: z.string().min(1),
+});
+
+export const servicesDocumentSchema = z.object({
   title: z.string().min(1),
   audienceLabel: z.string().min(1),
   expectationsLabel: z.string().min(1),
   frequentlyAskedQuestionsTitle: z.string().min(1),
   frequentlyAskedQuestions: z.array(frequentlyAskedQuestionSchema).min(1),
+  services: z.array(serviceItemSchema).min(1),
 });
 
-const announcementsSectionSchema = z.object({
+export const servicesDocumentCollectionSchema = servicesDocumentSchema.extend({
+  id: z.string().min(1),
+});
+
+const announcementKindSchema = z.enum(['workshop', 'group', 'announcement']);
+
+const announcementItemSchema = z.object({
+  title: z.string().min(1),
+  summary: z.string().min(1),
+  kind: announcementKindSchema,
+  dateLabel: z.string().min(1).optional(),
+  callToActionLabel: z.string().min(1).optional(),
+  callToActionHref: z.string().min(1).optional(),
+  isPublished: z.boolean().default(true),
+});
+
+export const announcementCollectionEntrySchema = announcementItemSchema.extend({
+  id: z.string().min(1),
+});
+
+export const announcementsDocumentSchema = z.object({
   title: z.string().min(1),
   intro: z.string().min(1),
   kindLabels: z.object({
@@ -72,6 +141,11 @@ const announcementsSectionSchema = z.object({
     group: z.string().min(1),
     announcement: z.string().min(1),
   }),
+  announcements: z.array(announcementItemSchema).min(1),
+});
+
+export const announcementsDocumentCollectionSchema = announcementsDocumentSchema.extend({
+  id: z.string().min(1),
 });
 
 const contactItemSchema = z.object({
@@ -103,7 +177,7 @@ const contactFormMessagesSchema = z.object({
   unavailable: z.string().min(1),
 });
 
-const contactSchema = z.object({
+export const contactSchema = z.object({
   title: z.string().min(1),
   description: z.string().min(1),
   privacyNote: z.string().min(1),
@@ -114,31 +188,6 @@ const contactSchema = z.object({
   contactItems: z.array(contactItemSchema).min(1),
 });
 
-const footerSchema = z.object({
-  copyright: z.string().min(1),
-  rightsReserved: z.string().min(1),
-  creditsLabel: z.string().min(1),
-  legalLabel: z.string().min(1),
-});
-
-export const siteContentSchema = z.object({
-  seo: seoSchema,
-  brandName: z.string().min(1),
-  brandSubtitle: z.string().min(1),
-  navigation: navigationSchema,
-  hero: heroSchema,
-  whatIs: whatIsSchema,
-  whoIsItFor: whoIsItForSchema,
-  about: aboutSchema,
-  servicesSection: servicesSectionSchema,
-  announcementsSection: announcementsSectionSchema,
-  contact: contactSchema,
-  footer: footerSchema,
-});
-
-export const siteContentCollectionSchema = siteContentSchema.extend({
+export const contactCollectionSchema = contactSchema.extend({
   id: z.string().min(1),
 });
-
-export type SiteContent = z.infer<typeof siteContentSchema>;
-export type SiteContentCollectionEntry = z.infer<typeof siteContentCollectionSchema>;

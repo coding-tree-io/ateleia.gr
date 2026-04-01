@@ -2,19 +2,62 @@ import { defineCollection } from 'astro:content';
 import { file } from 'astro/loaders';
 import { z } from 'astro/zod';
 
-import { siteContentCollectionSchema } from './content/site-content-schema';
+import {
+  aboutCollectionSchema,
+  announcementCollectionEntrySchema,
+  contactCollectionSchema,
+  heroCollectionSchema,
+  serviceCollectionEntrySchema,
+  siteGlobalCollectionSchema,
+  whatIsCollectionSchema,
+  whoIsItForCollectionSchema,
+} from './content/site-content-schema';
 
-const siteContent = defineCollection({
-  loader: file('src/data/site-content.json', {
-    parser: (text) => [
-      {
-        id: 'site-content',
-        ...JSON.parse(text),
-      },
-    ],
-  }),
-  schema: siteContentCollectionSchema,
-});
+function createSingleDocumentCollection(
+  path: string,
+  id: string,
+  schema: z.ZodTypeAny,
+) {
+  return defineCollection({
+    loader: file(path, {
+      parser: (text) => [
+        {
+          id,
+          ...JSON.parse(text),
+        },
+      ],
+    }),
+    schema,
+  });
+}
+
+const siteGlobal = createSingleDocumentCollection(
+  'src/data/site-global.json',
+  'site-global',
+  siteGlobalCollectionSchema,
+);
+
+const hero = createSingleDocumentCollection('src/data/hero.json', 'hero', heroCollectionSchema);
+
+const whatIs = createSingleDocumentCollection(
+  'src/data/what-is.json',
+  'what-is',
+  whatIsCollectionSchema,
+);
+
+const whoIsItFor = createSingleDocumentCollection(
+  'src/data/who-is-it-for.json',
+  'who-is-it-for',
+  whoIsItForCollectionSchema,
+);
+
+const about = createSingleDocumentCollection('src/data/about.json', 'about', aboutCollectionSchema);
+
+const contact = createSingleDocumentCollection(
+  'src/data/contact.json',
+  'contact',
+  contactCollectionSchema,
+);
 
 const services = defineCollection({
   loader: file('src/data/services.json', {
@@ -29,15 +72,7 @@ const services = defineCollection({
       }));
     },
   }),
-  schema: z.object({
-    id: z.string(),
-    title: z.string().min(1),
-    description: z.string().min(1),
-    idealFor: z.array(z.string().min(1)).min(1),
-    format: z.string().min(1).optional(),
-    duration: z.string().min(1).optional(),
-    whatToExpect: z.array(z.string().min(1)).default([]),
-  }),
+  schema: serviceCollectionEntrySchema,
 });
 
 const announcements = defineCollection({
@@ -53,16 +88,16 @@ const announcements = defineCollection({
       }));
     },
   }),
-  schema: z.object({
-    id: z.string(),
-    title: z.string().min(1),
-    summary: z.string().min(1),
-    kind: z.enum(['workshop', 'group', 'announcement']),
-    dateLabel: z.string().min(1).optional(),
-    callToActionLabel: z.string().min(1).optional(),
-    callToActionHref: z.string().min(1).optional(),
-    isPublished: z.boolean().default(true),
-  }),
+  schema: announcementCollectionEntrySchema,
 });
 
-export const collections = { siteContent, services, announcements };
+export const collections = {
+  siteGlobal,
+  hero,
+  whatIs,
+  whoIsItFor,
+  about,
+  contact,
+  services,
+  announcements,
+};

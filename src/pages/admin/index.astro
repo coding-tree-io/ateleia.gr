@@ -10,9 +10,7 @@ import '@fontsource/cormorant-garamond/700.css';
 import '@fontsource/cormorant-garamond/400-italic.css';
 import '@fontsource/cormorant-garamond/500-italic.css';
 
-import {
-  createProjectRelativeUrl,
-} from '@/config/site-branding';
+import { createProjectRelativeUrl } from '@/config/site-branding';
 
 const adminConfigUrl = createProjectRelativeUrl('admin/config.yml');
 const favicon16Url = createProjectRelativeUrl('favicon-16x16.png');
@@ -26,7 +24,7 @@ const previewStyleUrl = createProjectRelativeUrl('admin/preview.css');
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="el">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -37,96 +35,33 @@ const previewStyleUrl = createProjectRelativeUrl('admin/preview.css');
     <link rel="apple-touch-icon" sizes="180x180" href={appleTouchIconUrl} />
     <link rel="icon" type="image/png" sizes="32x32" href={favicon32Url} />
     <link rel="icon" type="image/png" sizes="16x16" href={favicon16Url} />
-    <title>Ateleia CMS</title>
-    <link rel="stylesheet" href={adminStyleUrl} />
     <link rel="icon" href={faviconIcoUrl} />
     <link rel="manifest" href={webManifestUrl} />
+    <link rel="stylesheet" href={adminStyleUrl} />
     <link rel="cms-config-url" type="text/yaml" href={adminConfigUrl} />
+    <title>Ateleia CMS</title>
   </head>
   <body>
+    <div id="nc-root"></div>
+
     <script is:inline>
       window.CMS_MANUAL_INIT = true;
     </script>
     <script src="https://unpkg.com/decap-cms@3.10.1/dist/decap-cms.js"></script>
-    <script is:inline define:vars={{ adminStyleUrl, previewStyleUrl }}>
-      const registerServicesEditor = () => {
-        if (!window.CMS || !window.createClass || !window.h || !window.initCMS) {
-          window.setTimeout(registerServicesEditor, 30);
+    <script is:inline define:vars={{ previewStyleUrl }}>
+      const bootstrapAdmin = () => {
+        if (!window.CMS || !window.h || !window.createClass || !window.initCMS) {
+          window.setTimeout(bootstrapAdmin, 30);
           return;
         }
 
         const h = window.h;
-        const numberWords = {
-          feminine: {
-            0: 'μηδέν',
-            1: 'μία',
-            2: 'δύο',
-            3: 'τρεις',
-            4: 'τέσσερις',
-            5: 'πέντε',
-            6: 'έξι',
-            7: 'επτά',
-            8: 'οκτώ',
-            9: 'εννέα',
-            10: 'δέκα',
-          },
-          neuter: {
-            0: 'μηδέν',
-            1: 'ένα',
-            2: 'δύο',
-            3: 'τρία',
-            4: 'τέσσερα',
-            5: 'πέντε',
-            6: 'έξι',
-            7: 'επτά',
-            8: 'οκτώ',
-            9: 'εννέα',
-            10: 'δέκα',
-          },
-        };
-        const countLabels = [
-          {
-            aliases: ['υπηρεσια', 'υπηρεσιες'],
-            singular: 'υπηρεσία',
-            plural: 'υπηρεσίες',
-            gender: 'feminine',
-          },
-          {
-            aliases: ['παραγραφος', 'παραγραφοι'],
-            singular: 'παράγραφος',
-            plural: 'παράγραφοι',
-            gender: 'feminine',
-          },
-          {
-            aliases: ['ερωτηση', 'ερωτησεις', 'συχνες ερωτησεις'],
-            singular: 'ερώτηση',
-            plural: 'συχνές ερωτήσεις',
-            gender: 'feminine',
-          },
-          {
-            aliases: ['στοιχειο', 'στοιχεια'],
-            singular: 'στοιχείο',
-            plural: 'στοιχεία',
-            gender: 'neuter',
-          },
-          {
-            aliases: ['στοιχειο λιστας', 'στοιχεια λιστας'],
-            singular: 'στοιχείο λίστας',
-            plural: 'στοιχεία λίστας',
-            gender: 'neuter',
-          },
-          {
-            aliases: ['στοιχειο επικοινωνιας', 'στοιχεια επικοινωνιας'],
-            singular: 'στοιχείο επικοινωνίας',
-            plural: 'στοιχεία επικοινωνίας',
-            gender: 'neuter',
-          },
-          {
-            aliases: ['τι να περιμενετε'],
-            singular: 'στοιχείο',
-            plural: 'στοιχεία',
-            gender: 'neuter',
-          },
+        const defaultNavigationLabels = [
+          'Τι είναι',
+          'Σε ποιους απευθύνεται',
+          'Σχετικά',
+          'Υπηρεσίες',
+          'Επικοινωνία',
         ];
 
         const toArray = (value) => {
@@ -140,7 +75,9 @@ const previewStyleUrl = createProjectRelativeUrl('admin/preview.css');
 
           return Array.isArray(value) ? value : [];
         };
+
         const toPlainObject = (value) => JSON.parse(JSON.stringify(value ?? {}));
+
         const deepMerge = (target, source) => {
           Object.entries(source).forEach(([key, value]) => {
             if (Array.isArray(value)) {
@@ -162,109 +99,419 @@ const previewStyleUrl = createProjectRelativeUrl('admin/preview.css');
 
           return target;
         };
-        const normalizeForMatch = (value) =>
-          String(value ?? '')
+
+        const toText = (value, fallback = '') => {
+          if (typeof value === 'string') {
+            const normalized = value.trim();
+            return normalized.length > 0 ? normalized : fallback;
+          }
+
+          if (value === null || value === undefined) {
+            return fallback;
+          }
+
+          const normalized = String(value).trim();
+          return normalized.length > 0 ? normalized : fallback;
+        };
+
+        const getEntryText = (entry, path, fallback = '') => toText(entry?.getIn?.(path), fallback);
+
+        const toUppercaseWithoutGreekTonos = (value, fallback = '') =>
+          toText(value, fallback)
             .normalize('NFD')
             .replace(/[\u0300-\u036f]/g, '')
-            .toLowerCase()
-            .replace(/\s+/g, ' ')
-            .trim();
-        const toGreekCount = (count, gender) => numberWords[gender]?.[count] ?? String(count);
-        const translateRenderedText = (value) => {
-          const normalized = normalizeForMatch(value);
-          const directReplacements = {
-            'add υπηρεσια': 'Προσθέστε Υπηρεσία',
-            'add παραγραφος': 'Προσθέστε Παράγραφο',
-            'add ερωτηση': 'Προσθέστε Ερώτηση',
-            'add στοιχειο': 'Προσθέστε Στοιχείο',
-            'add στοιχεια': 'Προσθέστε Στοιχείο',
-            'προσθεστε υπηρεσια': 'Προσθέστε Υπηρεσία',
-            'προσθεστε παραγραφος': 'Προσθέστε Παράγραφο',
-            'προσθεστε ερωτηση': 'Προσθέστε Ερώτηση',
-            'προσθεστε στοιχειο': 'Προσθέστε Στοιχείο',
-            'προσθεστε στοιχεια': 'Προσθέστε Στοιχείο',
-            '1 τι να περιμενετε': 'ένα στοιχείο',
-            '2 τι να περιμενετε': 'δύο στοιχεία',
-          };
+            .toUpperCase();
 
-          if (directReplacements[normalized]) {
-            return directReplacements[normalized];
-          }
+        const joinNonEmpty = (values, separator = ' · ') =>
+          toArray(values).filter(Boolean).join(separator);
 
-          const countMatch = normalized.match(/^(\d+)\s+(.+)$/);
-          if (!countMatch) {
-            return value;
-          }
+        const renderPreview = (kind, content) =>
+          h('section', { className: `decap-preview decap-preview--${kind}` }, [
+            h('div', { className: 'decap-preview__frame', key: 'frame' }, content),
+          ]);
 
-          const count = Number(countMatch[1]);
-          const noun = countMatch[2];
-          const labelDefinition = countLabels.find(({ aliases }) => aliases.includes(noun));
-          if (!labelDefinition) {
-            return value;
-          }
+        const renderSiteChrome = ({
+          brandName = 'Ατέλεια',
+          brandSubtitle = 'Θεραπεία μέσω τέχνης',
+          navigationLabels = defaultNavigationLabels,
+          actionLabel = 'Κλείστε ραντεβού',
+        } = {}) =>
+          h('header', { className: 'decap-preview__sitechrome' }, [
+            h('div', { className: 'decap-preview__brand', key: 'brand' }, [
+              h('span', { className: 'decap-preview__brand-mark', key: 'mark', 'aria-hidden': 'true' }),
+              h('div', { className: 'decap-preview__brand-copy', key: 'copy' }, [
+                h('p', { className: 'decap-preview__brand-name', key: 'name' }, brandName),
+                h('p', { className: 'decap-preview__brand-subtitle', key: 'subtitle' }, brandSubtitle),
+              ]),
+            ]),
+            h(
+              'nav',
+              { className: 'decap-preview__nav', key: 'nav', 'aria-label': 'Πλοήγηση προεπισκόπησης' },
+              navigationLabels.map((label, index) =>
+                h('span', { className: 'decap-preview__nav-chip', key: `nav-${index}` }, label),
+              ),
+            ),
+            h('span', { className: 'decap-preview__button decap-preview__button--primary', key: 'cta' }, actionLabel),
+          ]);
 
-          return `${toGreekCount(count, labelDefinition.gender)} ${
-            count === 1 ? labelDefinition.singular : labelDefinition.plural
-          }`;
+        const renderSiteGlobalPreview = (entryData) => {
+          const seo = entryData.get('seo');
+          const navigation = entryData.get('navigation');
+          const footer = entryData.get('footer');
+          const brandName = getEntryText(entryData, ['brandName'], 'Ατέλεια');
+          const brandSubtitle = getEntryText(entryData, ['brandSubtitle'], 'Θεραπεία μέσω τέχνης');
+          const navigationLabels = [
+            getEntryText(navigation, ['whatIs'], 'Τι είναι'),
+            getEntryText(navigation, ['whoIsItFor'], 'Σε ποιους απευθύνεται'),
+            getEntryText(navigation, ['about'], 'Σχετικά'),
+            getEntryText(navigation, ['services'], 'Υπηρεσίες'),
+            getEntryText(navigation, ['contact'], 'Επικοινωνία'),
+          ];
+
+          return renderPreview('site-global', [
+            renderSiteChrome({ brandName, brandSubtitle, navigationLabels }),
+            h('div', { className: 'decap-preview__section decap-preview__section--site-global', key: 'section' }, [
+              h('article', { className: 'decap-preview__card decap-preview__card--heroic', key: 'seo' }, [
+                h('p', { className: 'decap-preview__overline', key: 'overline' }, 'GOOGLE PREVIEW'),
+                h('h1', { className: 'decap-preview__headline', key: 'title' }, getEntryText(seo, ['pageTitle'], brandName)),
+                h(
+                  'p',
+                  { className: 'decap-preview__copy', key: 'description' },
+                  getEntryText(seo, ['pageDescription'], 'Σύντομη περιγραφή για το Google snippet και τις κοινοποιήσεις.'),
+                ),
+                h('div', { className: 'decap-preview__stack', key: 'stack' }, [
+                  h('div', { className: 'decap-preview__soft-card', key: 'social-title' }, [
+                    h('p', { className: 'decap-preview__label', key: 'label' }, 'Κοινοποίηση'),
+                    h('p', { className: 'decap-preview__copy decap-preview__copy--tight', key: 'value' }, getEntryText(seo, ['openGraphTitle'], brandName)),
+                  ]),
+                  h('div', { className: 'decap-preview__soft-card', key: 'social-copy' }, [
+                    h('p', { className: 'decap-preview__label', key: 'label' }, 'Περιγραφή'),
+                    h('p', { className: 'decap-preview__copy decap-preview__copy--tight', key: 'value' }, getEntryText(seo, ['openGraphDescription'], getEntryText(seo, ['pageDescription'], ''))),
+                  ]),
+                ]),
+              ]),
+              h('div', { className: 'decap-preview__grid decap-preview__grid--site-global', key: 'grid' }, [
+                h('article', { className: 'decap-preview__card', key: 'navigation' }, [
+                  h('p', { className: 'decap-preview__overline', key: 'overline' }, 'MENU'),
+                  h(
+                    'div',
+                    { className: 'decap-preview__chip-row', key: 'chips' },
+                    navigationLabels.map((label, index) =>
+                      h('span', { className: 'decap-preview__chip', key: `${label}-${index}` }, label),
+                    ),
+                  ),
+                ]),
+                h('article', { className: 'decap-preview__card', key: 'footer' }, [
+                  h('p', { className: 'decap-preview__overline', key: 'overline' }, 'FOOTER'),
+                  h('p', { className: 'decap-preview__copy decap-preview__copy--tight', key: 'copyright' }, getEntryText(footer, ['copyright'], `${brandName} · ${brandSubtitle}`)),
+                  h('p', { className: 'decap-preview__copy decap-preview__copy--tight', key: 'rights' }, getEntryText(footer, ['rightsReserved'], 'All rights reserved.')),
+                  h('div', { className: 'decap-preview__meta-row', key: 'links' }, [
+                    h('span', { className: 'decap-preview__meta-pill', key: 'credits' }, getEntryText(footer, ['creditsLabel'], 'Credits')),
+                    h('span', { className: 'decap-preview__meta-pill', key: 'legal' }, getEntryText(footer, ['legalLabel'], 'Legal')),
+                  ]),
+                ]),
+              ]),
+            ]),
+          ]);
         };
-        const localizeAdminText = () => {
-          const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
-            acceptNode(node) {
-              if (!node.textContent || !node.textContent.trim()) {
-                return NodeFilter.FILTER_REJECT;
-              }
 
-              const parentElement = node.parentElement;
-              if (!parentElement || parentElement.closest('script, style')) {
-                return NodeFilter.FILTER_REJECT;
-              }
+        const renderHeroPreview = (entryData) =>
+          renderPreview('hero', [
+            renderSiteChrome({
+              actionLabel: getEntryText(entryData, ['primaryCta'], 'Κλείστε ραντεβού'),
+            }),
+            h('section', { className: 'decap-preview__hero', key: 'hero' }, [
+              h('div', { className: 'decap-preview__hero-copy', key: 'copy' }, [
+                h(
+                  'p',
+                  { className: 'decap-preview__overline', key: 'eyebrow' },
+                  toUppercaseWithoutGreekTonos(getEntryText(entryData, ['spotlightEyebrow'], 'Therapeutic Atelier')),
+                ),
+                h('h1', { className: 'decap-preview__hero-title', key: 'headline' }, getEntryText(entryData, ['headline'], 'Θεραπεία μέσω τέχνης')),
+                h('p', { className: 'decap-preview__hero-copytext', key: 'subheadline' }, getEntryText(entryData, ['subheadline'], 'Ενας ασφαλής και δημιουργικός χώρος.')),
+                h('div', { className: 'decap-preview__button-row', key: 'actions' }, [
+                  h('span', { className: 'decap-preview__button decap-preview__button--primary', key: 'primary' }, getEntryText(entryData, ['primaryCta'], 'Κλείστε ραντεβού')),
+                  h('span', { className: 'decap-preview__button decap-preview__button--secondary', key: 'secondary' }, getEntryText(entryData, ['secondaryCta'], 'Στείλτε μήνυμα')),
+                ]),
+              ]),
+              h('aside', { className: 'decap-preview__hero-panel', key: 'panel' }, [
+                h('p', { className: 'decap-preview__label', key: 'label' }, 'Θεραπευτική αρχή'),
+                h('blockquote', { className: 'decap-preview__quote', key: 'quote' }, `«${getEntryText(entryData, ['subheadline'], 'Ενας ασφαλής και δημιουργικός χώρος.')}»`),
+                h(
+                  'div',
+                  { className: 'decap-preview__meta-row', key: 'meta' },
+                  [
+                    getEntryText(entryData, ['primaryCta'], 'Κλείστε ραντεβού'),
+                    getEntryText(entryData, ['secondaryCta'], 'Στείλτε μήνυμα'),
+                  ].map((value, index) => h('span', { className: 'decap-preview__meta-pill', key: `pill-${index}` }, value)),
+                ),
+              ]),
+            ]),
+          ]);
 
-              return NodeFilter.FILTER_ACCEPT;
-            },
-          });
-          const textNodes = [];
+        const renderWhatIsPreview = (entryData) => {
+          const paragraphs = toArray(entryData.get('paragraphs'));
 
-          while (walker.nextNode()) {
-            textNodes.push(walker.currentNode);
-          }
-
-          textNodes.forEach((textNode) => {
-            const localizedText = translateRenderedText(textNode.textContent);
-            if (localizedText !== textNode.textContent) {
-              textNode.textContent = localizedText;
-            }
-          });
-
-          document.querySelectorAll('[aria-label]').forEach((element) => {
-            const currentLabel = element.getAttribute('aria-label');
-            const localizedLabel = translateRenderedText(currentLabel);
-            if (localizedLabel !== currentLabel) {
-              element.setAttribute('aria-label', localizedLabel);
-            }
-          });
+          return renderPreview('what-is', [
+            h('section', { className: 'decap-preview__section', key: 'section' }, [
+              h('p', { className: 'decap-preview__overline', key: 'overline' }, toUppercaseWithoutGreekTonos('Τι είναι')),
+              h('h1', { className: 'decap-preview__headline', key: 'title' }, getEntryText(entryData, ['title'], 'Τι είναι η Θεραπεία μέσω τέχνης;')),
+              h('div', { className: 'decap-preview__grid decap-preview__grid--split', key: 'grid' }, [
+                h('article', { className: 'decap-preview__card decap-preview__card--quote', key: 'quote' }, [
+                  h('p', { className: 'decap-preview__quote', key: 'text' }, `«${getEntryText(entryData, ['pullQuote', 'text'], 'Το κείμενο του αποσπάσματος.') }»`),
+                  h(
+                    'p',
+                    { className: 'decap-preview__label', key: 'attribution' },
+                    toUppercaseWithoutGreekTonos(getEntryText(entryData, ['pullQuote', 'attribution'], 'Υπογραφή')),
+                  ),
+                ]),
+                h('div', { className: 'decap-preview__stack', key: 'body' }, [
+                  ...paragraphs.map((paragraph, index) =>
+                    h('p', { className: 'decap-preview__copy', key: `paragraph-${index}` }, toText(paragraph, '')),
+                  ),
+                  h('article', { className: 'decap-preview__soft-card', key: 'note' }, [
+                    h(
+                      'p',
+                      { className: 'decap-preview__label', key: 'note-label' },
+                      toUppercaseWithoutGreekTonos(getEntryText(entryData, ['practiceNoteLabel'], 'Πρακτική σημείωση')),
+                    ),
+                    h('p', { className: 'decap-preview__copy decap-preview__copy--tight', key: 'note-copy' }, getEntryText(entryData, ['practiceNote'], 'Σταθερό θεραπευτικό πλαίσιο και εμπιστευτικότητα.')),
+                  ]),
+                ]),
+              ]),
+            ]),
+          ]);
         };
-        const installAdminTextLocalizer = () => {
-          let isScheduled = false;
-          const scheduleLocalization = () => {
-            if (isScheduled) {
-              return;
-            }
 
-            isScheduled = true;
-            requestAnimationFrame(() => {
-              isScheduled = false;
-              localizeAdminText();
-            });
-          };
+        const renderWhoIsItForPreview = (entryData) => {
+          const items = toArray(entryData.get('items'));
 
-          new MutationObserver(scheduleLocalization).observe(document.body, {
-            childList: true,
-            subtree: true,
-            characterData: true,
-          });
-
-          scheduleLocalization();
+          return renderPreview('who-is-it-for', [
+            h('section', { className: 'decap-preview__section', key: 'section' }, [
+              h(
+                'p',
+                { className: 'decap-preview__overline', key: 'overline' },
+                toUppercaseWithoutGreekTonos('Σε ποιους απευθύνεται'),
+              ),
+              h('h1', { className: 'decap-preview__headline', key: 'title' }, getEntryText(entryData, ['title'], 'Σε ποιους απευθύνεται')),
+              h(
+                'div',
+                { className: 'decap-preview__list-grid', key: 'items' },
+                items.map((item, index) =>
+                  h('article', { className: 'decap-preview__list-card', key: `item-${index}` }, [
+                    h('span', { className: 'decap-preview__list-dot', key: 'dot', 'aria-hidden': 'true' }),
+                    h('p', { className: 'decap-preview__copy decap-preview__copy--tight', key: 'copy' }, toText(item, '')),
+                  ]),
+                ),
+              ),
+            ]),
+          ]);
         };
+
+        const renderAboutPreview = (entryData) => {
+          const bio = toArray(entryData.get('bio'));
+
+          return renderPreview('about', [
+            h('section', { className: 'decap-preview__section', key: 'section' }, [
+              h('p', { className: 'decap-preview__overline', key: 'overline' }, toUppercaseWithoutGreekTonos('Σχετικά')),
+              h('h1', { className: 'decap-preview__headline', key: 'title' }, getEntryText(entryData, ['title'], 'Σχετικά')),
+              h('div', { className: 'decap-preview__grid decap-preview__grid--split', key: 'grid' }, [
+                h('div', { className: 'decap-preview__stack', key: 'story' }, [
+                  h('article', { className: 'decap-preview__card decap-preview__card--quote', key: 'quote' }, [
+                    h('p', { className: 'decap-preview__quote', key: 'pull-quote' }, `«${getEntryText(entryData, ['pullQuote'], 'Το κεντρικό απόσπασμα της ενότητας.')}»`),
+                  ]),
+                  ...bio.map((paragraph, index) =>
+                    h('p', { className: 'decap-preview__copy', key: `paragraph-${index}` }, toText(paragraph, '')),
+                  ),
+                ]),
+                h('article', { className: 'decap-preview__card decap-preview__card--soft', key: 'approach' }, [
+                  h('p', { className: 'decap-preview__overline', key: 'overline' }, 'ΠΡΟΣΕΓΓΙΣΗ'),
+                  h('h2', { className: 'decap-preview__subheading', key: 'title' }, getEntryText(entryData, ['approach', 'title'], 'Θεραπευτική προσέγγιση')),
+                  h('p', { className: 'decap-preview__copy', key: 'copy' }, getEntryText(entryData, ['approach', 'description'], 'Περιγραφή θεραπευτικής προσέγγισης.')),
+                ]),
+              ]),
+            ]),
+          ]);
+        };
+
+        const renderServicesPreview = (entryData) => {
+          const services = toArray(entryData.get('services'));
+          const frequentlyAskedQuestions = toArray(entryData.get('frequentlyAskedQuestions'));
+          const audienceLabel = getEntryText(entryData, ['audienceLabel'], 'Ιδανικό για');
+          const expectationsLabel = getEntryText(entryData, ['expectationsLabel'], 'Τι να περιμένετε');
+
+          return renderPreview('services', [
+            h('section', { className: 'decap-preview__section', key: 'section' }, [
+              h('p', { className: 'decap-preview__overline', key: 'overline' }, toUppercaseWithoutGreekTonos('Υπηρεσίες')),
+              h('h1', { className: 'decap-preview__headline', key: 'title' }, getEntryText(entryData, ['title'], 'Υπηρεσίες')),
+              h(
+                'div',
+                { className: 'decap-preview__service-grid', key: 'services' },
+                services.length > 0
+                  ? services.map((service, index) => {
+                      const idealFor = toArray(service?.idealFor);
+                      const whatToExpect = toArray(service?.whatToExpect);
+                      const meta = joinNonEmpty([toText(service?.format, ''), toText(service?.duration, '')]);
+
+                      return h('article', { className: 'decap-preview__service-card', key: `service-${index}` }, [
+                        h('h2', { className: 'decap-preview__subheading', key: 'title' }, toText(service?.title, 'Νέα υπηρεσία')),
+                        h('p', { className: 'decap-preview__copy', key: 'description' }, toText(service?.description, 'Σύντομη περιγραφή υπηρεσίας.')),
+                        meta
+                          ? h('p', { className: 'decap-preview__service-meta', key: 'meta' }, meta)
+                          : null,
+                        idealFor.length > 0
+                          ? h('div', { className: 'decap-preview__stack', key: 'ideal-for' }, [
+                              h('p', { className: 'decap-preview__label', key: 'label' }, audienceLabel),
+                              h(
+                                'div',
+                                { className: 'decap-preview__chip-row', key: 'chips' },
+                                idealFor.map((item, itemIndex) =>
+                                  h('span', { className: 'decap-preview__chip', key: `ideal-${itemIndex}` }, toText(item?.value ?? item, '')),
+                                ),
+                              ),
+                            ])
+                          : null,
+                        whatToExpect.length > 0
+                          ? h('div', { className: 'decap-preview__soft-card', key: 'expectations' }, [
+                              h('p', { className: 'decap-preview__label', key: 'label' }, expectationsLabel),
+                              h(
+                                'ul',
+                                { className: 'decap-preview__bullet-list', key: 'list' },
+                                whatToExpect.map((item, itemIndex) =>
+                                  h('li', { className: 'decap-preview__bullet-item', key: `expectation-${itemIndex}` }, toText(item?.value ?? item, '')),
+                                ),
+                              ),
+                            ])
+                          : null,
+                      ].filter(Boolean));
+                    })
+                  : [
+                      h(
+                        'div',
+                        { className: 'decap-preview__empty', key: 'empty' },
+                        'Προσθέστε υπηρεσίες για να εμφανιστούν εδώ.',
+                      ),
+                    ],
+              ),
+              h('div', { className: 'decap-preview__stack', key: 'faq' }, [
+                h(
+                  'h2',
+                  { className: 'decap-preview__subheading', key: 'faq-title' },
+                  getEntryText(entryData, ['frequentlyAskedQuestionsTitle'], 'Συχνές ερωτήσεις'),
+                ),
+                frequentlyAskedQuestions.length > 0
+                  ? h(
+                      'div',
+                      { className: 'decap-preview__stack', key: 'faq-list' },
+                      frequentlyAskedQuestions.map((faq, index) =>
+                        h('article', { className: 'decap-preview__soft-card', key: `faq-${index}` }, [
+                          h('p', { className: 'decap-preview__label', key: 'question' }, toText(faq?.question, 'Ερώτηση')),
+                          h('p', { className: 'decap-preview__copy decap-preview__copy--tight', key: 'answer' }, toText(faq?.answer, 'Απάντηση')),
+                        ]),
+                      ),
+                    )
+                  : null,
+              ]),
+            ]),
+          ]);
+        };
+
+        const renderAnnouncementsPreview = (entryData) => {
+          const kindLabels = entryData.get('kindLabels');
+          const announcements = toArray(entryData.get('announcements')).filter(
+            (announcement) => announcement?.isPublished !== false,
+          );
+
+          return renderPreview('announcements', [
+            h('section', { className: 'decap-preview__section', key: 'section' }, [
+              h('p', { className: 'decap-preview__overline', key: 'overline' }, toUppercaseWithoutGreekTonos('Νέα & ανακοινώσεις')),
+              h('h1', { className: 'decap-preview__headline', key: 'title' }, getEntryText(entryData, ['title'], 'Νέα & ανακοινώσεις')),
+              h('p', { className: 'decap-preview__copy', key: 'intro' }, getEntryText(entryData, ['intro'], 'Σύντομες ενημερώσεις και νέες δράσεις.')),
+              h(
+                'div',
+                { className: 'decap-preview__announcement-grid', key: 'cards' },
+                announcements.length > 0
+                  ? announcements.map((announcement, index) => {
+                      const kind = toText(announcement?.kind, 'announcement');
+                      const labelMap = {
+                        workshop: getEntryText(kindLabels, ['workshop'], 'Εργαστήριο'),
+                        group: getEntryText(kindLabels, ['group'], 'Ομάδα'),
+                        announcement: getEntryText(kindLabels, ['announcement'], 'Ανακοίνωση'),
+                      };
+                      const badgeClass = `decap-preview__badge decap-preview__badge--${kind}`;
+
+                      return h('article', { className: 'decap-preview__announcement-card', key: `announcement-${index}` }, [
+                        h('div', { className: 'decap-preview__announcement-meta', key: 'meta' }, [
+                          toText(announcement?.dateLabel, '')
+                            ? h('p', { className: 'decap-preview__label', key: 'date' }, toText(announcement?.dateLabel, ''))
+                            : null,
+                          h('span', { className: badgeClass, key: 'kind' }, labelMap[kind] ?? labelMap.announcement),
+                        ].filter(Boolean)),
+                        h('h2', { className: 'decap-preview__subheading', key: 'title' }, toText(announcement?.title, 'Νέα ανακοίνωση')),
+                        h('p', { className: 'decap-preview__copy', key: 'summary' }, toText(announcement?.summary, 'Σύντομη περιγραφή ανακοίνωσης.')),
+                        toText(announcement?.callToActionLabel, '')
+                          ? h('p', { className: 'decap-preview__announcement-cta', key: 'cta' }, `${toText(announcement?.callToActionLabel, '')} ↗`)
+                          : null,
+                      ].filter(Boolean));
+                    })
+                  : [
+                      h(
+                        'div',
+                        { className: 'decap-preview__empty', key: 'empty' },
+                        'Δεν υπάρχουν δημοσιευμένες ανακοινώσεις.',
+                      ),
+                    ],
+              ),
+            ]),
+          ]);
+        };
+
+        const renderContactPreview = (entryData) => {
+          const contactItems = toArray(entryData.get('contactItems'));
+          const formLabels = entryData.get('formLabels');
+          const formPlaceholders = entryData.get('formPlaceholders');
+
+          return renderPreview('contact', [
+            h('section', { className: 'decap-preview__section', key: 'section' }, [
+              h('p', { className: 'decap-preview__overline', key: 'overline' }, toUppercaseWithoutGreekTonos('Επικοινωνία')),
+              h('h1', { className: 'decap-preview__headline', key: 'title' }, getEntryText(entryData, ['title'], 'Επικοινωνία')),
+              h('div', { className: 'decap-preview__grid decap-preview__grid--split', key: 'grid' }, [
+                h('div', { className: 'decap-preview__stack', key: 'details' }, [
+                  h('p', { className: 'decap-preview__copy', key: 'description' }, getEntryText(entryData, ['description'], 'Επικοινωνήστε για ραντεβού ή περισσότερες πληροφορίες.')),
+                  h(
+                    'div',
+                    { className: 'decap-preview__stack', key: 'items' },
+                    contactItems.map((contactItem, index) =>
+                      h('article', { className: 'decap-preview__soft-card', key: `contact-${index}` }, [
+                        h('p', { className: 'decap-preview__label', key: 'label' }, toText(contactItem?.label, 'Στοιχείο')),
+                        h('p', { className: 'decap-preview__copy decap-preview__copy--tight', key: 'value' }, toText(contactItem?.value, '')),
+                      ]),
+                    ),
+                  ),
+                  h('p', { className: 'decap-preview__copy decap-preview__copy--tight', key: 'availability' }, getEntryText(entryData, ['availabilityNote'], 'Συνήθως απαντώ εντός λίγων εργάσιμων ημερών.')),
+                ]),
+                h('article', { className: 'decap-preview__form-card', key: 'form' }, [
+                  h('div', { className: 'decap-preview__form-field', key: 'name' }, [
+                    h('span', { className: 'decap-preview__label', key: 'label' }, getEntryText(formLabels, ['name'], 'Ονομα')),
+                    h('span', { className: 'decap-preview__form-value', key: 'value' }, getEntryText(formPlaceholders, ['name'], 'Το ονοματεπώνυμό σας')),
+                  ]),
+                  h('div', { className: 'decap-preview__form-field', key: 'email' }, [
+                    h('span', { className: 'decap-preview__label', key: 'label' }, getEntryText(formLabels, ['email'], 'Email')),
+                    h('span', { className: 'decap-preview__form-value', key: 'value' }, getEntryText(formPlaceholders, ['email'], 'name@example.com')),
+                  ]),
+                  h('div', { className: 'decap-preview__form-field decap-preview__form-field--textarea', key: 'message' }, [
+                    h('span', { className: 'decap-preview__label', key: 'label' }, getEntryText(formLabels, ['message'], 'Μήνυμα')),
+                    h('span', { className: 'decap-preview__form-value', key: 'value' }, getEntryText(formPlaceholders, ['message'], 'Πείτε μας λίγο τι χρειάζεστε.')),
+                  ]),
+                  h('p', { className: 'decap-preview__copy decap-preview__copy--tight', key: 'consent' }, getEntryText(formLabels, ['consent'], 'Συμφωνώ με την επεξεργασία των στοιχείων μου για απάντηση στο μήνυμα.')),
+                  h('span', { className: 'decap-preview__button decap-preview__button--primary', key: 'submit' }, getEntryText(formLabels, ['submit'], 'Αποστολή μηνύματος')),
+                  h('p', { className: 'decap-preview__form-note', key: 'privacy' }, getEntryText(entryData, ['privacyNote'], 'Η φόρμα χρησιμοποιείται μόνο για την επικοινωνία σας με την Ατέλεια.')),
+                ]),
+              ]),
+            ]),
+          ]);
+        };
+
         const registerGreekLocale = () => {
           const englishLocale = toPlainObject(window.CMS.getLocale('en'));
           const greekLocale = deepMerge(englishLocale, {
@@ -278,16 +525,16 @@ const previewStyleUrl = createProjectRelativeUrl('admin/preview.css');
             collection: {
               sidebar: {
                 collections: 'Συλλογές',
-                allCollections: 'Όλες οι συλλογές',
+                allCollections: 'Ολες οι συλλογές',
                 searchAll: 'Αναζήτηση σε όλα',
                 searchIn: 'Αναζήτηση σε',
               },
               collectionTop: {
                 newButton: 'Προσθέστε %{collectionLabel}',
-                sortBy: 'Ταξινόμηση κατά',
-                viewAs: 'Προβολή ως',
-                viewAsList: 'Προβολή λίστας',
-                viewAsGrid: 'Προβολή πλέγματος',
+                sortBy: 'Ταξινόμηση',
+                viewAs: 'Προβολή',
+                viewAsList: 'Λίστα',
+                viewAsGrid: 'Πλέγμα',
               },
               entries: {
                 loadingEntries: 'Φόρτωση καταχωρίσεων...',
@@ -359,371 +606,28 @@ const previewStyleUrl = createProjectRelativeUrl('admin/preview.css');
 
           window.CMS.registerLocale('el', greekLocale);
         };
-        const joinNonEmpty = (value, separator = ' · ') => toArray(value).filter(Boolean).join(separator);
-        const toText = (value, fallback = '') => {
-          if (typeof value === 'string') {
-            const normalized = value.trim();
-            return normalized.length > 0 ? normalized : fallback;
-          }
 
-          if (value === null || value === undefined) {
-            return fallback;
-          }
-
-          const normalized = String(value).trim();
-          return normalized.length > 0 ? normalized : fallback;
-        };
-        const getEntryText = (entry, path, fallback = '') => toText(entry?.getIn?.(path), fallback);
-        const announcementKindLabelByValue = {
-          workshop: 'Εργαστήριο',
-          group: 'Ομάδα',
-          announcement: 'Ανακοίνωση',
-        };
-        const announcementKindClassByValue = {
-          workshop: 'decap-announcements-preview__badge--workshop',
-          group: 'decap-announcements-preview__badge--group',
-          announcement: 'decap-announcements-preview__badge--announcement',
-        };
-        const resolveHomePagePreviewKind = (entry) => {
-          const routeHash = toText(window?.parent?.location?.hash).toLowerCase();
-          if (routeHash.includes('/entries/services')) {
-            return 'services';
-          }
-
-          if (routeHash.includes('/entries/announcements')) {
-            return 'announcements';
-          }
-
-          if (routeHash.includes('/entries/site-content')) {
-            return 'site-content';
-          }
-
-          const hasSeoField = entry?.getIn?.(['data', 'seo']) !== undefined;
-          const hasAnnouncementsField = entry?.getIn?.(['data', 'announcements']) !== undefined;
-          const hasServicesField = entry?.getIn?.(['data', 'services']) !== undefined;
-
-          if (hasSeoField) {
-            return 'site-content';
-          }
-
-          if (hasAnnouncementsField) {
-            return 'announcements';
-          }
-
-          if (hasServicesField) {
-            return 'services';
-          }
-
-          const entryPath = toText(entry?.get?.('path')).toLowerCase();
-          const entrySlug = toText(entry?.get?.('slug')).toLowerCase();
-
-          if (entryPath.includes('services.json') || entrySlug === 'services') {
-            return 'services';
-          }
-
-          if (entryPath.includes('announcements.json') || entrySlug === 'announcements') {
-            return 'announcements';
-          }
-
-          return 'site-content';
-        };
-
-        const SiteContentPreview = window.createClass({
-          render() {
-            const entryData = this.props.entry.get('data');
-            const navigation = entryData.get('navigation');
-            const hero = entryData.get('hero');
-            const contact = entryData.get('contact');
-            const contactItems = toArray(contact?.get?.('contactItems')).filter(
-              (item) => toText(item?.value).length > 0,
-            );
-            const overviewBlocks = [
-              {
-                key: 'what-is',
-                label: 'Τι είναι',
-                title: getEntryText(entryData, ['whatIs', 'title'], 'Τι είναι η Θεραπεία μέσω τέχνης'),
-                summary: getEntryText(entryData, ['whatIs', 'practiceNote'], 'Σύντομη πρακτική σημείωση.'),
-              },
-              {
-                key: 'who-is-it-for',
-                label: 'Σε ποιους απευθύνεται',
-                title: getEntryText(entryData, ['whoIsItFor', 'title'], 'Σε ποιους απευθύνεται'),
-                summary: joinNonEmpty(entryData.getIn(['whoIsItFor', 'items'])) || 'Στόχος κοινού και βασικές ενδείξεις.',
-              },
-              {
-                key: 'about',
-                label: 'Σχετικά',
-                title: getEntryText(entryData, ['about', 'title'], 'Σχετικά'),
-                summary:
-                  getEntryText(entryData, ['about', 'pullQuote'], '') ||
-                  getEntryText(entryData, ['about', 'approach', 'description'], 'Περιγραφή θεραπευτικής προσέγγισης.'),
-              },
-              {
-                key: 'contact',
-                label: 'Επικοινωνία',
-                title: getEntryText(entryData, ['contact', 'title'], 'Επικοινωνία'),
-                summary: getEntryText(entryData, ['contact', 'description'], 'Περιγραφή επικοινωνίας.'),
-              },
-            ];
-
-            return h('section', { className: 'decap-site-preview' }, [
-              h('div', { className: 'decap-site-preview__shell', key: 'shell' }, [
-                h('header', { className: 'decap-site-preview__header', key: 'header' }, [
-                  h('p', { className: 'decap-site-preview__eyebrow', key: 'eyebrow' }, 'ΠΡΟΕΠΙΣΚΟΠΗΣΗ ΑΡΧΙΚΗΣ'),
-                  h('h1', { className: 'decap-site-preview__title', key: 'title' }, getEntryText(entryData, ['brandName'], 'Ατέλεια')),
-                  h(
-                    'p',
-                    { className: 'decap-site-preview__subtitle', key: 'subtitle' },
-                    getEntryText(entryData, ['brandSubtitle'], 'Θεραπεία μέσω τέχνης'),
-                  ),
-                  h(
-                    'div',
-                    { className: 'decap-site-preview__nav-chips', key: 'navigation' },
-                    [
-                      getEntryText(navigation, ['whatIs'], 'Τι είναι'),
-                      getEntryText(navigation, ['whoIsItFor'], 'Σε ποιους απευθύνεται'),
-                      getEntryText(navigation, ['about'], 'Σχετικά'),
-                      getEntryText(navigation, ['services'], 'Υπηρεσίες'),
-                      getEntryText(navigation, ['contact'], 'Επικοινωνία'),
-                    ].map((navigationLabel, index) =>
-                      h('span', { className: 'decap-site-preview__nav-chip', key: `nav-chip-${index}` }, navigationLabel),
-                    ),
-                  ),
-                ]),
-                h('article', { className: 'decap-site-preview__hero-card', key: 'hero' }, [
-                  h('p', { className: 'decap-site-preview__hero-kicker', key: 'hero-kicker' }, 'Hero'),
-                  h(
-                    'h2',
-                    { className: 'decap-site-preview__hero-headline', key: 'hero-headline' },
-                    getEntryText(hero, ['headline'], 'Θεραπεία μέσω τέχνης'),
-                  ),
-                  h(
-                    'p',
-                    { className: 'decap-site-preview__hero-copy', key: 'hero-copy' },
-                    getEntryText(hero, ['subheadline'], 'Περιγραφή εισαγωγικού hero.'),
-                  ),
-                  h('div', { className: 'decap-site-preview__hero-actions', key: 'hero-actions' }, [
-                    h('span', { className: 'decap-site-preview__hero-action decap-site-preview__hero-action--primary', key: 'hero-primary' }, getEntryText(hero, ['primaryCta'], 'Κλείστε ραντεβού')),
-                    h('span', { className: 'decap-site-preview__hero-action', key: 'hero-secondary' }, getEntryText(hero, ['secondaryCta'], 'Στείλτε μήνυμα')),
-                  ]),
-                ]),
-                h(
-                  'div',
-                  { className: 'decap-site-preview__overview-grid', key: 'overview-grid' },
-                  overviewBlocks.map((overviewBlock) =>
-                    h('article', { className: 'decap-site-preview__overview-card', key: overviewBlock.key }, [
-                      h('p', { className: 'decap-site-preview__overview-label', key: `${overviewBlock.key}-label` }, overviewBlock.label),
-                      h('h3', { className: 'decap-site-preview__overview-title', key: `${overviewBlock.key}-title` }, overviewBlock.title),
-                      h('p', { className: 'decap-site-preview__overview-copy', key: `${overviewBlock.key}-summary` }, overviewBlock.summary),
-                    ]),
-                  ),
-                ),
-                h('section', { className: 'decap-site-preview__contact-strip', key: 'contact-strip' }, [
-                  h('p', { className: 'decap-site-preview__contact-strip-title', key: 'contact-strip-title' }, 'Στοιχεία επικοινωνίας'),
-                  h(
-                    'div',
-                    { className: 'decap-site-preview__contact-strip-items', key: 'contact-strip-items' },
-                    contactItems.length > 0
-                      ? contactItems.slice(0, 3).map((item, itemIndex) =>
-                          h('p', { className: 'decap-site-preview__contact-strip-item', key: `contact-item-${itemIndex}` }, `${toText(item.label, 'Στοιχείο')}: ${item.value}`),
-                        )
-                      : [h('p', { className: 'decap-site-preview__contact-strip-item', key: 'contact-item-empty' }, 'Προσθέστε στοιχεία επικοινωνίας για την προεπισκόπηση.')],
-                  ),
-                ]),
-              ]),
-            ]);
-          },
-        });
-
-        const ServicesPreview = window.createClass({
-          render() {
-            const services = toArray(this.props.entry.getIn(['data', 'services']));
-
-            return h('section', { className: 'decap-services-preview' }, [
-              h('div', { className: 'decap-services-preview__shell', key: 'shell' }, [
-                h('div', { className: 'decap-services-preview__intro', key: 'intro' }, [
-                  h('p', { className: 'decap-services-preview__eyebrow', key: 'eyebrow' }, 'ΠΡΟΕΠΙΣΚΟΠΗΣΗ ΕΝΟΤΗΤΑΣ'),
-                  h('h1', { className: 'decap-services-preview__title', key: 'title' }, 'Υπηρεσίες'),
-                  h(
-                    'p',
-                    { className: 'decap-services-preview__lead', key: 'lead' },
-                    'Η προεπισκόπηση ακολουθεί την αισθητική των καρτών της ζωντανής σελίδας και δείχνει πώς θα διαβαστεί η ενότητα όταν δημοσιευτεί.',
-                  ),
-                ]),
-                h(
-                  'div',
-                  { className: 'decap-services-preview__grid', key: 'grid' },
-                  services.length > 0
-                    ? services.map((service, index) => {
-                        const serviceMeta = [service.format, service.duration].filter(Boolean).join(' / ');
-                        const audienceSummary = joinNonEmpty(service.idealFor);
-                        const supportItems = toArray(service.whatToExpect).filter(Boolean);
-
-                        return h(
-                          'article',
-                          {
-                            className: 'decap-services-preview__card',
-                            key: `${service.title ?? 'service'}-${index}`,
-                          },
-                          [
-                            h('span', { className: 'decap-services-preview__card-glow', key: 'glow', 'aria-hidden': 'true' }),
-                            h('h2', { className: 'decap-services-preview__card-title', key: 'title' }, service.title || 'Νέα υπηρεσία'),
-                            h(
-                              'p',
-                              { className: 'decap-services-preview__card-copy', key: 'description' },
-                              service.description || 'Σύντομη περιγραφή υπηρεσίας.',
-                            ),
-                            h('div', { className: 'decap-services-preview__facts', key: 'facts' }, [
-                              h('div', { className: 'decap-services-preview__fact', key: 'audience' }, [
-                                h('span', { className: 'decap-services-preview__fact-icon', key: 'audience-icon', 'aria-hidden': 'true' }, '◎'),
-                                h('p', { className: 'decap-services-preview__fact-copy', key: 'audience-copy' }, [
-                                  h('strong', { key: 'audience-label' }, 'Σε ποιους απευθύνεται: '),
-                                  audienceSummary || 'Σύντομη περιγραφή κοινού.',
-                                ]),
-                              ]),
-                              serviceMeta
-                                ? h('div', { className: 'decap-services-preview__fact', key: 'meta' }, [
-                                    h('span', { className: 'decap-services-preview__fact-icon', key: 'meta-icon', 'aria-hidden': 'true' }, '◌'),
-                                    h('p', { className: 'decap-services-preview__fact-copy decap-services-preview__meta', key: 'meta-copy' }, serviceMeta),
-                                  ])
-                                : null,
-                            ].filter(Boolean)),
-                            supportItems.length > 0
-                              ? h('div', { className: 'decap-services-preview__support', key: 'support' }, [
-                                  h('p', { className: 'decap-services-preview__support-title', key: 'support-title' }, 'ΤΙ ΝΑ ΠΕΡΙΜΕΝΕΤΕ'),
-                                  h(
-                                    'ul',
-                                    { className: 'decap-services-preview__support-list', key: 'support-list' },
-                                    supportItems.map((item, itemIndex) =>
-                                      h('li', { key: `${item}-${itemIndex}` }, item),
-                                    ),
-                                  ),
-                                ])
-                              : null,
-                          ].filter(Boolean),
-                        );
-                      })
-                    : [
-                        h(
-                          'div',
-                          { className: 'decap-services-preview__empty', key: 'empty' },
-                          'Προσθέστε υπηρεσίες για να εμφανιστεί εδώ η ζωντανή προεπισκόπηση των καρτών.',
-                        ),
-                      ],
-                ),
-              ]),
-            ]);
-          },
-        });
-
-        const AnnouncementsPreview = window.createClass({
-          render() {
-            const announcements = toArray(this.props.entry.getIn(['data', 'announcements']));
-
-            return h('section', { className: 'decap-announcements-preview' }, [
-              h('div', { className: 'decap-announcements-preview__shell', key: 'shell' }, [
-                h('div', { className: 'decap-announcements-preview__intro', key: 'intro' }, [
-                  h('p', { className: 'decap-announcements-preview__eyebrow', key: 'eyebrow' }, 'ΠΡΟΕΠΙΣΚΟΠΗΣΗ ΕΝΟΤΗΤΑΣ'),
-                  h('h1', { className: 'decap-announcements-preview__title', key: 'title' }, 'Νέα & Ανακοινώσεις'),
-                  h(
-                    'p',
-                    { className: 'decap-announcements-preview__lead', key: 'lead' },
-                    'Η προεπισκόπηση εμφανίζει τις δημοσιευμένες ανακοινώσεις όπως διαβάζονται στην αρχική σελίδα.',
-                  ),
-                ]),
-                h(
-                  'div',
-                  { className: 'decap-announcements-preview__grid', key: 'grid' },
-                  announcements.length > 0
-                    ? announcements.map((announcement, index) => {
-                        const announcementKind = toText(announcement.kind, 'announcement');
-                        const announcementKindLabel =
-                          announcementKindLabelByValue[announcementKind] ??
-                          announcementKindLabelByValue.announcement;
-                        const announcementKindClass =
-                          announcementKindClassByValue[announcementKind] ??
-                          announcementKindClassByValue.announcement;
-                        const shouldShowCallToAction = toText(announcement.callToActionLabel).length > 0;
-
-                        return h(
-                          'article',
-                          {
-                            className: 'decap-announcements-preview__card',
-                            key: `${announcement.title ?? 'announcement'}-${index}`,
-                          },
-                          [
-                            h('div', { className: 'decap-announcements-preview__meta', key: 'meta' }, [
-                              h(
-                                'p',
-                                { className: 'decap-announcements-preview__date', key: 'date' },
-                                toText(announcement.dateLabel, 'Χωρίς ημερομηνία'),
-                              ),
-                              h(
-                                'span',
-                                { className: `decap-announcements-preview__badge ${announcementKindClass}`, key: 'kind' },
-                                announcementKindLabel,
-                              ),
-                            ]),
-                            h(
-                              'h2',
-                              { className: 'decap-announcements-preview__card-title', key: 'title' },
-                              toText(announcement.title, 'Νέα ανακοίνωση'),
-                            ),
-                            h(
-                              'p',
-                              { className: 'decap-announcements-preview__card-copy', key: 'summary' },
-                              toText(announcement.summary, 'Προσθέστε σύντομη περιγραφή για την ανακοίνωση.'),
-                            ),
-                            shouldShowCallToAction
-                              ? h(
-                                  'p',
-                                  { className: 'decap-announcements-preview__cta', key: 'cta' },
-                                  `${announcement.callToActionLabel} ↗`,
-                                )
-                              : null,
-                          ].filter(Boolean),
-                        );
-                      })
-                    : [
-                        h(
-                          'div',
-                          { className: 'decap-announcements-preview__empty', key: 'empty' },
-                          'Προσθέστε ανακοινώσεις για να εμφανιστεί η προεπισκόπηση.',
-                        ),
-                      ],
-                ),
-              ]),
-            ]);
-          },
-        });
-        const HomePageCollectionPreview = window.createClass({
-          render() {
-            const previewKind = resolveHomePagePreviewKind(this.props.entry);
-
-            if (previewKind === 'services') {
-              return h(ServicesPreview, this.props);
-            }
-
-            if (previewKind === 'announcements') {
-              return h(AnnouncementsPreview, this.props);
-            }
-
-            return h(SiteContentPreview, this.props);
-          },
-        });
+        const createPreviewTemplate = (renderFn) =>
+          window.createClass({
+            render() {
+              return renderFn(this.props.entry.get('data'));
+            },
+          });
 
         registerGreekLocale();
-        window.CMS.registerPreviewStyle(adminStyleUrl);
         window.CMS.registerPreviewStyle(previewStyleUrl);
-        window.CMS.registerPreviewTemplate('homepage', HomePageCollectionPreview);
-        window.CMS.registerPreviewTemplate('site-content', HomePageCollectionPreview);
-        window.CMS.registerPreviewTemplate('services', HomePageCollectionPreview);
-        window.CMS.registerPreviewTemplate('announcements', HomePageCollectionPreview);
+        window.CMS.registerPreviewTemplate('site-global', createPreviewTemplate(renderSiteGlobalPreview));
+        window.CMS.registerPreviewTemplate('hero', createPreviewTemplate(renderHeroPreview));
+        window.CMS.registerPreviewTemplate('what-is', createPreviewTemplate(renderWhatIsPreview));
+        window.CMS.registerPreviewTemplate('who-is-it-for', createPreviewTemplate(renderWhoIsItForPreview));
+        window.CMS.registerPreviewTemplate('about', createPreviewTemplate(renderAboutPreview));
+        window.CMS.registerPreviewTemplate('services', createPreviewTemplate(renderServicesPreview));
+        window.CMS.registerPreviewTemplate('announcements', createPreviewTemplate(renderAnnouncementsPreview));
+        window.CMS.registerPreviewTemplate('contact', createPreviewTemplate(renderContactPreview));
         window.initCMS({ config: { locale: 'el' } });
-        installAdminTextLocalizer();
       };
 
-      registerServicesEditor();
+      bootstrapAdmin();
     </script>
   </body>
 </html>
