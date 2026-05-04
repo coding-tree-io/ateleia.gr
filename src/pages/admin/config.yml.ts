@@ -166,6 +166,16 @@ auth:
         file: src/data/about.json
         fields:
           - { label: Τίτλος ενότητας, name: title, widget: string, hint: "Εμφανίζεται: κύριος τίτλος της ενότητας." }
+          - label: Φωτογραφία θεραπεύτριας
+            name: portrait
+            widget: object
+            required: false
+            collapsed: false
+            hint: "Εμφανίζεται: δίπλα στο βιογραφικό κείμενο της ενότητας."
+            fields:
+              - { label: Αρχείο εικόνας, name: src, widget: image, required: false, choose_url: false, hint: "Ανεβάστε ή επιλέξτε τη φωτογραφία που θα εμφανίζεται στη σελίδα." }
+              - { label: Περιγραφή για αναγνώστες οθόνης, name: alt, widget: string, required: false, hint: "Σύντομη περιγραφή της φωτογραφίας, για προσβασιμότητα." }
+              - { label: Λεζάντα κάτω από τη φωτογραφία, name: caption, widget: string, required: false, hint: "Προαιρετικό μικρό κείμενο κάτω από τη φωτογραφία." }
           - { label: Απόσπασμα που ξεχωρίζει, name: pullQuote, widget: text, hint: "Εμφανίζεται: ως κεντρικό απόσπασμα πριν από τα βιογραφικά κείμενα." }
           - label: Παράγραφοι
             name: bio

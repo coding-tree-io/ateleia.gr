@@ -447,6 +447,152 @@
     background-color: color-mix(in srgb, var(--secondary) 55%, transparent);
   }
 
+  .therapy-about-layout {
+    display: grid;
+    grid-template-areas:
+      "heading"
+      "bio"
+      "insight";
+    gap: 2rem;
+  }
+
+  .therapy-about-layout--with-portrait {
+    grid-template-areas:
+      "heading"
+      "portrait"
+      "bio"
+      "insight";
+  }
+
+  .therapy-about-heading-block {
+    grid-area: heading;
+  }
+
+  .therapy-about-bio {
+    grid-area: bio;
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .therapy-about-insight-stack {
+    grid-area: insight;
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .therapy-about-portrait-frame {
+    grid-area: portrait;
+    position: relative;
+    isolation: isolate;
+    width: min(100%, 20.25rem);
+    margin-inline: auto;
+    padding: 0.55rem;
+    border: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
+    border-radius: 1.65rem;
+    background:
+      radial-gradient(circle at 12% 18%, color-mix(in srgb, var(--primary) 12%, transparent) 0 22%, transparent 44%),
+      linear-gradient(152deg, rgba(255, 255, 255, 0.88) 0%, color-mix(in srgb, var(--secondary) 54%, rgba(255, 255, 255, 0.58)) 100%);
+    box-shadow: 0 22px 44px -34px rgba(47, 39, 36, 0.5);
+  }
+
+  .therapy-about-portrait-frame::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    inset: auto auto -0.95rem -1rem;
+    width: 46%;
+    aspect-ratio: 1.35;
+    border-radius: 9999px;
+    background: color-mix(in srgb, var(--tone-golden) 28%, transparent);
+    opacity: 0.62;
+    transform: rotate(-7deg);
+  }
+
+  .therapy-about-portrait-frame::after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    inset: 1.15rem -0.85rem auto auto;
+    width: 42%;
+    aspect-ratio: 1;
+    border: 1px solid color-mix(in srgb, var(--primary) 28%, transparent);
+    border-radius: 50%;
+    opacity: 0.48;
+  }
+
+  .therapy-about-portrait-image {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    max-height: 30rem;
+    border: 1px solid color-mix(in srgb, var(--border) 68%, transparent);
+    border-radius: 1.18rem;
+    background-color: color-mix(in srgb, var(--secondary) 58%, var(--background) 42%);
+    box-shadow: 0 14px 28px -24px rgba(47, 39, 36, 0.44);
+    object-fit: cover;
+    object-position: 50% 34%;
+  }
+
+  .therapy-about-portrait-caption {
+    margin-top: 0.75rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    text-align: center;
+    color: color-mix(in srgb, var(--foreground) 72%, var(--muted-foreground) 28%);
+  }
+
+  .therapy-about-quote-card {
+    padding: 1.5rem;
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    line-height: 1.16;
+    color: var(--tone-ink);
+  }
+
+  .therapy-about-approach-card {
+    padding: 1.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .therapy-about-quote-card {
+      padding: 2rem;
+      font-size: 1.95rem;
+    }
+
+    .therapy-about-approach-card {
+      padding: 2rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .therapy-about-layout {
+      grid-template-columns: minmax(0, 1.08fr) minmax(20rem, 0.92fr);
+      grid-template-areas:
+        "heading insight"
+        "bio insight";
+      align-items: start;
+      gap: 2rem 3rem;
+    }
+
+    .therapy-about-layout--with-portrait {
+      grid-template-areas:
+        "heading portrait"
+        "bio portrait"
+        "bio insight";
+    }
+
+    .therapy-about-portrait-frame {
+      width: 100%;
+      max-width: 27rem;
+      margin-inline: auto 0;
+      padding: 0.7rem;
+    }
+
+    .therapy-about-portrait-image {
+      max-height: none;
+    }
+  }
+
   .therapy-announcements-card {
     position: relative;
     overflow: hidden;

@@ -21,6 +21,7 @@ const webManifestUrl = createProjectRelativeUrl('site.webmanifest');
 const browserConfigUrl = createProjectRelativeUrl('browserconfig.xml');
 const adminStyleUrl = createProjectRelativeUrl('admin/admin.css');
 const previewStyleUrl = createProjectRelativeUrl('admin/preview.css');
+const projectBaseUrl = createProjectRelativeUrl('');
 ---
 
 <!doctype html>
@@ -48,7 +49,7 @@ const previewStyleUrl = createProjectRelativeUrl('admin/preview.css');
       window.CMS_MANUAL_INIT = true;
     </script>
     <script src="https://unpkg.com/decap-cms@3.10.1/dist/decap-cms.js"></script>
-    <script is:inline define:vars={{ previewStyleUrl }}>
+    <script is:inline define:vars={{ previewStyleUrl, projectBaseUrl }}>
       const bootstrapAdmin = () => {
         if (!window.CMS || !window.h || !window.createClass || !window.initCMS) {
           window.setTimeout(bootstrapAdmin, 30);
@@ -124,6 +125,23 @@ const previewStyleUrl = createProjectRelativeUrl('admin/preview.css');
 
         const joinNonEmpty = (values, separator = ' · ') =>
           toArray(values).filter(Boolean).join(separator);
+
+        const createPreviewImageUrl = (value, getAsset) => {
+          const source = toText(value, '');
+
+          if (!source) {
+            return '';
+          }
+
+          const asset = typeof getAsset === 'function' ? getAsset(source) : source;
+          const assetUrl = toText(asset?.toString?.() ?? asset, source);
+
+          if (/^(?:https?:|data:|blob:|\/)/.test(assetUrl)) {
+            return assetUrl;
+          }
+
+          return `${projectBaseUrl}${assetUrl.replace(/^public\//, '')}`;
+        };
 
         const renderPreview = (kind, content) =>
           h('section', { className: `decap-preview decap-preview--${kind}` }, [
@@ -308,8 +326,12 @@ const previewStyleUrl = createProjectRelativeUrl('admin/preview.css');
           ]);
         };
 
-        const renderAboutPreview = (entryData) => {
+        const renderAboutPreview = (entryData, getAsset) => {
           const bio = toArray(entryData.get('bio'));
+          const portrait = entryData.get('portrait');
+          const portraitImageUrl = createPreviewImageUrl(portrait?.get?.('src'), getAsset);
+          const portraitCaption = getEntryText(portrait, ['caption'], '');
+          const portraitAlt = getEntryText(portrait, ['alt'], portraitCaption || getEntryText(entryData, ['title'], 'Σχετικά'));
 
           return renderPreview('about', [
             h('section', { className: 'decap-preview__section', key: 'section' }, [
@@ -317,17 +339,27 @@ const previewStyleUrl = createProjectRelativeUrl('admin/preview.css');
               h('h1', { className: 'decap-preview__headline', key: 'title' }, getEntryText(entryData, ['title'], 'Σχετικά')),
               h('div', { className: 'decap-preview__grid decap-preview__grid--split', key: 'grid' }, [
                 h('div', { className: 'decap-preview__stack', key: 'story' }, [
-                  h('article', { className: 'decap-preview__card decap-preview__card--quote', key: 'quote' }, [
-                    h('p', { className: 'decap-preview__quote', key: 'pull-quote' }, `«${getEntryText(entryData, ['pullQuote'], 'Το κεντρικό απόσπασμα της ενότητας.')}»`),
-                  ]),
                   ...bio.map((paragraph, index) =>
                     h('p', { className: 'decap-preview__copy', key: `paragraph-${index}` }, toText(paragraph, '')),
                   ),
                 ]),
-                h('article', { className: 'decap-preview__card decap-preview__card--soft', key: 'approach' }, [
-                  h('p', { className: 'decap-preview__overline', key: 'overline' }, 'ΠΡΟΣΕΓΓΙΣΗ'),
-                  h('h2', { className: 'decap-preview__subheading', key: 'title' }, getEntryText(entryData, ['approach', 'title'], 'Θεραπευτική προσέγγιση')),
-                  h('p', { className: 'decap-preview__copy', key: 'copy' }, getEntryText(entryData, ['approach', 'description'], 'Περιγραφή θεραπευτικής προσέγγισης.')),
+                h('div', { className: 'decap-preview__stack', key: 'side' }, [
+                  portraitImageUrl
+                    ? h('figure', { className: 'decap-preview__portrait', key: 'portrait' }, [
+                        h('img', { className: 'decap-preview__portrait-image', src: portraitImageUrl, alt: portraitAlt, key: 'image' }),
+                        portraitCaption
+                          ? h('figcaption', { className: 'decap-preview__portrait-caption', key: 'caption' }, portraitCaption)
+                          : null,
+                      ])
+                    : null,
+                  h('article', { className: 'decap-preview__card decap-preview__card--quote', key: 'quote' }, [
+                    h('p', { className: 'decap-preview__quote', key: 'pull-quote' }, `«${getEntryText(entryData, ['pullQuote'], 'Το κεντρικό απόσπασμα της ενότητας.')}»`),
+                  ]),
+                  h('article', { className: 'decap-preview__card decap-preview__card--soft', key: 'approach' }, [
+                    h('p', { className: 'decap-preview__overline', key: 'overline' }, 'ΠΡΟΣΕΓΓΙΣΗ'),
+                    h('h2', { className: 'decap-preview__subheading', key: 'title' }, getEntryText(entryData, ['approach', 'title'], 'Θεραπευτική προσέγγιση')),
+                    h('p', { className: 'decap-preview__copy', key: 'copy' }, getEntryText(entryData, ['approach', 'description'], 'Περιγραφή θεραπευτικής προσέγγισης.')),
+                  ]),
                 ]),
               ]),
             ]),
@@ -610,7 +642,7 @@ const previewStyleUrl = createProjectRelativeUrl('admin/preview.css');
         const createPreviewTemplate = (renderFn) =>
           window.createClass({
             render() {
-              return renderFn(this.props.entry.get('data'));
+              return renderFn(this.props.entry.get('data'), this.props.getAsset);
             },
           });
 

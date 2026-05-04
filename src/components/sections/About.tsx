@@ -2,9 +2,39 @@ import { therapyPracticeWebsiteContent } from '@/content/therapy-practice-websit
 import { AbstractFace, OrganicDivider } from '@/components/decorative/ArtShapes';
 import { ParallaxLayer } from '@/components/decorative/ParallaxLayer';
 import { Card } from '@/components/ui/card';
+import { createProjectRelativeUrl } from '@/config/site-branding';
+
+function createContentImageUrl(source: string): string {
+  const trimmedSource = source.trim();
+
+  if (!trimmedSource) {
+    return '';
+  }
+
+  if (/^(?:https?:|data:|blob:)/.test(trimmedSource)) {
+    return trimmedSource;
+  }
+
+  const baseUrl = import.meta.env.BASE_URL;
+  const normalizedBaseUrl = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
+  const normalizedBasePath = normalizedBaseUrl.replace(/^\/+/, '');
+  const normalizedSource = trimmedSource.replace(/^\/+/, '').replace(/^public\//, '');
+  const projectRelativeSource = normalizedSource.startsWith(normalizedBasePath)
+    ? normalizedSource.slice(normalizedBasePath.length)
+    : normalizedSource;
+
+  return createProjectRelativeUrl(projectRelativeSource);
+}
 
 export function About() {
   const { about } = therapyPracticeWebsiteContent;
+  const portraitSource = about.portrait?.src?.trim() ?? '';
+  const portraitImageUrl = portraitSource ? createContentImageUrl(portraitSource) : '';
+  const portraitCaption = about.portrait?.caption?.trim() ?? '';
+  const portraitAlt = about.portrait?.alt?.trim() || portraitCaption || about.title;
+  const layoutClassName = portraitImageUrl
+    ? 'therapy-section-content-width therapy-about-layout therapy-about-layout--with-portrait'
+    : 'therapy-section-content-width therapy-about-layout';
 
   return (
     <section id="about" className="therapy-section-shell">
@@ -12,37 +42,56 @@ export function About() {
         <AbstractFace />
       </ParallaxLayer>
 
-      <div className="therapy-section-content-width grid gap-10 lg:grid-cols-[1.08fr_0.92fr] lg:gap-12">
-        <div>
+      <div className={layoutClassName}>
+        <div className="therapy-about-heading-block">
           <h2 className="therapy-section-heading">
             {about.title}
           </h2>
 
           <OrganicDivider className="my-8 h-4 w-40 md:w-44" />
-
-          <div className="space-y-5">
-            {about.bio.map((paragraph, index) => (
-              <p
-                key={`${index}-${paragraph.slice(0, 24)}`}
-                className="therapy-section-paragraph"
-              >
-                {paragraph}
-              </p>
-            ))}
-          </div>
         </div>
 
-        <aside className="space-y-6">
+        {portraitImageUrl ? (
+          <Card asChild className="therapy-about-portrait-frame">
+            <figure>
+              <img
+                src={portraitImageUrl}
+                alt={portraitAlt}
+                width={1066}
+                height={1600}
+                loading="lazy"
+                decoding="async"
+                className="therapy-about-portrait-image"
+              />
+              {portraitCaption ? (
+                <figcaption className="therapy-about-portrait-caption">{portraitCaption}</figcaption>
+              ) : null}
+            </figure>
+          </Card>
+        ) : null}
+
+        <div className="therapy-about-bio">
+          {about.bio.map((paragraph, index) => (
+            <p
+              key={`${index}-${paragraph.slice(0, 24)}`}
+              className="therapy-section-paragraph"
+            >
+              {paragraph}
+            </p>
+          ))}
+        </div>
+
+        <aside className="therapy-about-insight-stack">
           <Card
             asChild
-            className="therapy-surface-paper-card p-6 font-serif text-2xl leading-tight text-[var(--tone-ink)] md:p-8 md:text-[1.95rem]"
+            className="therapy-surface-paper-card therapy-about-quote-card"
           >
             <blockquote>
               «{about.pullQuote}»
             </blockquote>
           </Card>
 
-          <Card asChild className="therapy-surface-soft-card p-6 md:p-8">
+          <Card asChild className="therapy-surface-soft-card therapy-about-approach-card">
             <div>
               <h3 className="font-serif text-2xl font-semibold text-foreground">{about.approach.title}</h3>
               <p className="therapy-section-supporting-copy mt-4">

@@ -76,6 +76,11 @@ export const whoIsItForCollectionSchema = whoIsItForSchema.extend({
 
 export const aboutSchema = z.object({
   title: z.string().min(1),
+  portrait: z.object({
+    src: z.string().default(''),
+    alt: z.string().default(''),
+    caption: z.string().optional(),
+  }).optional(),
   pullQuote: z.string().min(1),
   bio: z.array(z.string().min(1)).min(1),
   approach: z.object({
