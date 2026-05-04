@@ -217,6 +217,7 @@ auth:
                 name: idealFor
                 widget: list
                 label_singular: Περίπτωση
+                required: false
                 collapsed: true
                 summary: "{{fields.value}}"
                 hint: "Εμφανίζεται: κάτω από το «Ιδανικό για»."

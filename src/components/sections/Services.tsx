@@ -21,6 +21,7 @@ function TherapyServiceCard({ service }: TherapyServiceCardProps) {
     servicesSection: { audienceLabel, expectationsLabel },
   } = therapyPracticeWebsiteContent;
   const serviceMeta = [service.format, service.duration].filter(Boolean).join(' / ');
+  const hasAudience = service.idealFor.length > 0;
 
   return (
     <Card asChild className="therapy-surface-paper-card-interactive group">
@@ -29,15 +30,17 @@ function TherapyServiceCard({ service }: TherapyServiceCardProps) {
         <p className="therapy-section-paragraph mt-4">{service.description}</p>
 
         <div className="mt-7 space-y-3">
-          <div className="flex items-start gap-3 text-sm text-muted-foreground">
-            <div className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg bg-accent/25 text-[var(--tone-ink)]">
-              <Users className="size-4" aria-hidden="true" />
+          {hasAudience ? (
+            <div className="flex items-start gap-3 text-sm text-muted-foreground">
+              <div className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg bg-accent/25 text-[var(--tone-ink)]">
+                <Users className="size-4" aria-hidden="true" />
+              </div>
+              <span>
+                <span className="font-semibold text-foreground">{`${audienceLabel}: `}</span>
+                {service.idealFor.join(' · ')}
+              </span>
             </div>
-            <span>
-              <span className="font-semibold text-foreground">{`${audienceLabel}: `}</span>
-              {service.idealFor.join(' · ')}
-            </span>
-          </div>
+          ) : null}
 
           {serviceMeta ? (
             <div className="flex items-center gap-3 text-sm text-muted-foreground">

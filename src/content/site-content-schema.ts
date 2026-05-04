@@ -94,7 +94,7 @@ const frequentlyAskedQuestionSchema = z.object({
 const serviceItemSchema = z.object({
   title: z.string().min(1),
   description: z.string().min(1),
-  idealFor: z.array(z.string().min(1)).min(1),
+  idealFor: z.array(z.string().min(1)).default([]),
   format: z.string().min(1).optional(),
   duration: z.string().min(1).optional(),
   whatToExpect: z.array(z.string().min(1)).default([]),
