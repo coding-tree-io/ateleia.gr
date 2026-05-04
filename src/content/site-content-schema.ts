@@ -143,7 +143,7 @@ export const announcementsDocumentSchema = z.object({
     group: z.string().min(1),
     announcement: z.string().min(1),
   }),
-  announcements: z.array(announcementItemSchema).min(1),
+  announcements: z.array(announcementItemSchema).default([]),
 });
 
 export const announcementsDocumentCollectionSchema = announcementsDocumentSchema.extend({

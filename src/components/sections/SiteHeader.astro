@@ -17,7 +17,7 @@ const logoImageUrl = createLogoImageUrl();
 
 const desktopBookingButtonClassName = cn(
   buttonVariants({ size: 'lg' }),
-  'therapy-primary-call-to-action px-6 opacity-100 transition-[opacity,transform] duration-300 motion-reduce:transition-none md:[.hero-in-view_&]:pointer-events-none md:[.hero-in-view_&]:-translate-y-1 md:[.hero-in-view_&]:opacity-0',
+  'therapy-primary-call-to-action pointer-events-none invisible -translate-y-1 px-6 opacity-0 transition-[opacity,transform,visibility] duration-300 motion-reduce:transition-none md:[.hero-in-view_&]:pointer-events-none md:[.hero-in-view_&]:invisible md:[.hero-in-view_&]:-translate-y-1 md:[.hero-in-view_&]:opacity-0',
 );
 ---
 
@@ -49,7 +49,7 @@ const desktopBookingButtonClassName = cn(
     </nav>
 
     <div class="hidden overflow-hidden transition-[width] duration-300 motion-reduce:transition-none md:flex md:w-[14rem] md:shrink-0 md:justify-end md:[.hero-in-view_&]:w-[12rem]">
-      <a href="#contact" class={desktopBookingButtonClassName} data-header-cta aria-hidden="true" tabindex="-1">
+      <a href="#contact" class={desktopBookingButtonClassName} data-header-cta hidden aria-hidden="true" tabindex="-1">
         {primaryCta}
       </a>
     </div>
@@ -69,7 +69,7 @@ const desktopBookingButtonClassName = cn(
     const heroSectionId = 'hero';
     const heroInViewClassName = 'hero-in-view';
     const headerCtaSelector = '[data-header-cta]';
-    const hiddenHeaderCtaClassNames = ['opacity-0', '-translate-y-1', 'pointer-events-none'];
+    const hiddenHeaderCtaClassNames = ['invisible', 'opacity-0', '-translate-y-1', 'pointer-events-none'];
     const dialogSelector = '[data-mobile-nav-dialog]';
     const triggerSelector = '[data-mobile-nav-trigger]';
     const closeSelector = '[data-mobile-nav-close]';
@@ -90,12 +90,14 @@ const desktopBookingButtonClassName = cn(
 
       if (shouldHideHeaderCta) {
         headerCtaElement.classList.add(...hiddenHeaderCtaClassNames);
+        headerCtaElement.hidden = true;
         headerCtaElement.setAttribute('aria-hidden', 'true');
         headerCtaElement.setAttribute('tabindex', '-1');
         return;
       }
 
       headerCtaElement.classList.remove(...hiddenHeaderCtaClassNames);
+      headerCtaElement.hidden = false;
       headerCtaElement.removeAttribute('aria-hidden');
       headerCtaElement.removeAttribute('tabindex');
     };
