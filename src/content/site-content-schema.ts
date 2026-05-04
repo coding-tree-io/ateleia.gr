@@ -7,12 +7,14 @@ const seoSchema = z.object({
   openGraphDescription: z.string().min(1),
 });
 
+const navigationLabelSchema = z.string().min(1).max(32);
+
 const navigationSchema = z.object({
-  whatIs: z.string().min(1),
-  whoIsItFor: z.string().min(1),
-  about: z.string().min(1),
-  services: z.string().min(1),
-  contact: z.string().min(1),
+  whatIs: navigationLabelSchema,
+  whoIsItFor: navigationLabelSchema,
+  about: navigationLabelSchema,
+  services: navigationLabelSchema,
+  contact: navigationLabelSchema,
 });
 
 const footerSchema = z.object({

@@ -97,11 +97,11 @@ auth:
             name: navigation
             widget: object
             fields:
-              - { label: Κείμενο μενού για «Τι είναι», name: whatIs, widget: string, hint: "Εμφανίζεται: header, mobile menu και footer." }
-              - { label: Κείμενο μενού για «Σε ποιους απευθύνεται», name: whoIsItFor, widget: string, hint: "Εμφανίζεται: header, mobile menu και footer." }
-              - { label: Κείμενο μενού για «Σχετικά», name: about, widget: string, hint: "Εμφανίζεται: header, mobile menu και footer." }
-              - { label: Κείμενο μενού για «Υπηρεσίες», name: services, widget: string, hint: "Εμφανίζεται: header, mobile menu και footer." }
-              - { label: Κείμενο μενού για «Επικοινωνία», name: contact, widget: string, hint: "Εμφανίζεται: header, mobile menu και footer." }
+              - { label: Κείμενο μενού για «Τι είναι», name: whatIs, widget: string, pattern: ['^.{1,32}$', "Χρησιμοποιήστε έως 32 χαρακτήρες για να χωράει στο μενού."], hint: "Σύντομη ετικέτα. Εμφανίζεται: header, mobile menu και footer." }
+              - { label: Κείμενο μενού για «Σε ποιους απευθύνεται», name: whoIsItFor, widget: string, pattern: ['^.{1,32}$', "Χρησιμοποιήστε έως 32 χαρακτήρες για να χωράει στο μενού."], hint: "Σύντομη ετικέτα. Εμφανίζεται: header, mobile menu και footer." }
+              - { label: Κείμενο μενού για «Σχετικά», name: about, widget: string, pattern: ['^.{1,32}$', "Χρησιμοποιήστε έως 32 χαρακτήρες για να χωράει στο μενού."], hint: "Σύντομη ετικέτα. Εμφανίζεται: header, mobile menu και footer." }
+              - { label: Κείμενο μενού για «Υπηρεσίες», name: services, widget: string, pattern: ['^.{1,32}$', "Χρησιμοποιήστε έως 32 χαρακτήρες για να χωράει στο μενού."], hint: "Σύντομη ετικέτα. Εμφανίζεται: header, mobile menu και footer." }
+              - { label: Κείμενο μενού για «Επικοινωνία», name: contact, widget: string, pattern: ['^.{1,32}$', "Χρησιμοποιήστε έως 32 χαρακτήρες για να χωράει στο μενού."], hint: "Σύντομη ετικέτα. Εμφανίζεται: header, mobile menu και footer." }
           - label: Footer
             name: footer
             widget: object
