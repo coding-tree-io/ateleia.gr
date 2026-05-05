@@ -285,6 +285,7 @@ auth:
         fields:
           - { label: Τίτλος ενότητας, name: title, widget: string, hint: "Εμφανίζεται: τίτλος της ενότητας επικοινωνίας." }
           - { label: Περιγραφή κάτω από τον τίτλο, name: description, widget: text, hint: "Εμφανίζεται: ακριβώς κάτω από τον τίτλο της ενότητας." }
+          - { label: Περιοχή εξυπηρέτησης, name: serviceArea, widget: string, hint: "Εμφανίζεται: στην ενότητα επικοινωνίας και στο footer. Κρατήστε το σύντομο, π.χ. Αθήνα, Ελλάδα." }
           - { label: Μικρή σημείωση χρόνου απάντησης, name: availabilityNote, widget: text, hint: "Εμφανίζεται: δίπλα στη φόρμα." }
           - { label: Σύντομη ενημέρωση απορρήτου, name: privacyNote, widget: text, hint: "Εμφανίζεται: κάτω από τη φόρμα." }
           - label: Στοιχεία

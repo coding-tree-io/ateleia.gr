@@ -65,6 +65,7 @@ const browserConfigUrl = createProjectRelativeUrl('browserconfig.xml');
 const codingTreeAttributionScriptUrl = createCodingTreeAttributionScriptUrl();
 const canonicalUrl = createCanonicalUrl(canonicalPath);
 const openGraphImageUrl = createCanonicalUrl(openGraphImage);
+const sitemapUrl = createCanonicalUrl('sitemap-index.xml');
 const normalizedStructuredData = Array.isArray(structuredData) ? structuredData : [structuredData];
 ---
 
@@ -84,6 +85,7 @@ const normalizedStructuredData = Array.isArray(structuredData) ? structuredData 
     <meta name="description" content={pageDescription} />
     <meta name="robots" content={robots} />
     <link rel="canonical" href={canonicalUrl} />
+    <link rel="sitemap" href={sitemapUrl} />
     <meta property="og:site_name" content={therapyPracticeSiteMetadata.siteName} />
     <meta property="og:title" content={openGraphTitle} />
     <meta property="og:description" content={openGraphDescription} />

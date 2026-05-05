@@ -184,6 +184,7 @@ const contactFormMessagesSchema = z.object({
 export const contactSchema = z.object({
   title: z.string().min(1),
   description: z.string().min(1),
+  serviceArea: z.string().min(1),
   privacyNote: z.string().min(1),
   availabilityNote: z.string().min(1),
   formLabels: contactFormLabelsSchema,

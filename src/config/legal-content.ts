@@ -3,69 +3,75 @@ import { getPrimaryContactEmail } from '@/config/contact';
 const privacyContactEmail = getPrimaryContactEmail();
 
 export const therapyPracticeLegalContent = {
-  pageTitle: 'Privacy & Legal Notice',
+  pageTitle: 'Πολιτική απορρήτου & νομική ενημέρωση',
   pageDescription:
-    'Privacy notice and basic legal information for the Ateleia website and contact form.',
-  heading: 'Privacy & Legal Notice',
+    'Πολιτική απορρήτου και βασική νομική ενημέρωση για τον ιστότοπο της Ατέλειας και τη φόρμα επικοινωνίας.',
+  heading: 'Πολιτική απορρήτου & νομική ενημέρωση',
   introduction:
-    'This page explains how Ateleia handles personal data submitted through this website and outlines the basic legal terms that apply to its content.',
+    'Η σελίδα αυτή εξηγεί συνοπτικά πώς η Ατέλεια χειρίζεται τα προσωπικά δεδομένα που αποστέλλονται μέσω του ιστότοπου και ποιοι βασικοί όροι ισχύουν για το περιεχόμενό του.',
   sections: [
     {
-      title: '1. Data controller',
-      paragraphs: ['Ateleia operates this website and acts as the controller for personal data submitted through its contact form.'],
+      title: '1. Υπεύθυνος επεξεργασίας',
+      paragraphs: ['Η Ατέλεια λειτουργεί τον παρόντα ιστότοπο και είναι υπεύθυνη για την επεξεργασία των προσωπικών δεδομένων που αποστέλλονται μέσω της φόρμας επικοινωνίας.'],
     },
     {
-      title: '2. Data collected',
+      title: '2. Δεδομένα που συλλέγονται',
       paragraphs: [
-        'When you use the contact form, the website may collect your full name, email address, message content, and your confirmation that you consent to be contacted.',
+        'Όταν χρησιμοποιείτε τη φόρμα επικοινωνίας, ενδέχεται να συλλέγονται το ονοματεπώνυμο, η διεύθυνση email, το περιεχόμενο του μηνύματος και η επιβεβαίωση ότι συμφωνείτε να χρησιμοποιηθούν τα στοιχεία σας αποκλειστικά για επικοινωνία.',
       ],
     },
     {
-      title: '3. Purpose and legal basis',
+      title: '3. Σκοπός και νομική βάση',
       paragraphs: [
-        'This data is used only to review and respond to your inquiry, arrange follow-up communication, and protect the site from spam or abusive submissions.',
-        'The legal basis is the data subject’s request for pre-contractual communication and the legitimate interest of responding to contact requests.',
+        'Τα δεδομένα χρησιμοποιούνται μόνο για την ανάγνωση και απάντηση στο αίτημά σας, για πιθανή συνέχεια στην επικοινωνία ή για τον προγραμματισμό ραντεβού.',
+        'Η νομική βάση είναι το αίτημα του ίδιου του προσώπου για επικοινωνία πριν από πιθανή συνεργασία, καθώς και το έννομο συμφέρον απάντησης σε μηνύματα που αποστέλλονται προς τον ιστότοπο.',
       ],
     },
     {
-      title: '4. Processors and delivery services',
+      title: '4. Υπηρεσίες επεξεργασίας',
       paragraphs: [
-        'Form submissions are delivered through Form.taxi, which acts as a technical processor for contact-form delivery.',
+        'Οι αποστολές της φόρμας παραδίδονται μέσω Form.taxi, το οποίο λειτουργεί ως τεχνικός επεξεργαστής για την ασφαλή αποστολή των μηνυμάτων.',
       ],
     },
     {
-      title: '5. Retention',
+      title: '5. Email και επικοινωνία',
       paragraphs: [
-        'Messages are retained only for as long as necessary to review, respond to, and reasonably follow up on the original inquiry.',
+        'Τα μηνύματα παραδίδονται στο email επικοινωνίας της Ατέλειας. Η απάντηση μπορεί να γίνει μέσω email ή τηλεφώνου, ανάλογα με τα στοιχεία που έχετε δώσει και το περιεχόμενο του αιτήματος.',
       ],
     },
     {
-      title: '6. Your rights',
+      title: '6. Χρόνος διατήρησης',
       paragraphs: [
-        'You may request access, correction, or deletion of personal data connected to your inquiry by writing to the privacy contact below.',
-        'You may also contact the competent data protection authority if you believe your data has been handled improperly.',
+        'Τα μηνύματα διατηρούνται μόνο για όσο χρειάζεται ώστε να εξεταστεί το αρχικό αίτημα, να δοθεί απάντηση και να υπάρξει εύλογη συνέχεια στην επικοινωνία.',
       ],
     },
     {
-      title: '7. Cookies and analytics',
+      title: '7. Τα δικαιώματά σας',
       paragraphs: [
-        'At this stage, this website does not describe any analytics or advertising stack as part of this notice. If that changes, this page should be updated before such tooling is used.',
+        'Μπορείτε να ζητήσετε πρόσβαση, διόρθωση ή διαγραφή προσωπικών δεδομένων που σχετίζονται με το μήνυμά σας, γράφοντας στο email επικοινωνίας απορρήτου.',
+        'Μπορείτε επίσης να απευθυνθείτε στην αρμόδια αρχή προστασίας δεδομένων, εάν θεωρείτε ότι τα δεδομένα σας δεν έχουν χειριστεί σωστά.',
       ],
     },
     {
-      title: '8. Intellectual property and credits',
+      title: '8. Cookies και analytics',
       paragraphs: [
-        'Website design, copy, and branding remain protected. Third-party artwork or assets are credited where required, including on the dedicated credits page.',
+        'Στο παρόν στάδιο ο ιστότοπος δεν χρησιμοποιεί analytics ή διαφημιστική παρακολούθηση. Αν αυτό αλλάξει, η παρούσα σελίδα πρέπει να ενημερωθεί πριν ενεργοποιηθεί τέτοια λειτουργία.',
       ],
     },
     {
-      title: '9. Privacy contact',
-      paragraphs: [`Privacy requests can be sent to ${privacyContactEmail}.`],
+      title: '9. Πνευματική ιδιοκτησία και credits',
+      paragraphs: [
+        'Ο σχεδιασμός, τα κείμενα και η οπτική ταυτότητα του ιστότοπου προστατεύονται. Τρίτα εικαστικά στοιχεία ή assets αναφέρονται όπου απαιτείται, συμπεριλαμβανομένης της ξεχωριστής σελίδας credits.',
+      ],
     },
     {
-      title: '10. Updates',
+      title: '10. Επικοινωνία για θέματα απορρήτου',
+      paragraphs: [`Αιτήματα σχετικά με την προστασία προσωπικών δεδομένων μπορούν να σταλούν στο ${privacyContactEmail}.`],
+    },
+    {
+      title: '11. Ενημερώσεις',
       paragraphs: [
-        'This notice may be updated as the website, contact workflow, or legal requirements change.',
+        'Η παρούσα ενημέρωση μπορεί να τροποποιείται όταν αλλάζει ο ιστότοπος, η διαδικασία επικοινωνίας ή οι σχετικές νομικές απαιτήσεις.',
       ],
     },
   ],

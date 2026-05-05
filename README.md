@@ -232,9 +232,11 @@ The project now has a centralized metadata layer in:
 Current strategy:
 
 - production `index, follow` on the custom domain
+- Athens-focused homepage title/description for conservative local discovery around `εικαστική ψυχοθεραπεία στην Αθήνα`
 - canonical, Open Graph, Twitter metadata, and JSON-LD emitted from `PublicDocumentLayout.astro`
+- homepage JSON-LD includes `WebSite`, service-area `LocalBusiness`, therapist `Person`, and `FAQPage`
 - `robots.txt` generated from `src/pages/robots.txt.ts`
-- sitemap generation enabled via `@astrojs/sitemap`
+- sitemap generation enabled via `@astrojs/sitemap`, filtered to public indexable pages only
 - production social preview image is now the minimal referral card asset at `public/images/social/og-minimal-referral.png`, wired through `src/config/site-metadata.ts`
 - full favicon/app icon set is now wired globally from the selected Base B asset (`favicon.svg`, `favicon.ico`, `favicon-16x16.png`, `favicon-32x32.png`, `apple-touch-icon.png`, `android-chrome-192x192.png`, `android-chrome-512x512.png`, `site.webmanifest`, `browserconfig.xml`)
 
@@ -246,7 +248,7 @@ Launch-day SEO checks:
 
 ## Legal page
 
-An initial English privacy-first legal page lives at:
+A Greek-first privacy/legal notice lives at:
 
 - `/legal/`
 
@@ -258,6 +260,8 @@ It covers:
 - cookies / analytics status
 - basic copyright / credits notice
 
+The copy is intentionally conservative and should receive final legal approval before being treated as formal legal advice.
+
 ## Key files
 
 - `src/config/site-branding.ts`: frozen Terracotta Calm + Nunito brand/typography configuration
@@ -266,7 +270,7 @@ It covers:
 - `public/images/social/og-b3-terracotta.png`: previous terracotta Open Graph/Twitter fallback social preview asset, kept as a reference
 - `public/site.webmanifest`: PWA/app icon metadata
 - `src/config/contact.ts`: shared contact email extraction and Form.taxi endpoint wiring
-- `src/config/legal-content.ts`: English privacy/legal copy source
+- `src/config/legal-content.ts`: Greek privacy/legal copy source
 - `src/content/therapy-practice-website-content.ts`: typed adapter that composes the split CMS documents for the homepage sections and metadata
 - `src/content/site-content-schema.ts`: shared Zod schemas for the editable CMS documents
 - `src/content.config.ts`: Astro content-collection definitions

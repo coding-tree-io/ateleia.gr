@@ -1,5 +1,5 @@
 ---
-import { Mail, Phone, type LucideIcon } from 'lucide-react';
+import { Mail, MapPin, Phone, type LucideIcon } from 'lucide-react';
 
 import { BotanicalCluster } from '@/components/decorative/ArtShapes';
 import { GuidingLabyrinthIllustration } from '@/components/decorative/GuidingLabyrinthIllustration';
@@ -23,6 +23,7 @@ function selectContactChannelIconByHref(contactChannelHref: string): LucideIcon 
 const {
   title,
   description,
+  serviceArea,
   contactItems,
   availabilityNote,
   privacyNote,
@@ -78,6 +79,13 @@ const contactFormSubject = getContactFormSubject();
               );
             })
           }
+        </div>
+
+        <div class="therapy-contact-channel-link mt-5" aria-label="Περιοχή εξυπηρέτησης">
+          <div class="therapy-contact-channel-icon-shell">
+            <MapPin className="size-5" aria-hidden="true" />
+          </div>
+          <span class="font-semibold">Περιοχή εξυπηρέτησης: {serviceArea}</span>
         </div>
 
         <p class="therapy-section-supporting-copy mt-8 text-xs">

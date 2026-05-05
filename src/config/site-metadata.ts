@@ -14,6 +14,8 @@ const canonicalOrigin = 'https://ateleiatherapy.gr';
 const projectBasePathname = new URL(canonicalOrigin).pathname.replace(/\/+$/, '');
 
 const socialProfileUrls: SocialProfileUrl[] = [];
+const localBusinessStructuredDataId = `${canonicalOrigin}/#local-business`;
+const therapistPersonStructuredDataId = `${canonicalOrigin}/#person-chrysoula-plakioti`;
 
 function normalizeStructuredDataEmail(emailAddress: string | undefined): string | undefined {
   if (!emailAddress) {
@@ -57,6 +59,14 @@ export const therapyPracticeSiteMetadata = {
     ),
     logoRelativePath: therapyPracticeSiteBranding.projectPaths.logoImageRelativePath,
     sameAs: socialProfileUrls.map((socialProfileUrl) => socialProfileUrl.href),
+  },
+  localSeo: {
+    serviceArea: therapyPracticeWebsiteContent.contact.serviceArea,
+    addressLocality: 'Αθήνα',
+    addressCountry: 'GR',
+    businessType: 'LocalBusiness',
+    providerName: 'Χρυσούλα Πλακιώτη',
+    providerJobTitle: 'Εικαστική ψυχοθεραπεύτρια',
   },
   themeColorHex: therapyPracticeSiteBranding.visualIdentity.themeColorHex,
 } as const;
@@ -127,6 +137,96 @@ export function createOrganizationStructuredData(): StructuredDataValue {
   };
 }
 
+function createCanonicalAssetUrl(assetPath: string | undefined): string {
+  if (!assetPath) {
+    return createCanonicalUrl(therapyPracticeSiteMetadata.openGraph.fallbackImageRelativePath);
+  }
+
+  if (/^https?:\/\//i.test(assetPath)) {
+    return assetPath;
+  }
+
+  return createCanonicalUrl(assetPath.replace(/^\/+/, ''));
+}
+
+export function createLocalBusinessStructuredData(): StructuredDataValue {
+  const { organization, localSeo } = therapyPracticeSiteMetadata;
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': localSeo.businessType,
+    '@id': localBusinessStructuredDataId,
+    name: organization.name,
+    alternateName: 'Ateleia',
+    url: createCanonicalUrl(),
+    image: createCanonicalUrl(therapyPracticeSiteMetadata.openGraph.fallbackImageRelativePath),
+    logo: createCanonicalUrl(organization.logoRelativePath),
+    ...(organization.email ? { email: organization.email } : {}),
+    ...(organization.telephone ? { telephone: organization.telephone } : {}),
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: localSeo.addressLocality,
+      addressCountry: localSeo.addressCountry,
+    },
+    areaServed: {
+      '@type': 'AdministrativeArea',
+      name: localSeo.serviceArea,
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: localSeo.addressLocality,
+        addressCountry: localSeo.addressCountry,
+      },
+    },
+    founder: {
+      '@id': therapistPersonStructuredDataId,
+    },
+    employee: {
+      '@id': therapistPersonStructuredDataId,
+    },
+    ...(organization.sameAs.length > 0 ? { sameAs: organization.sameAs } : {}),
+  };
+}
+
+export function createPersonStructuredData(): StructuredDataValue {
+  const { localSeo } = therapyPracticeSiteMetadata;
+  const portraitSource = therapyPracticeWebsiteContent.about.portrait?.src;
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    '@id': therapistPersonStructuredDataId,
+    name: localSeo.providerName,
+    jobTitle: localSeo.providerJobTitle,
+    worksFor: {
+      '@id': localBusinessStructuredDataId,
+    },
+    url: createCanonicalUrl(),
+    image: createCanonicalAssetUrl(portraitSource),
+    knowsAbout: [
+      'Εικαστική ψυχοθεραπεία',
+      'Ψυχοθεραπεία μέσω τέχνης',
+      'Δημιουργική έκφραση',
+      'Αυτογνωσία',
+    ],
+  };
+}
+
+export function createFaqStructuredData(): StructuredDataValue {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    '@id': `${createCanonicalUrl()}#faq`,
+    mainEntity: therapyPracticeWebsiteContent.frequentlyAskedQuestions.map((faq) => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faq.answer,
+      },
+    })),
+  };
+}
+
 export function createWebSiteStructuredData(): StructuredDataValue {
   return {
     '@context': 'https://schema.org',
@@ -135,5 +235,8 @@ export function createWebSiteStructuredData(): StructuredDataValue {
     name: therapyPracticeSiteMetadata.siteName,
     url: createCanonicalUrl(),
     inLanguage: therapyPracticeSiteMetadata.defaultLanguage,
+    publisher: {
+      '@id': localBusinessStructuredDataId,
+    },
   };
 }

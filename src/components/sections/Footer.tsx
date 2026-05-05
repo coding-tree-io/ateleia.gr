@@ -8,7 +8,7 @@ export function Footer() {
   const logoImageUrl = createLogoImageUrl();
   const {
     brandName,
-    contact: { contactItems },
+    contact: { contactItems, serviceArea },
     navigationItems,
     footer: { creditsLabel, legalLabel, rightsReserved },
   } = therapyPracticeWebsiteContent;
@@ -58,6 +58,8 @@ export function Footer() {
 
         <div className="mx-auto mt-2.5 flex w-full max-w-6xl flex-col items-center gap-0.5 border-t border-border/45 pt-1.5 text-center">
           <address className="not-italic text-xs text-muted-foreground">
+            <span>Περιοχή εξυπηρέτησης: {serviceArea}</span>
+            <span> · </span>
             {contactItems.map((contactItem, index) => (
               <span key={contactItem.href}>
                 <a className="transition-colors hover:text-foreground" href={contactItem.href}>
