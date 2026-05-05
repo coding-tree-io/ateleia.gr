@@ -100,7 +100,7 @@ $env:BASE_URL="https://ateleiatherapy.gr/"
 npm --prefix .codex-pipeline run verify:all
 ```
 
-For local dev verification, point `BASE_URL` to your local URL (for example `http://localhost:4321/ateleia.gr/`).
+For local dev verification, point `BASE_URL` to your local URL (for example `http://localhost:4321/`).
 
 ## SVG normalization workflow (Noun Project assets)
 
@@ -152,23 +152,19 @@ A Lighthouse-backed mobile budget is enforced locally and in CI:
 
 ## GitHub Pages configuration
 
-`astro.config.mjs` is configured for GitHub Pages deployment while the custom domain DNS is pending:
+`astro.config.mjs` is configured for GitHub Pages deployment on the custom domain:
 
 - `site: "https://ateleiatherapy.gr"`
-- `base: "/ateleia.gr/"`
+- `base: "/"`
 - `output: "static"`
 
-Deployment workflow on `main` publishes the homepage artifact from `dist`. Until `ateleiatherapy.gr` resolves and GitHub Pages HTTPS is fully active, the current working deployment URL remains:
-
-- `https://coding-tree-io.github.io/ateleia.gr/`
-
-The intended custom domain remains:
+Deployment workflow on `main` publishes the homepage artifact from `dist`. The canonical production URL is:
 
 - `https://ateleiatherapy.gr/`
 
-The CMS admin is served from the same deployment at the matching active host:
+The CMS admin is served from the same deployment:
 
-- `https://coding-tree-io.github.io/ateleia.gr/admin/`
+- `https://ateleiatherapy.gr/admin/`
 
 ### GitHub Actions caching
 
