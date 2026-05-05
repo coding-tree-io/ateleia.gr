@@ -235,7 +235,7 @@ Current strategy:
 - canonical, Open Graph, Twitter metadata, and JSON-LD emitted from `PublicDocumentLayout.astro`
 - `robots.txt` generated from `src/pages/robots.txt.ts`
 - sitemap generation enabled via `@astrojs/sitemap`
-- production social preview image is now the B3 terracotta asset at `public/images/social/og-b3-terracotta.png`, wired through `src/config/site-metadata.ts`
+- production social preview image is now the minimal referral card asset at `public/images/social/og-minimal-referral.png`, wired through `src/config/site-metadata.ts`
 - full favicon/app icon set is now wired globally from the selected Base B asset (`favicon.svg`, `favicon.ico`, `favicon-16x16.png`, `favicon-32x32.png`, `apple-touch-icon.png`, `android-chrome-192x192.png`, `android-chrome-512x512.png`, `site.webmanifest`, `browserconfig.xml`)
 
 Launch-day SEO checks:
@@ -262,7 +262,8 @@ It covers:
 
 - `src/config/site-branding.ts`: frozen Terracotta Calm + Nunito brand/typography configuration
 - `src/config/site-metadata.ts`: canonical origin, robots mode, OG defaults, structured-data helpers
-- `public/images/social/og-b3-terracotta.png`: current Open Graph/Twitter fallback social preview asset
+- `public/images/social/og-minimal-referral.png`: current Open Graph/Twitter fallback social preview asset
+- `public/images/social/og-b3-terracotta.png`: previous terracotta Open Graph/Twitter fallback social preview asset, kept as a reference
 - `public/site.webmanifest`: PWA/app icon metadata
 - `src/config/contact.ts`: shared contact email extraction and Form.taxi endpoint wiring
 - `src/config/legal-content.ts`: English privacy/legal copy source

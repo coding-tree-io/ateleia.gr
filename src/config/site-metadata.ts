@@ -42,9 +42,9 @@ export const therapyPracticeSiteMetadata = {
     isTemporaryNoindexEnabled: false,
   },
   openGraph: {
-    fallbackImageRelativePath: 'images/social/og-b3-terracotta.png',
+    fallbackImageRelativePath: 'images/social/og-minimal-referral.png',
     fallbackImageAlt:
-      'Ateleia Art Therapy social preview image in terracotta editorial style.',
+      'Minimal Ateleia social preview card with logo and Greek share copy.',
   },
   legalPageRelativePath: 'legal/',
   organization: {

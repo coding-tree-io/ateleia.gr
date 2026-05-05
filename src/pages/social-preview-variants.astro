@@ -1,0 +1,540 @@
+---
+import { createProjectRelativeUrl } from '@/config/site-branding';
+import { createCanonicalUrl } from '@/config/site-metadata';
+import { therapyPracticeWebsiteContent } from '@/content/therapy-practice-website-content';
+import PublicDocumentLayout from '@/layouts/PublicDocumentLayout.astro';
+
+const pageTitle = 'Social Preview Variants | Ateleia';
+const pageDescription = 'Local review page for choosing the Ateleia social sharing preview direction.';
+
+const { seo } = therapyPracticeWebsiteContent;
+const shareUrl = createCanonicalUrl();
+const shareTitle = seo.openGraphTitle;
+const shareDescription = seo.openGraphDescription;
+
+const currentOgImageUrl = createProjectRelativeUrl('images/social/og-b3-terracotta.png');
+const therapistPortraitUrl = createProjectRelativeUrl('images/uploads/φωτο.jpeg');
+const logoUrl = createProjectRelativeUrl('images/client-review/logo.png');
+
+const variants = [
+  {
+    option: '01',
+    name: 'Current Terracotta + Logo + Text',
+    intent: 'Closest to the current production image, now with the real title and description embedded.',
+    tradeoff: 'Elegant and familiar, but still more brand-led than personal.',
+    className: 'social-preview-card--current',
+  },
+  {
+    option: '02',
+    name: 'Portrait Editorial + Current Text',
+    intent: 'The most human version: therapist photo, logo, and current link copy in one calm editorial card.',
+    tradeoff: 'Strong trust cue, but the portrait becomes the image people see everywhere.',
+    className: 'social-preview-card--portrait',
+  },
+  {
+    option: '03',
+    name: 'Logo On Terracotta Paper',
+    intent: 'A brand-safe, text-forward card with no portrait and no favicon mark.',
+    tradeoff: 'Very professional and durable, but less emotional than the portrait options.',
+    className: 'social-preview-card--paper',
+  },
+  {
+    option: '04',
+    name: 'Split Artwork + Portrait Hint',
+    intent: 'Balances the current terracotta artwork with a smaller portrait cue and strong logo-led copy.',
+    tradeoff: 'The most balanced mixed option, but visually denser.',
+    className: 'social-preview-card--split',
+  },
+  {
+    option: '05',
+    name: 'Minimal Referral Card',
+    intent: 'Designed for small chat previews: large title, compact description, logo, and quiet texture.',
+    tradeoff: 'Highly legible, least pictorial.',
+    className: 'social-preview-card--minimal',
+    isSelected: true,
+  },
+];
+---
+
+<PublicDocumentLayout
+  pageTitle={pageTitle}
+  pageDescription={pageDescription}
+  canonicalPath="social-preview-variants/"
+  robots="noindex, nofollow"
+  includeCodingTreeAttributionScript={false}
+>
+  <main class="social-preview-variants-page">
+    <section class="social-preview-variants-intro" aria-labelledby="social-preview-variants-title">
+      <p class="social-preview-variants-label">Local decision board</p>
+      <div class="social-preview-variants-heading-row">
+        <h1 id="social-preview-variants-title">Social preview directions</h1>
+        <p>
+          Five mixed options using the current link text, the Ateleia logo, and existing project images.
+          Option 05 is the selected production direction; the other cards remain here as review references.
+        </p>
+      </div>
+    </section>
+
+    <section class="social-preview-copy-reference" aria-labelledby="social-preview-copy-title">
+      <h2 id="social-preview-copy-title">Current link text</h2>
+      <dl>
+        <div>
+          <dt>Title</dt>
+          <dd>{shareTitle}</dd>
+        </div>
+        <div>
+          <dt>Description</dt>
+          <dd>{shareDescription}</dd>
+        </div>
+        <div>
+          <dt>URL</dt>
+          <dd>{shareUrl}</dd>
+        </div>
+      </dl>
+    </section>
+
+    <section class="social-preview-variant-list" aria-label="Social preview image options">
+      {
+        variants.map((variant) => (
+          <article class:list={['social-preview-variant', variant.isSelected && 'social-preview-variant--selected']}>
+            <div class="social-preview-variant-meta">
+              <p class="social-preview-variant-number">Option {variant.option}</p>
+              <h2>{variant.name}</h2>
+              {variant.isSelected ? <p class="social-preview-selected-label">Selected production direction</p> : null}
+              <p>{variant.intent}</p>
+              <p>{variant.tradeoff}</p>
+            </div>
+
+            <div class="social-preview-stage" aria-label={`${variant.name} 1200 by 630 preview`}>
+              <div class={`social-preview-card ${variant.className}`}>
+                {variant.option === '01' || variant.option === '04' ? (
+                  <img
+                    class="social-preview-card__artwork"
+                    src={currentOgImageUrl}
+                    alt=""
+                    width="1200"
+                    height="630"
+                    loading="lazy"
+                  />
+                ) : null}
+
+                {variant.option === '02' || variant.option === '04' ? (
+                  <div class="social-preview-card__portrait-frame" aria-hidden={variant.option === '04'}>
+                    <img
+                      src={therapistPortraitUrl}
+                      alt={variant.option === '02' ? 'Portrait of the therapist used for preview exploration' : ''}
+                      width="620"
+                      height="760"
+                      loading="lazy"
+                    />
+                  </div>
+                ) : null}
+
+                <div class="social-preview-card__copy">
+                  <img class="social-preview-card__logo" src={logoUrl} alt="Ατέλεια" width="160" height="92" loading="lazy" />
+                  <p class="social-preview-card__title">{shareTitle}</p>
+                  <p class="social-preview-card__description">{shareDescription}</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="social-preview-link-mock" aria-label="Approximate social link card text">
+              <div class="social-preview-link-mock__image" aria-hidden="true">
+                {variant.option}
+              </div>
+              <div>
+                <p>{shareUrl}</p>
+                <h3>{shareTitle}</h3>
+                <span>{shareDescription}</span>
+              </div>
+            </div>
+          </article>
+        ))
+      }
+    </section>
+  </main>
+</PublicDocumentLayout>
+
+<style>
+  .social-preview-variants-page {
+    min-height: 100vh;
+    background:
+      radial-gradient(circle at 12% 4%, rgba(199, 57, 46, 0.14), transparent 30rem),
+      linear-gradient(180deg, #fbf3ec 0%, #f6eadf 44%, #efe1d5 100%);
+    color: #3d3534;
+    padding: clamp(2rem, 5vw, 4.5rem);
+  }
+
+  .social-preview-variants-intro,
+  .social-preview-copy-reference,
+  .social-preview-variant {
+    margin-inline: auto;
+    max-width: 86rem;
+  }
+
+  .social-preview-variants-intro {
+    display: grid;
+    gap: 1rem;
+    padding-block: 1rem 2.5rem;
+  }
+
+  .social-preview-variants-label,
+  .social-preview-variant-number,
+  .social-preview-copy-reference dt {
+    color: #8d4d43;
+    font-size: 0.76rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .social-preview-variants-heading-row {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .social-preview-variants-heading-row h1 {
+    max-width: 13ch;
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: clamp(3.2rem, 9vw, 7.2rem);
+    font-weight: 600;
+    letter-spacing: -0.055em;
+    line-height: 0.88;
+  }
+
+  .social-preview-variants-heading-row p {
+    max-width: 48rem;
+    color: #5f5250;
+    font-size: clamp(1rem, 1.5vw, 1.2rem);
+    line-height: 1.7;
+  }
+
+  .social-preview-copy-reference {
+    border: 1px solid rgba(61, 53, 52, 0.14);
+    background: rgba(255, 251, 246, 0.64);
+    padding: clamp(1rem, 2vw, 1.5rem);
+  }
+
+  .social-preview-copy-reference h2,
+  .social-preview-variant-meta h2 {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: clamp(1.9rem, 3vw, 3rem);
+    font-weight: 600;
+    letter-spacing: -0.035em;
+  }
+
+  .social-preview-copy-reference dl {
+    display: grid;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .social-preview-copy-reference div {
+    display: grid;
+    gap: 0.25rem;
+  }
+
+  .social-preview-copy-reference dd {
+    color: #4d4240;
+    font-size: 1rem;
+    line-height: 1.55;
+  }
+
+  .social-preview-variant-list {
+    display: grid;
+    gap: clamp(2rem, 5vw, 4rem);
+    margin-top: clamp(2rem, 5vw, 4rem);
+  }
+
+  .social-preview-variant {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .social-preview-variant--selected {
+    border: 1px solid rgba(199, 57, 46, 0.26);
+    background: rgba(255, 251, 246, 0.38);
+    padding: clamp(1rem, 2vw, 1.5rem);
+  }
+
+  .social-preview-variant-meta {
+    display: grid;
+    gap: 0.45rem;
+    max-width: 52rem;
+  }
+
+  .social-preview-selected-label {
+    width: fit-content;
+    border: 1px solid rgba(199, 57, 46, 0.22);
+    background: rgba(199, 57, 46, 0.1);
+    color: #7f342d;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    line-height: 1;
+    padding: 0.5rem 0.65rem;
+    text-transform: uppercase;
+  }
+
+  .social-preview-variant-meta p:not(.social-preview-variant-number) {
+    color: #5f5250;
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  .social-preview-stage {
+    overflow: auto;
+    border: 1px solid rgba(61, 53, 52, 0.18);
+    background:
+      linear-gradient(45deg, rgba(61, 53, 52, 0.055) 25%, transparent 25%),
+      linear-gradient(-45deg, rgba(61, 53, 52, 0.055) 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, rgba(61, 53, 52, 0.055) 75%),
+      linear-gradient(-45deg, transparent 75%, rgba(61, 53, 52, 0.055) 75%);
+    background-position:
+      0 0,
+      0 12px,
+      12px -12px,
+      -12px 0;
+    background-size: 24px 24px;
+    padding: clamp(0.75rem, 2vw, 1.25rem);
+  }
+
+  .social-preview-card {
+    position: relative;
+    width: min(1200px, 100%);
+    aspect-ratio: 1200 / 630;
+    min-width: min(100%, 42rem);
+    overflow: hidden;
+    background: #f7eadf;
+    isolation: isolate;
+  }
+
+  .social-preview-card::after {
+    content: "";
+    pointer-events: none;
+    position: absolute;
+    inset: 6%;
+    z-index: 3;
+    border: 1px solid rgba(61, 53, 52, 0.14);
+  }
+
+  .social-preview-card__artwork,
+  .social-preview-card__portrait-frame img {
+    display: block;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+  }
+
+  .social-preview-card__logo {
+    display: block;
+    height: auto;
+    margin-bottom: clamp(1rem, 2vw, 2rem);
+    object-fit: contain;
+    width: clamp(4.4rem, 9vw, 7.6rem);
+  }
+
+  .social-preview-card__copy {
+    position: absolute;
+    z-index: 4;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .social-preview-card__title {
+    color: #3d3534;
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: clamp(2.15rem, 5.8vw, 5.7rem);
+    font-weight: 600;
+    letter-spacing: -0.055em;
+    line-height: 0.9;
+  }
+
+  .social-preview-card__description {
+    color: #5d4b47;
+    font-size: clamp(0.78rem, 1.55vw, 1.46rem);
+    font-weight: 650;
+    line-height: 1.32;
+    margin-top: clamp(0.8rem, 1.8vw, 1.7rem);
+    max-width: 34em;
+  }
+
+  .social-preview-card--current {
+    background: #c7392e;
+  }
+
+  .social-preview-card--current .social-preview-card__artwork {
+    opacity: 0.92;
+  }
+
+  .social-preview-card--current::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background:
+      linear-gradient(90deg, rgba(251, 243, 236, 0.96) 0%, rgba(251, 243, 236, 0.9) 42%, rgba(251, 243, 236, 0.08) 76%),
+      radial-gradient(circle at 76% 24%, rgba(61, 53, 52, 0.22), transparent 24rem);
+  }
+
+  .social-preview-card--current .social-preview-card__copy {
+    inset: 9% auto 9% 8%;
+    width: 51%;
+  }
+
+  .social-preview-card--portrait {
+    display: grid;
+    grid-template-columns: 0.54fr 0.46fr;
+    background:
+      radial-gradient(circle at 14% 18%, rgba(224, 201, 135, 0.52), transparent 17rem),
+      linear-gradient(135deg, #f8eee4 0%, #e6cbbd 100%);
+  }
+
+  .social-preview-card--portrait .social-preview-card__copy {
+    inset: 8% auto 8% 7.2%;
+    width: 47%;
+  }
+
+  .social-preview-card--portrait .social-preview-card__portrait-frame {
+    grid-column: 2;
+    min-width: 0;
+  }
+
+  .social-preview-card--portrait .social-preview-card__portrait-frame img {
+    object-position: 50% 34%;
+  }
+
+  .social-preview-card--paper {
+    background:
+      radial-gradient(circle at 10% 18%, rgba(199, 57, 46, 0.15), transparent 18rem),
+      radial-gradient(circle at 88% 78%, rgba(92, 122, 130, 0.16), transparent 20rem),
+      linear-gradient(135deg, #f8eee5 0%, #e2c4b4 100%);
+  }
+
+  .social-preview-card--paper::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(90deg, rgba(199, 57, 46, 0.08) 1px, transparent 1px),
+      linear-gradient(0deg, rgba(61, 53, 52, 0.05) 1px, transparent 1px);
+    background-size: 54px 54px;
+    opacity: 0.48;
+  }
+
+  .social-preview-card--paper .social-preview-card__copy {
+    align-items: center;
+    inset: 10% 10%;
+    text-align: center;
+  }
+
+  .social-preview-card--paper .social-preview-card__description {
+    max-width: 38em;
+  }
+
+  .social-preview-card--split {
+    background: #f8eee4;
+  }
+
+  .social-preview-card--split .social-preview-card__artwork {
+    position: absolute;
+    inset: 0;
+    opacity: 0.34;
+  }
+
+  .social-preview-card--split .social-preview-card__portrait-frame {
+    position: absolute;
+    right: 6.8%;
+    top: 12%;
+    z-index: 2;
+    width: 27%;
+    aspect-ratio: 0.76;
+    overflow: hidden;
+    border: 10px solid rgba(251, 243, 236, 0.78);
+  }
+
+  .social-preview-card--split .social-preview-card__portrait-frame img {
+    object-position: 50% 34%;
+  }
+
+  .social-preview-card--split .social-preview-card__copy {
+    inset: 9% auto 9% 7.4%;
+    width: 53%;
+  }
+
+  .social-preview-card--minimal {
+    background:
+      radial-gradient(circle at 88% 14%, rgba(199, 57, 46, 0.2), transparent 17rem),
+      linear-gradient(135deg, #fbf3ec 0%, #f0d8c8 100%);
+  }
+
+  .social-preview-card--minimal::before {
+    content: "";
+    position: absolute;
+    inset: auto -8% -42% 45%;
+    height: 76%;
+    rotate: -8deg;
+    background: rgba(199, 57, 46, 0.13);
+  }
+
+  .social-preview-card--minimal .social-preview-card__copy {
+    inset: 10% 8%;
+    width: 62%;
+  }
+
+  .social-preview-link-mock {
+    display: grid;
+    grid-template-columns: 5.5rem 1fr;
+    gap: 1rem;
+    border: 1px solid rgba(61, 53, 52, 0.14);
+    background: rgba(255, 251, 246, 0.7);
+    padding: 0.9rem;
+  }
+
+  .social-preview-link-mock__image {
+    display: grid;
+    min-height: 5.5rem;
+    place-items: center;
+    background: #c7392e;
+    color: #fbf3ec;
+    font-weight: 800;
+  }
+
+  .social-preview-link-mock p {
+    color: #8d4d43;
+    font-size: 0.76rem;
+    font-weight: 800;
+    margin-bottom: 0.28rem;
+    text-transform: uppercase;
+  }
+
+  .social-preview-link-mock h3 {
+    color: #3d3534;
+    font-size: 1.05rem;
+    font-weight: 800;
+    line-height: 1.2;
+  }
+
+  .social-preview-link-mock span {
+    color: #5f5250;
+    display: block;
+    font-size: 0.92rem;
+    line-height: 1.45;
+    margin-top: 0.35rem;
+  }
+
+  @media (max-width: 720px) {
+    .social-preview-variants-page {
+      padding: 1rem;
+    }
+
+    .social-preview-link-mock {
+      grid-template-columns: 1fr;
+    }
+
+    .social-preview-card {
+      min-width: 100%;
+    }
+  }
+</style>

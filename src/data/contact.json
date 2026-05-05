@@ -5,15 +5,15 @@
   "availabilityNote": "Συνήθως απαντώ εντός 24 ωρών τις εργάσιμες ημέρες.",
   "formLabels": {
     "name": "Ονοματεπώνυμο",
-    "email": "chrysa.plakioti@gmail.com",
+    "email": "Email",
     "message": "Μήνυμα",
     "consent": "Συμφωνώ να χρησιμοποιηθούν τα στοιχεία μου αποκλειστικά για επικοινωνία.",
     "submit": "Αποστολή μηνύματος",
     "submitting": "Αποστολή..."
   },
   "formPlaceholders": {
-    "name": "Χρυσούλα Πλακιώτη",
-    "email": "chrysa.plakioti@gmail.com",
+    "name": "Το ονοματεπώνυμό σας",
+    "email": "name@example.com",
     "message": "Γράψτε το μήνυμά σας..."
   },
   "formMessages": {
@@ -32,7 +32,7 @@
     {
       "label": "Τηλέφωνο",
       "value": "+30 6993053589",
-      "href": "tel:+30XXXXXXXXXX"
+      "href": "tel:+306993053589"
     }
   ]
 }

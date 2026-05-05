@@ -8,6 +8,7 @@ export function Footer() {
   const logoImageUrl = createLogoImageUrl();
   const {
     brandName,
+    contact: { contactItems },
     navigationItems,
     footer: { creditsLabel, legalLabel, rightsReserved },
   } = therapyPracticeWebsiteContent;
@@ -56,6 +57,17 @@ export function Footer() {
         </div>
 
         <div className="mx-auto mt-2.5 flex w-full max-w-6xl flex-col items-center gap-0.5 border-t border-border/45 pt-1.5 text-center">
+          <address className="not-italic text-xs text-muted-foreground">
+            {contactItems.map((contactItem, index) => (
+              <span key={contactItem.href}>
+                <a className="transition-colors hover:text-foreground" href={contactItem.href}>
+                  {contactItem.value}
+                </a>
+                {index < contactItems.length - 1 ? ' · ' : ''}
+              </span>
+            ))}
+          </address>
+
           <p className="text-sm text-muted-foreground">© {currentYear}. {rightsReserved}</p>
 
           <div className="flex w-full justify-center">
