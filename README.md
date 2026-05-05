@@ -100,7 +100,7 @@ $env:BASE_URL="https://ateleiatherapy.gr/"
 npm --prefix .codex-pipeline run verify:all
 ```
 
-For local dev verification, point `BASE_URL` to your local URL (for example `http://localhost:4321/`).
+For local dev verification, point `BASE_URL` to your local URL (for example `http://localhost:4321/ateleia.gr/`).
 
 ## SVG normalization workflow (Noun Project assets)
 
@@ -152,19 +152,33 @@ A Lighthouse-backed mobile budget is enforced locally and in CI:
 
 ## GitHub Pages configuration
 
-`astro.config.mjs` is configured for GitHub Pages deployment on the custom root domain:
+`astro.config.mjs` is configured for GitHub Pages deployment while the custom domain DNS is pending:
 
 - `site: "https://ateleiatherapy.gr"`
-- `base: "/"`
+- `base: "/ateleia.gr/"`
 - `output: "static"`
 
-Deployment workflow on `main` publishes the homepage artifact from `dist` to:
+Deployment workflow on `main` publishes the homepage artifact from `dist`. Until `ateleiatherapy.gr` resolves and GitHub Pages HTTPS is fully active, the current working deployment URL remains:
+
+- `https://coding-tree-io.github.io/ateleia.gr/`
+
+The intended custom domain remains:
 
 - `https://ateleiatherapy.gr/`
 
-The CMS admin is served from the same deployment at:
+The CMS admin is served from the same deployment at the matching active host:
 
-- `https://ateleiatherapy.gr/admin/`
+- `https://coding-tree-io.github.io/ateleia.gr/admin/`
+
+### GitHub Actions caching
+
+The Pages workflow intentionally caches generated tooling state, not committed build output:
+
+- pnpm package store: handled by `actions/setup-node` with `cache: pnpm`
+- Lighthouse npm CLI downloads: cached under `~/.npm` with keys tied to the package manifests and performance-budget script/config
+- Astro/Vite generated state: cached for `.astro`, `node_modules/.astro`, and `node_modules/.vite`
+
+The workflow does not cache `node_modules`, `dist`, Playwright browsers, Storybook output, or `.codex-pipeline` artifacts. `dist` is always rebuilt fresh and uploaded as the GitHub Pages artifact.
 
 ## Decap CMS
 

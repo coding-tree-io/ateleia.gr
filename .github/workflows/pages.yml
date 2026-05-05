@@ -50,9 +50,21 @@ jobs:
         uses: actions/cache@v5.0.5
         with:
           path: ~/.npm
-          key: ${{ runner.os }}-npm-${{ hashFiles('package.json') }}
+          key: ${{ runner.os }}-npm-lighthouse-${{ hashFiles('package.json', 'pnpm-lock.yaml', 'scripts/check-lighthouse-budget.mjs', 'performance-budget.json') }}
           restore-keys: |
+            ${{ runner.os }}-npm-lighthouse-
             ${{ runner.os }}-npm-
+
+      - name: Cache Astro and Vite build state
+        uses: actions/cache@v5.0.5
+        with:
+          path: |
+            .astro
+            node_modules/.astro
+            node_modules/.vite
+          key: ${{ runner.os }}-astro-vite-${{ hashFiles('package.json', 'pnpm-lock.yaml', 'astro.config.mjs', 'src/content.config.ts', 'src/content/**/*.ts', 'src/data/**/*.json', 'src/styles/**/*.css', 'src/components/**/*', 'src/pages/**/*', 'public/**/*') }}
+          restore-keys: |
+            ${{ runner.os }}-astro-vite-
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
