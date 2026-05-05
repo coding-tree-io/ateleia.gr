@@ -21,7 +21,7 @@ jobs:
       PUBLIC_CONTACT_FORM_ENDPOINT: https://form.taxi/s/tb10t33e
       DECAP_REPOSITORY: ${{ vars.DECAP_REPOSITORY }}
       DECAP_BRANCH: ${{ vars.DECAP_BRANCH }}
-      DECAP_SITE_URL: ${{ vars.DECAP_SITE_URL }}
+      DECAP_SITE_URL: https://ateleiatherapy.gr/
       DECAP_LOGO_URL: ${{ vars.DECAP_LOGO_URL }}
       DECAPBRIDGE_BASE_URL: ${{ vars.DECAPBRIDGE_BASE_URL }}
       DECAPBRIDGE_AUTH_ENDPOINT: ${{ vars.DECAPBRIDGE_AUTH_ENDPOINT }}

@@ -41,24 +41,21 @@ export const heroSchema = z.object({
   subheadline: z.string().min(1),
   primaryCta: z.string().min(1),
   secondaryCta: z.string().min(1),
-  spotlightEyebrow: z.string().min(1),
+  spotlight: z.object({
+    eyebrow: z.string().min(1),
+    quote: z.string().min(1),
+    body: z.string().min(1),
+    attribution: z.string().min(1),
+  }),
 });
 
 export const heroCollectionSchema = heroSchema.extend({
   id: z.string().min(1),
 });
 
-const pullQuoteSchema = z.object({
-  text: z.string().min(1),
-  attribution: z.string().min(1),
-});
-
 export const whatIsSchema = z.object({
   title: z.string().min(1),
-  pullQuote: pullQuoteSchema,
   paragraphs: z.array(z.string().min(1)).min(1),
-  practiceNoteLabel: z.string().min(1),
-  practiceNote: z.string().min(1),
 });
 
 export const whatIsCollectionSchema = whatIsSchema.extend({

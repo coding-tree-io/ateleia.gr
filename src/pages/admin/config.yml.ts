@@ -120,7 +120,15 @@ auth:
           - { label: Κείμενο κάτω από τον τίτλο, name: subheadline, widget: text, hint: "Εμφανίζεται: ακριβώς κάτω από τον κύριο τίτλο." }
           - { label: Κείμενο πρώτου κουμπιού, name: primaryCta, widget: string, hint: "Εμφανίζεται: το βασικό κόκκινο κουμπί του hero." }
           - { label: Κείμενο δεύτερου κουμπιού, name: secondaryCta, widget: string, hint: "Εμφανίζεται: το δεύτερο κουμπί δίπλα στο βασικό CTA." }
-          - { label: Μικρή ετικέτα στη δεξιά κάρτα, name: spotlightEyebrow, widget: string, hint: "Εμφανίζεται: μικρό overline στο δεξί πλαίσιο του hero." }`;
+          - label: Δεξιά κάρτα hero
+            name: spotlight
+            widget: object
+            hint: "Εμφανίζεται: ολόκληρη η κάρτα δεξιά από τον κύριο τίτλο στην πρώτη οθόνη."
+            fields:
+              - { label: Μικρή ετικέτα κάρτας, name: eyebrow, widget: string, hint: "Εμφανίζεται: πάνω πάνω στη δεξιά κάρτα του hero." }
+              - { label: Κεντρικό απόσπασμα κάρτας, name: quote, widget: text, hint: "Εμφανίζεται: μεγάλο κείμενο με εισαγωγικά στη δεξιά κάρτα του hero." }
+              - { label: Επεξηγηματικό κείμενο κάρτας, name: body, widget: text, hint: "Εμφανίζεται: κάτω από το απόσπασμα στη δεξιά κάρτα του hero." }
+              - { label: Μικρή υπογραφή κάρτας, name: attribution, widget: string, hint: "Εμφανίζεται: στο κάτω μέρος της δεξιάς κάρτας του hero." }`;
   const whatIsFields = `
       - name: what-is
         label: 02 · Τι είναι
@@ -128,12 +136,6 @@ auth:
         file: src/data/what-is.json
         fields:
           - { label: Τίτλος ενότητας, name: title, widget: string, hint: "Εμφανίζεται: τίτλος της ενότητας αμέσως μετά το hero." }
-          - label: Απόσπασμα που ξεχωρίζει
-            name: pullQuote
-            widget: object
-            fields:
-              - { label: Κείμενο αποσπάσματος, name: text, widget: text, hint: "Εμφανίζεται: σε quote styling στην αριστερή στήλη." }
-              - { label: Μικρή υπογραφή κάτω από το απόσπασμα, name: attribution, widget: string, hint: "Εμφανίζεται: ακριβώς κάτω από το απόσπασμα." }
           - label: Παράγραφοι
             name: paragraphs
             widget: list
@@ -141,9 +143,7 @@ auth:
             collapsed: true
             summary: "{{fields.value}}"
             hint: "Εμφανίζεται: το κύριο κείμενο της ενότητας."
-            field: { label: Παράγραφος, name: value, widget: text }
-          - { label: Μικρή ετικέτα του κάτω πλαισίου, name: practiceNoteLabel, widget: string, hint: "Εμφανίζεται: πριν από το πρακτικό πλαίσιο στο τέλος της ενότητας." }
-          - { label: Κείμενο μέσα στο κάτω πλαίσιο, name: practiceNote, widget: text, hint: "Εμφανίζεται: μέσα στο βοηθητικό πλαίσιο της ενότητας." }`;
+            field: { label: Παράγραφος, name: value, widget: text }`;
   const whoIsItForFields = `
       - name: who-is-it-for
         label: 03 · Σε ποιους απευθύνεται

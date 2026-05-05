@@ -78,7 +78,7 @@ CMS local development on an isolated port:
 corepack pnpm cms:dev
 ```
 
-This starts the Astro dev server on `http://localhost:4322/ateleia.gr/` and the local Decap proxy on `http://127.0.0.1:8082/api/v1`, so the admin works without live login at `http://localhost:4322/ateleia.gr/admin/`.
+This starts the Astro dev server on `http://localhost:4322/` and the local Decap proxy on `http://127.0.0.1:8082/api/v1`, so the admin works without live login at `http://localhost:4322/admin/`.
 The generated admin config uses `backend: proxy` on localhost, so local editing works without DecapBridge. Production builds emit the DecapBridge `git-gateway` config instead.
 
 ## Verification (Required)
@@ -96,11 +96,11 @@ corepack pnpm perf:budget
 ```sh
 npm --prefix .codex-pipeline install
 npm --prefix .codex-pipeline run setup:browsers
-$env:BASE_URL="https://coding-tree-io.github.io/ateleia.gr/"
+$env:BASE_URL="https://ateleiatherapy.gr/"
 npm --prefix .codex-pipeline run verify:all
 ```
 
-For local dev verification, point `BASE_URL` to your local URL (for example `http://localhost:4321/ateleia.gr/`).
+For local dev verification, point `BASE_URL` to your local URL (for example `http://localhost:4321/`).
 
 ## SVG normalization workflow (Noun Project assets)
 
@@ -152,19 +152,19 @@ A Lighthouse-backed mobile budget is enforced locally and in CI:
 
 ## GitHub Pages configuration
 
-`astro.config.mjs` is configured for GitHub project pages deployment:
+`astro.config.mjs` is configured for GitHub Pages deployment on the custom root domain:
 
-- `site: "https://coding-tree-io.github.io"`
-- `base: "/ateleia.gr/"`
+- `site: "https://ateleiatherapy.gr"`
+- `base: "/"`
 - `output: "static"`
 
 Deployment workflow on `main` publishes the homepage artifact from `dist` to:
 
-- `https://coding-tree-io.github.io/ateleia.gr/`
+- `https://ateleiatherapy.gr/`
 
 The CMS admin is served from the same deployment at:
 
-- `https://coding-tree-io.github.io/ateleia.gr/admin/`
+- `https://ateleiatherapy.gr/admin/`
 
 ## Decap CMS
 
@@ -189,8 +189,8 @@ The CMS sidebar is grouped into client-facing editing areas:
 - `Υπηρεσίες & ανακοινώσεις`: service cards, FAQ, and homepage update cards
 - `Επικοινωνία & φόρμα`: contact details plus all visible form copy
 
-- correct GitHub Pages login URL: `https://coding-tree-io.github.io/ateleia.gr/admin/index.html`
-- `site_url` in the generated CMS config intentionally includes `/ateleia.gr/`, because this repo is deployed as a GitHub Pages project site, not a root site
+- correct production login URL: `https://ateleiatherapy.gr/admin/index.html`
+- `site_url` in the generated CMS config should resolve to the custom root domain in production
 
 Optional build-time overrides:
 
@@ -211,7 +211,7 @@ Committed defaults target the current DecapBridge site:
 Remaining DecapBridge dashboard checks:
 
 - confirm Google is the only enabled sign-in provider
-- confirm the DecapBridge site login URL is exactly `https://coding-tree-io.github.io/ateleia.gr/admin/index.html`
+- confirm the DecapBridge site login URL is exactly `https://ateleiatherapy.gr/admin/index.html`
 
 ## SEO and indexing status
 
@@ -221,19 +221,18 @@ The project now has a centralized metadata layer in:
 
 Current strategy:
 
-- temporary `noindex, nofollow` until the final production domain is known
+- production `index, follow` on the custom domain
 - canonical, Open Graph, Twitter metadata, and JSON-LD emitted from `PublicDocumentLayout.astro`
 - `robots.txt` generated from `src/pages/robots.txt.ts`
 - sitemap generation enabled via `@astrojs/sitemap`
 - production social preview image is now the B3 terracotta asset at `public/images/social/og-b3-terracotta.png`, wired through `src/config/site-metadata.ts`
 - full favicon/app icon set is now wired globally from the selected Base B asset (`favicon.svg`, `favicon.ico`, `favicon-16x16.png`, `favicon-32x32.png`, `apple-touch-icon.png`, `android-chrome-192x192.png`, `android-chrome-512x512.png`, `site.webmanifest`, `browserconfig.xml`)
 
-Launch-day SEO switch:
+Launch-day SEO checks:
 
-1. update the canonical origin in `src/config/site-metadata.ts`
-2. switch temporary noindex off in `src/config/site-metadata.ts`
-3. confirm generated `robots.txt`, canonical tags, and sitemap URLs
-4. redeploy
+1. confirm generated `robots.txt`, canonical tags, and sitemap URLs use `https://ateleiatherapy.gr/`
+2. confirm GitHub Pages HTTPS is enforced after certificate provisioning
+3. redeploy after any domain or DNS changes
 
 ## Legal page
 
@@ -254,7 +253,7 @@ It covers:
 - `src/config/site-branding.ts`: frozen Terracotta Calm + Nunito brand/typography configuration
 - `src/config/site-metadata.ts`: canonical origin, robots mode, OG defaults, structured-data helpers
 - `public/images/social/og-b3-terracotta.png`: current Open Graph/Twitter fallback social preview asset
-- `public/site.webmanifest`: PWA/app icon metadata (GitHub Pages scoped)
+- `public/site.webmanifest`: PWA/app icon metadata
 - `src/config/contact.ts`: shared contact email extraction and Form.taxi endpoint wiring
 - `src/config/legal-content.ts`: English privacy/legal copy source
 - `src/content/therapy-practice-website-content.ts`: typed adapter that composes the split CMS documents for the homepage sections and metadata

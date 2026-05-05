@@ -7,8 +7,8 @@ import { defineConfig } from 'astro/config';
 
 // https://astro.build/config
 export default defineConfig({
-	site: 'https://coding-tree-io.github.io',
-	base: '/ateleia.gr/',
+	site: 'https://ateleiatherapy.gr',
+	base: '/',
 	output: 'static',
 	build: {
 		inlineStylesheets: 'always',

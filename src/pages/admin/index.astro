@@ -240,11 +240,6 @@ const projectBaseUrl = createProjectRelativeUrl('');
             }),
             h('section', { className: 'decap-preview__hero', key: 'hero' }, [
               h('div', { className: 'decap-preview__hero-copy', key: 'copy' }, [
-                h(
-                  'p',
-                  { className: 'decap-preview__overline', key: 'eyebrow' },
-                  toUppercaseWithoutGreekTonos(getEntryText(entryData, ['spotlightEyebrow'], 'Therapeutic Atelier')),
-                ),
                 h('h1', { className: 'decap-preview__hero-title', key: 'headline' }, getEntryText(entryData, ['headline'], 'Θεραπεία μέσω τέχνης')),
                 h('p', { className: 'decap-preview__hero-copytext', key: 'subheadline' }, getEntryText(entryData, ['subheadline'], 'Ενας ασφαλής και δημιουργικός χώρος.')),
                 h('div', { className: 'decap-preview__button-row', key: 'actions' }, [
@@ -253,15 +248,17 @@ const projectBaseUrl = createProjectRelativeUrl('');
                 ]),
               ]),
               h('aside', { className: 'decap-preview__hero-panel', key: 'panel' }, [
-                h('p', { className: 'decap-preview__label', key: 'label' }, 'Θεραπευτική αρχή'),
-                h('blockquote', { className: 'decap-preview__quote', key: 'quote' }, `«${getEntryText(entryData, ['subheadline'], 'Ενας ασφαλής και δημιουργικός χώρος.')}»`),
                 h(
-                  'div',
-                  { className: 'decap-preview__meta-row', key: 'meta' },
-                  [
-                    getEntryText(entryData, ['primaryCta'], 'Κλείστε ραντεβού'),
-                    getEntryText(entryData, ['secondaryCta'], 'Στείλτε μήνυμα'),
-                  ].map((value, index) => h('span', { className: 'decap-preview__meta-pill', key: `pill-${index}` }, value)),
+                  'p',
+                  { className: 'decap-preview__label', key: 'label' },
+                  toUppercaseWithoutGreekTonos(getEntryText(entryData, ['spotlight', 'eyebrow'], 'Ψυχοθεραπευτικός χώρος δημιουργίας')),
+                ),
+                h('blockquote', { className: 'decap-preview__quote', key: 'quote' }, `«${getEntryText(entryData, ['spotlight', 'quote'], 'Το κεντρικό απόσπασμα της δεξιάς κάρτας.')}»`),
+                h('p', { className: 'decap-preview__copy decap-preview__copy--tight', key: 'body' }, getEntryText(entryData, ['spotlight', 'body'], 'Το επεξηγηματικό κείμενο της δεξιάς κάρτας.')),
+                h(
+                  'p',
+                  { className: 'decap-preview__label', key: 'attribution' },
+                  toUppercaseWithoutGreekTonos(getEntryText(entryData, ['spotlight', 'attribution'], 'Θεραπευτική αρχή')),
                 ),
               ]),
             ]),
@@ -274,28 +271,10 @@ const projectBaseUrl = createProjectRelativeUrl('');
             h('section', { className: 'decap-preview__section', key: 'section' }, [
               h('p', { className: 'decap-preview__overline', key: 'overline' }, toUppercaseWithoutGreekTonos('Τι είναι')),
               h('h1', { className: 'decap-preview__headline', key: 'title' }, getEntryText(entryData, ['title'], 'Τι είναι η Θεραπεία μέσω τέχνης;')),
-              h('div', { className: 'decap-preview__grid decap-preview__grid--split', key: 'grid' }, [
-                h('article', { className: 'decap-preview__card decap-preview__card--quote', key: 'quote' }, [
-                  h('p', { className: 'decap-preview__quote', key: 'text' }, `«${getEntryText(entryData, ['pullQuote', 'text'], 'Το κείμενο του αποσπάσματος.') }»`),
-                  h(
-                    'p',
-                    { className: 'decap-preview__label', key: 'attribution' },
-                    toUppercaseWithoutGreekTonos(getEntryText(entryData, ['pullQuote', 'attribution'], 'Υπογραφή')),
-                  ),
-                ]),
-                h('div', { className: 'decap-preview__stack', key: 'body' }, [
-                  ...paragraphs.map((paragraph, index) =>
-                    h('p', { className: 'decap-preview__copy', key: `paragraph-${index}` }, toText(paragraph, '')),
-                  ),
-                  h('article', { className: 'decap-preview__soft-card', key: 'note' }, [
-                    h(
-                      'p',
-                      { className: 'decap-preview__label', key: 'note-label' },
-                      toUppercaseWithoutGreekTonos(getEntryText(entryData, ['practiceNoteLabel'], 'Πρακτική σημείωση')),
-                    ),
-                    h('p', { className: 'decap-preview__copy decap-preview__copy--tight', key: 'note-copy' }, getEntryText(entryData, ['practiceNote'], 'Σταθερό θεραπευτικό πλαίσιο και εμπιστευτικότητα.')),
-                  ]),
-                ]),
+              h('div', { className: 'decap-preview__stack', key: 'body' }, [
+                ...paragraphs.map((paragraph, index) =>
+                  h('p', { className: 'decap-preview__copy', key: `paragraph-${index}` }, toText(paragraph, '')),
+                ),
               ]),
             ]),
           ]);

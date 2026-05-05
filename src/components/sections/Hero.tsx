@@ -11,7 +11,7 @@ import { Card } from '@/components/ui/card';
 import { therapyPracticeWebsiteContent } from '@/content/therapy-practice-website-content';
 
 export function Hero() {
-  const { hero, whatIs } = therapyPracticeWebsiteContent;
+  const { hero } = therapyPracticeWebsiteContent;
 
   return (
     <section id="hero" className="therapy-hero-section-shell">
@@ -74,16 +74,16 @@ export function Hero() {
           <Card asChild className="therapy-surface-attention-glow-animation therapy-surface-paper-card rounded-[1.75rem] p-6 md:rounded-[2rem] md:p-10">
             <div>
               <p className="therapy-section-overline tracking-[0.16em] text-[var(--tone-teal)]">
-                {hero.spotlightEyebrow}
+                {hero.spotlight.eyebrow}
               </p>
               <blockquote className="mt-4 font-serif text-[1.85rem] font-semibold leading-tight text-[var(--tone-ink)] md:text-[2.2rem]">
-                «{whatIs.pullQuote.text}»
+                «{hero.spotlight.quote}»
               </blockquote>
               <p className="therapy-section-supporting-copy mt-5">
-                {whatIs.practiceNote}
+                {hero.spotlight.body}
               </p>
               <p className="therapy-section-overline mt-4 text-primary/80">
-                {whatIs.pullQuote.attribution}
+                {hero.spotlight.attribution}
               </p>
             </div>
           </Card>

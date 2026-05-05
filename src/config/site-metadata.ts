@@ -10,9 +10,8 @@ type SocialProfileUrl = {
 
 type StructuredDataValue = Record<string, unknown>;
 
-const temporaryPublicOrigin = 'https://coding-tree-io.github.io';
-const temporaryCanonicalOrigin = `${temporaryPublicOrigin}/ateleia.gr`;
-const projectBasePathname = new URL(temporaryCanonicalOrigin).pathname.replace(/\/+$/, '');
+const canonicalOrigin = 'https://ateleiatherapy.gr';
+const projectBasePathname = new URL(canonicalOrigin).pathname.replace(/\/+$/, '');
 
 const socialProfileUrls: SocialProfileUrl[] = [];
 
@@ -34,13 +33,13 @@ function normalizeStructuredDataTelephone(telephoneNumber: string | undefined): 
 
 export const therapyPracticeSiteMetadata = {
   siteName: therapyPracticeWebsiteContent.brandName,
-  temporaryCanonicalOrigin,
+  canonicalOrigin,
   defaultLocale: 'el_GR',
   defaultLanguage: 'el',
   robots: {
     temporaryNoindexDirective: 'noindex, nofollow',
     launchDirective: 'index, follow',
-    isTemporaryNoindexEnabled: true,
+    isTemporaryNoindexEnabled: false,
   },
   openGraph: {
     fallbackImageRelativePath: 'images/social/og-b3-terracotta.png',
@@ -102,7 +101,7 @@ export function createCanonicalUrl(canonicalPath = ''): string {
   }
 
   const normalizedCanonicalOrigin = normalizeCanonicalOrigin(
-    therapyPracticeSiteMetadata.temporaryCanonicalOrigin
+    therapyPracticeSiteMetadata.canonicalOrigin
   );
   const normalizedCanonicalPath = normalizeCanonicalPath(canonicalPath);
 
