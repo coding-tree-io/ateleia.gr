@@ -10,10 +10,7 @@ import { Services } from '@/components/sections/Services';
 import { WhatIs } from '@/components/sections/WhatIs';
 import { WhoIsItFor } from '@/components/sections/WhoIsItFor';
 import {
-  createFaqStructuredData,
-  createLocalBusinessStructuredData,
-  createPersonStructuredData,
-  createWebSiteStructuredData,
+  createHomepageStructuredData,
   getRobotsDirective,
 } from '@/config/site-metadata';
 import { getAnnouncements } from '@/content/announcements';
@@ -28,12 +25,7 @@ const sectionDividerInvertedClassName =
 const announcements = (await getAnnouncements()).slice(0, 2);
 const hasAnnouncements = announcements.length > 0;
 const services = await getServices();
-const structuredData = [
-  createWebSiteStructuredData(),
-  createLocalBusinessStructuredData(),
-  createPersonStructuredData(),
-  createFaqStructuredData(),
-];
+const structuredData = createHomepageStructuredData();
 const { seo } = therapyPracticeWebsiteContent;
 ---
 

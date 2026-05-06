@@ -9,11 +9,15 @@ type SocialProfileUrl = {
 };
 
 type StructuredDataValue = Record<string, unknown>;
+type StructuredDataGraphValue = StructuredDataValue & {
+  '@graph': StructuredDataValue[];
+};
 
 const canonicalOrigin = 'https://ateleiatherapy.gr';
 const projectBasePathname = new URL(canonicalOrigin).pathname.replace(/\/+$/, '');
 
 const socialProfileUrls: SocialProfileUrl[] = [];
+const organizationStructuredDataId = `${canonicalOrigin}/#organization`;
 const localBusinessStructuredDataId = `${canonicalOrigin}/#local-business`;
 const therapistPersonStructuredDataId = `${canonicalOrigin}/#person-chrysoula-plakioti`;
 
@@ -51,6 +55,8 @@ export const therapyPracticeSiteMetadata = {
   legalPageRelativePath: 'legal/',
   organization: {
     name: therapyPracticeWebsiteContent.brandName,
+    alternateName: ['Ateleia', 'Ατέλεια Art Therapy'],
+    description: therapyPracticeWebsiteContent.seo.pageDescription,
     email: normalizeStructuredDataEmail(getPrimaryContactEmail()),
     telephone: normalizeStructuredDataTelephone(
       therapyPracticeWebsiteContent.contact.contactItems.find((contactItem) =>
@@ -67,6 +73,12 @@ export const therapyPracticeSiteMetadata = {
     businessType: 'LocalBusiness',
     providerName: 'Χρυσούλα Πλακιώτη',
     providerJobTitle: 'Εικαστική ψυχοθεραπεύτρια',
+    keywords: [
+      'εικαστική ψυχοθεραπεία Αθήνα',
+      'ψυχοθεραπεία μέσω τέχνης',
+      'δημιουργική έκφραση',
+      'αυτογνωσία',
+    ],
   },
   themeColorHex: therapyPracticeSiteBranding.visualIdentity.themeColorHex,
 } as const;
@@ -126,8 +138,10 @@ export function createOrganizationStructuredData(): StructuredDataValue {
   return {
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    '@id': `${createCanonicalUrl()}#organization`,
+    '@id': organizationStructuredDataId,
     name: organization.name,
+    alternateName: organization.alternateName,
+    description: organization.description,
     url: createCanonicalUrl(),
     logo: createCanonicalUrl(organization.logoRelativePath),
     image: createCanonicalUrl(therapyPracticeSiteMetadata.openGraph.fallbackImageRelativePath),
@@ -157,10 +171,14 @@ export function createLocalBusinessStructuredData(): StructuredDataValue {
     '@type': localSeo.businessType,
     '@id': localBusinessStructuredDataId,
     name: organization.name,
-    alternateName: 'Ateleia',
+    alternateName: organization.alternateName,
+    description: organization.description,
     url: createCanonicalUrl(),
     image: createCanonicalUrl(therapyPracticeSiteMetadata.openGraph.fallbackImageRelativePath),
     logo: createCanonicalUrl(organization.logoRelativePath),
+    parentOrganization: {
+      '@id': organizationStructuredDataId,
+    },
     ...(organization.email ? { email: organization.email } : {}),
     ...(organization.telephone ? { telephone: organization.telephone } : {}),
     address: {
@@ -183,6 +201,7 @@ export function createLocalBusinessStructuredData(): StructuredDataValue {
     employee: {
       '@id': therapistPersonStructuredDataId,
     },
+    keywords: localSeo.keywords,
     ...(organization.sameAs.length > 0 ? { sameAs: organization.sameAs } : {}),
   };
 }
@@ -208,6 +227,10 @@ export function createPersonStructuredData(): StructuredDataValue {
       'Δημιουργική έκφραση',
       'Αυτογνωσία',
     ],
+    areaServed: {
+      '@type': 'AdministrativeArea',
+      name: localSeo.serviceArea,
+    },
   };
 }
 
@@ -233,10 +256,24 @@ export function createWebSiteStructuredData(): StructuredDataValue {
     '@type': 'WebSite',
     '@id': `${createCanonicalUrl()}#website`,
     name: therapyPracticeSiteMetadata.siteName,
+    alternateName: ['Ateleia', 'Ατέλεια Art Therapy'],
     url: createCanonicalUrl(),
     inLanguage: therapyPracticeSiteMetadata.defaultLanguage,
     publisher: {
       '@id': localBusinessStructuredDataId,
     },
+  };
+}
+
+export function createHomepageStructuredData(): StructuredDataGraphValue {
+  const website = createWebSiteStructuredData();
+  const organization = createOrganizationStructuredData();
+  const localBusiness = createLocalBusinessStructuredData();
+  const person = createPersonStructuredData();
+  const faq = createFaqStructuredData();
+
+  return {
+    '@context': 'https://schema.org',
+    '@graph': [website, organization, localBusiness, person, faq],
   };
 }

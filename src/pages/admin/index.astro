@@ -15,6 +15,7 @@ import { createProjectRelativeUrl } from '@/config/site-branding';
 const adminConfigUrl = createProjectRelativeUrl('admin/config.yml');
 const favicon16Url = createProjectRelativeUrl('favicon-16x16.png');
 const favicon32Url = createProjectRelativeUrl('favicon-32x32.png');
+const favicon96Url = createProjectRelativeUrl('favicon-96x96.png');
 const faviconIcoUrl = createProjectRelativeUrl('favicon.ico');
 const appleTouchIconUrl = createProjectRelativeUrl('apple-touch-icon.png');
 const webManifestUrl = createProjectRelativeUrl('site.webmanifest');
@@ -34,6 +35,7 @@ const projectBaseUrl = createProjectRelativeUrl('');
     <meta name="msapplication-TileColor" content="#C7392E" />
     <meta name="msapplication-config" content={browserConfigUrl} />
     <link rel="apple-touch-icon" sizes="180x180" href={appleTouchIconUrl} />
+    <link rel="icon" type="image/png" sizes="96x96" href={favicon96Url} />
     <link rel="icon" type="image/png" sizes="32x32" href={favicon32Url} />
     <link rel="icon" type="image/png" sizes="16x16" href={favicon16Url} />
     <link rel="icon" href={faviconIcoUrl} />
