@@ -2,6 +2,7 @@
 
 interface ImportMetaEnv {
   readonly PUBLIC_CONTACT_FORM_ENDPOINT?: string;
+  readonly PUBLIC_SEO_LAUNCH_READY?: string;
   readonly DECAP_REPOSITORY?: string;
   readonly DECAP_BRANCH?: string;
   readonly DECAP_SITE_URL?: string;

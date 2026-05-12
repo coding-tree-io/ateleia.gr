@@ -9,7 +9,7 @@ export const GET: APIRoute = () => {
   const robotsLines = therapyPracticeSiteMetadata.robots.isTemporaryNoindexEnabled
     ? [
         'User-agent: *',
-        'Allow: /',
+        'Disallow: /',
         `Sitemap: ${createCanonicalUrl('sitemap-index.xml')}`,
       ]
     : [

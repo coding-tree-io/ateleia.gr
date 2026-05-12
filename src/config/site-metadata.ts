@@ -15,11 +15,55 @@ type StructuredDataGraphValue = StructuredDataValue & {
 
 const canonicalOrigin = 'https://ateleiatherapy.gr';
 const projectBasePathname = new URL(canonicalOrigin).pathname.replace(/\/+$/, '');
+const canonicalHostname = new URL(canonicalOrigin).hostname;
 
 const socialProfileUrls: SocialProfileUrl[] = [];
 const organizationStructuredDataId = `${canonicalOrigin}/#organization`;
 const localBusinessStructuredDataId = `${canonicalOrigin}/#local-business`;
 const therapistPersonStructuredDataId = `${canonicalOrigin}/#person-chrysoula-plakioti`;
+
+function parseBooleanEnvironmentValue(value: string | undefined): boolean | undefined {
+  if (!value) {
+    return undefined;
+  }
+
+  const normalizedValue = value.trim().toLowerCase();
+
+  if (['1', 'true', 'yes', 'on'].includes(normalizedValue)) {
+    return true;
+  }
+
+  if (['0', 'false', 'no', 'off'].includes(normalizedValue)) {
+    return false;
+  }
+
+  return undefined;
+}
+
+function isFinalProductionSite(): boolean {
+  const configuredSite = import.meta.env.SITE?.trim();
+
+  if (!configuredSite) {
+    return false;
+  }
+
+  try {
+    return new URL(configuredSite).hostname === canonicalHostname;
+  } catch {
+    return false;
+  }
+}
+
+const isLaunchReady = (() => {
+  const explicitLaunchOverride = parseBooleanEnvironmentValue(import.meta.env.PUBLIC_SEO_LAUNCH_READY);
+  const isProductionDomainReady = isFinalProductionSite();
+
+  if (explicitLaunchOverride !== undefined) {
+    return explicitLaunchOverride && isProductionDomainReady;
+  }
+
+  return import.meta.env.PROD && isProductionDomainReady;
+})();
 
 function normalizeStructuredDataEmail(emailAddress: string | undefined): string | undefined {
   if (!emailAddress) {
@@ -45,7 +89,7 @@ export const therapyPracticeSiteMetadata = {
   robots: {
     temporaryNoindexDirective: 'noindex, nofollow',
     launchDirective: 'index, follow',
-    isTemporaryNoindexEnabled: false,
+    isTemporaryNoindexEnabled: !isLaunchReady,
   },
   openGraph: {
     fallbackImageRelativePath: 'images/social/og-minimal-referral.png',

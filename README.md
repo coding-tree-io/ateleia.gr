@@ -231,7 +231,7 @@ The project now has a centralized metadata layer in:
 
 Current strategy:
 
-- production `index, follow` on the custom domain
+- production `index, follow` on the custom domain when launch gate passes
 - Athens-focused homepage title/description for conservative local discovery around `εικαστική ψυχοθεραπεία στην Αθήνα`
 - canonical, Open Graph, Twitter metadata, and JSON-LD emitted from `PublicDocumentLayout.astro`
 - homepage JSON-LD includes `WebSite`, service-area `LocalBusiness`, therapist `Person`, and `FAQPage`
@@ -239,6 +239,15 @@ Current strategy:
 - sitemap generation enabled via `@astrojs/sitemap`, filtered to public indexable pages only
 - production social preview image is now the minimal referral card asset at `public/images/social/og-minimal-referral.png`, wired through `src/config/site-metadata.ts`
 - full favicon/app icon set is now wired globally from the selected Base B asset (`favicon.svg`, `favicon.ico`, `favicon-16x16.png`, `favicon-32x32.png`, `apple-touch-icon.png`, `android-chrome-192x192.png`, `android-chrome-512x512.png`, `site.webmanifest`, `browserconfig.xml`)
+
+The launch gate is explicit:
+
+- `PUBLIC_SEO_LAUNCH_READY=true` enables indexable directives only when the resolved `SITE`
+  origin matches `https://ateleiatherapy.gr` and we are in launch mode.
+- any non-launch build (or a mismatched/public non-final domain) keeps `noindex, nofollow`
+  defaults for non-public/tooling pages.
+- tooling and reference routes remain explicit `noindex` overrides (`/admin`, `/favicon-lab`,
+  `/social-preview-variants`, `/credits`) regardless of launch switch.
 
 Launch-day SEO checks:
 
