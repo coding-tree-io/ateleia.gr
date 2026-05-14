@@ -353,6 +353,95 @@
     transform: rotate(180deg);
   }
 
+  .therapy-painted-separator {
+    --separator-height: clamp(5rem, 8.4vw, 7.75rem);
+    --separator-width: min(92vw, 78rem);
+    --separator-opacity: 0.68;
+    --separator-x: 0rem;
+    --separator-y: 0rem;
+    --separator-rotate: 0deg;
+    --separator-flip-x: 1;
+    --separator-scale-y: 1;
+
+    position: relative;
+    z-index: 6;
+    display: grid;
+    height: var(--separator-height);
+    margin-block: clamp(-1.7rem, -2.2vw, -0.85rem);
+    place-items: center;
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  .therapy-painted-separator__picture,
+  .therapy-painted-separator__image {
+    display: block;
+  }
+
+  .therapy-painted-separator__image {
+    width: var(--separator-width);
+    max-width: none;
+    height: auto;
+    opacity: var(--separator-opacity);
+    transform: translate3d(var(--separator-x), var(--separator-y), 0)
+      rotate(var(--separator-rotate)) scale(var(--separator-flip-x), var(--separator-scale-y));
+    transform-origin: 50% 50%;
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+
+  .therapy-painted-separator--after-hero {
+    --separator-height: clamp(5.8rem, 9.8vw, 8.8rem);
+    --separator-width: min(96vw, 82rem);
+    --separator-opacity: 0.76;
+
+    margin-top: clamp(-2.25rem, -2.8vw, -1.15rem);
+  }
+
+  .therapy-painted-separator--standard {
+    --separator-height: clamp(5.1rem, 8.2vw, 7.35rem);
+  }
+
+  .therapy-painted-separator--compact {
+    --separator-height: clamp(4.6rem, 7.2vw, 6.7rem);
+    --separator-width: min(88vw, 72rem);
+  }
+
+  .therapy-painted-separator--inverted {
+    --separator-rotate: 180deg;
+  }
+
+  .therapy-painted-separator--mirrored {
+    --separator-flip-x: -1;
+  }
+
+  .therapy-painted-separator--ochre {
+    --separator-opacity: 0.76;
+    --separator-scale-y: 0.44;
+    --separator-y: -0.05rem;
+  }
+
+  .therapy-painted-separator--after-hero.therapy-painted-separator--ochre {
+    --separator-scale-y: 0.42;
+  }
+
+  .therapy-painted-separator--teal {
+    --separator-opacity: 0.62;
+    --separator-scale-y: 0.54;
+  }
+
+  .therapy-painted-separator--sage {
+    --separator-opacity: 0.58;
+    --separator-scale-y: 0.58;
+  }
+
+  .therapy-painted-separator--ink {
+    --separator-opacity: 0.28;
+    --separator-height: clamp(4.75rem, 7.4vw, 6.8rem);
+    --separator-scale-y: 0.8;
+    --separator-width: min(88vw, 72rem);
+  }
+
   .therapy-section-heading {
     font-family: var(--font-serif);
     font-size: 1.875rem;
@@ -1304,6 +1393,34 @@
   }
 
   @media (max-width: 767px) {
+    .therapy-painted-separator {
+      --separator-width: 116vw;
+      --separator-height: 4.75rem;
+
+      margin-block: -0.9rem;
+    }
+
+    .therapy-painted-separator--after-hero {
+      --separator-height: 5.2rem;
+    }
+
+    .therapy-painted-separator--ochre,
+    .therapy-painted-separator--after-hero.therapy-painted-separator--ochre {
+      --separator-scale-y: 0.46;
+    }
+
+    .therapy-painted-separator--teal {
+      --separator-scale-y: 0.56;
+    }
+
+    .therapy-painted-separator--sage {
+      --separator-scale-y: 0.6;
+    }
+
+    .therapy-painted-separator--ink {
+      --separator-height: 4.6rem;
+    }
+
     .therapy-surface-paper-card,
     .therapy-surface-paper-card-interactive,
     .therapy-form-shell {

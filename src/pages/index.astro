@@ -1,5 +1,5 @@
 ---
-import { PaintedEdgeDivider } from '@/components/decorative/ArtShapes';
+import SectionSeparator from '@/components/decorative/SectionSeparator.astro';
 import { Announcements } from '@/components/sections/Announcements';
 import { About } from '@/components/sections/About';
 import ContactSection from '@/components/sections/ContactSection.astro';
@@ -18,10 +18,6 @@ import { therapyPracticeWebsiteContent } from '@/content/therapy-practice-websit
 import { getServices } from '@/content/services';
 import PublicDocumentLayout from '@/layouts/PublicDocumentLayout.astro';
 
-const topDividerClassName = 'therapy-illustrated-section-divider therapy-illustrated-section-divider-after-hero';
-const sectionDividerClassName = 'therapy-illustrated-section-divider therapy-illustrated-section-divider-standard';
-const sectionDividerInvertedClassName =
-  'therapy-illustrated-section-divider therapy-illustrated-section-divider-inverted';
 const announcements = (await getAnnouncements()).slice(0, 2);
 const hasAnnouncements = announcements.length > 0;
 const services = await getServices();
@@ -45,28 +41,28 @@ const { seo } = therapyPracticeWebsiteContent;
 
     <main class="relative overflow-x-clip overflow-y-visible">
       <Hero />
-      <PaintedEdgeDivider className={topDividerClassName} />
+      <SectionSeparator tone="ochre" weight="after-hero" eager />
 
       <div id="what-is">
         <WhatIs />
       </div>
-      <PaintedEdgeDivider className={sectionDividerInvertedClassName} />
+      <SectionSeparator tone="teal" inverted />
 
       <div id="who-is-it-for">
         <WhoIsItFor />
       </div>
-      <PaintedEdgeDivider className={sectionDividerClassName} />
+      <SectionSeparator tone="sage" mirrored />
 
       <About />
-      <PaintedEdgeDivider className={sectionDividerInvertedClassName} />
+      <SectionSeparator tone="ink" weight="compact" inverted />
 
       <Services services={services} client:visible />
-      <PaintedEdgeDivider className={sectionDividerClassName} />
+      <SectionSeparator tone="ochre" mirrored />
 
       {hasAnnouncements ? (
         <>
           <Announcements announcements={announcements} />
-          <PaintedEdgeDivider className={sectionDividerInvertedClassName} />
+          <SectionSeparator tone="teal" inverted mirrored />
         </>
       ) : null}
 
