@@ -7,12 +7,12 @@ Astro 5 Greek-first site for the current Ateleia direction. Keep the locked Terr
 
 ## Read first
 - `README.md`
+- `SEO_OPERATIONS.md`
 - `astro.config.mjs`
 - `src/content.config.ts`
 - `src/pages/index.astro`
 - `src/config/site-metadata.ts`
 - `ISLANDS_POLICY.md`
-- `POST_DOMAIN_LAUNCH_CHECKLIST.md`
 
 ## Stack / invariants
 - Astro 5 + React + Tailwind CSS v4 + shadcn/ui.
@@ -20,7 +20,7 @@ Astro 5 Greek-first site for the current Ateleia direction. Keep the locked Terr
 - Use `import.meta.env.BASE_URL` for project-safe assets and links.
 - Homepage sections are intentionally limited to Hero, WhatIs, WhoIsItFor, About, Services, Announcements, Contact.
 - Active islands stay limited to `MobileNavigationMenu`, `HeaderCtaVisibilityObserver`, and `ContactForm`.
-- Current SEO mode is `noindex, nofollow` until the final production domain is known.
+- SEO launch behavior is controlled by `src/config/site-metadata.ts`; production is indexable only on `https://ateleiatherapy.gr` when the launch gate passes.
 - Extend the `therapy-*` semantic class layer instead of scattering utility bundles.
 
 ## Content / integration notes

@@ -27,6 +27,13 @@ Use that branch only if you intentionally want to revisit palette/font explorati
 - shadcn-ui
 - pnpm
 
+## Project docs
+
+- `README.md`: repo setup, runtime, deployment, and editing guide
+- `ISLANDS_POLICY.md`: hydration boundaries and interaction policy
+- `SEO_OPERATIONS.md`: live indexing baseline, launch-gate behavior, and Search Console triage rules
+- `ATTRIBUTIONS.md`: third-party asset attribution
+
 ## Prerequisites
 
 - Node.js 20+
@@ -254,6 +261,8 @@ Launch-day SEO checks:
 1. confirm generated `robots.txt`, canonical tags, and sitemap URLs use `https://ateleiatherapy.gr/`
 2. confirm GitHub Pages HTTPS is enforced after certificate provisioning
 3. redeploy after any domain or DNS changes
+
+Search Console findings and operator triage rules live in `SEO_OPERATIONS.md`.
 
 ## Legal page
 
