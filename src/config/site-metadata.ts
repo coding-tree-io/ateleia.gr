@@ -99,7 +99,7 @@ export const therapyPracticeSiteMetadata = {
   legalPageRelativePath: 'legal/',
   organization: {
     name: therapyPracticeWebsiteContent.brandName,
-    alternateName: ['Ateleia', 'Ατέλεια Art Therapy'],
+    alternateName: ['Ateleia', 'Ateleia Therapy', 'Ατέλεια Art Therapy'],
     description: therapyPracticeWebsiteContent.seo.pageDescription,
     email: normalizeStructuredDataEmail(getPrimaryContactEmail()),
     telephone: normalizeStructuredDataTelephone(
@@ -116,6 +116,7 @@ export const therapyPracticeSiteMetadata = {
     addressCountry: 'GR',
     businessType: 'LocalBusiness',
     providerName: 'Χρυσούλα Πλακιώτη',
+    providerAlternateName: 'Χρύσα Πλακιώτη',
     providerJobTitle: 'Εικαστική ψυχοθεραπεύτρια',
     keywords: [
       'εικαστική ψυχοθεραπεία Αθήνα',
@@ -259,6 +260,7 @@ export function createPersonStructuredData(): StructuredDataValue {
     '@type': 'Person',
     '@id': therapistPersonStructuredDataId,
     name: localSeo.providerName,
+    alternateName: localSeo.providerAlternateName,
     jobTitle: localSeo.providerJobTitle,
     worksFor: {
       '@id': localBusinessStructuredDataId,
@@ -300,7 +302,7 @@ export function createWebSiteStructuredData(): StructuredDataValue {
     '@type': 'WebSite',
     '@id': `${createCanonicalUrl()}#website`,
     name: therapyPracticeSiteMetadata.siteName,
-    alternateName: ['Ateleia', 'Ατέλεια Art Therapy'],
+    alternateName: therapyPracticeSiteMetadata.organization.alternateName,
     url: createCanonicalUrl(),
     inLanguage: therapyPracticeSiteMetadata.defaultLanguage,
     publisher: {

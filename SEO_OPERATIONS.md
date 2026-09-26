@@ -2,6 +2,97 @@
 
 Operational reference for live indexing, Search Console follow-up, and launch-state verification.
 
+## Name and brand SEO: September 26, 2026
+
+The homepage uses this metadata, including its Open Graph and Twitter equivalents:
+
+- title: `Ατέλεια | Χρύσα Πλακιώτη — Εικαστική Ψυχοθεραπεία`
+- description: `Εικαστική ψυχοθεραπεία με τη Χρύσα Πλακιώτη στην Ατέλεια (Ateleia Therapy). Ατομικές συνεδρίες στην Αθήνα και online, ομαδικές συνεδρίες στην Αθήνα.`
+
+The visible page remains unchanged. Person JSON-LD retains `Χρυσούλα Πλακιώτη`
+and its existing entity ID, with `Χρύσα Πλακιώτη` as `alternateName`. Organization,
+LocalBusiness, and WebSite share the aliases `Ateleia`, `Ateleia Therapy`, and
+`Ατέλεια Art Therapy`. Existing relationships and service-area information remain.
+No verified professional profile URL has been established, so no `sameAs` link
+has been added. A mention in an article is not an identity profile. No permanent
+office, new credential, review, or Maps listing is implied by this change.
+
+### Measurement procedure
+
+Use [OpenSEO hosted MCP](https://openseo.so/docs/mcp) or its signed-in web app
+outside the website. Reuse a project for `https://ateleiatherapy.gr/` and record
+that visible site changes are out of scope. Keep reports private. Use existing
+or free access; obtaining paid credits requires a separate spending decision.
+
+Use Google organic results, Greek language, mobile device, and Athens where
+supported (otherwise Greece). Record the actual location, date, device, language,
+result depth, ranking URL, position, and competing identities. An absent result
+means "not found within checked depth", not "not indexed". Keep relevant name
+queries even when a provider reports zero volume.
+
+Initial query set:
+
+```text
+Χρύσα Πλακιώτη
+Χρυσούλα Πλακιώτη
+Χρυσα Πλακιωτη
+Χρυσουλα Πλακιωτη
+Χρύσα Πλακιώτη ψυχοθεραπεία
+Χρυσούλα Πλακιώτη ψυχοθεραπεία
+ατέλεια
+ateleia
+ατέλεια therapy
+ateleia therapy
+ατέλεια ψυχοθεραπεία
+ateleia ψυχοθεραπεία
+```
+
+For Search Console, use the latest available 90 days of Web search data and record
+the exact date range and filters. Capture clicks, impressions, CTR, average
+position, queries, and homepage URL inspection (index status, selected canonical,
+last crawl). Missing or anonymized query data is unavailable, not zero. Search
+Console averages and location-specific rank snapshots are different measurements.
+
+Save baseline data in a private OpenSEO report or an ignored local
+`.codex-artifacts/seo/` report, never in public site assets. Do not commit private
+Search Console exports or credentials. Repeat checks four and eight weeks after
+deployment using the same settings; no recurring automation is configured.
+
+### Release checks
+
+OpenSEO setup on September 26, 2026: project `Ατέλεια Therapy` is configured for
+`ateleiatherapy.gr` with Greece/Greek defaults. All 12 queries are saved with
+original case in an Athens-city, Greek, mobile-only tracker, manual schedule,
+top-10 depth. Project context records the unchanged-page constraint. Ranking
+checks require a paid plan on the current account, so positions are unavailable;
+no purchase was made. Search Console connection remains pending. The private
+local setup/baseline report is `.codex-artifacts/seo/baseline-2026-09-26.md`.
+
+Local validation on September 26, 2026:
+
+- `pnpm check`: 60 files, zero diagnostics; `pnpm build`: passed.
+- `pnpm perf:budget`: passed (96/100 performance, LCP 2426 ms, TBT 0 ms).
+- Homepage body is byte-identical to the pre-change build after normalizing
+  generated JavaScript bundle filenames. Metadata changes alter bundle hashes
+  because shared content is imported by existing islands.
+- Exact, unique title/description/Open Graph/Twitter tags and valid JSON-LD
+  aliases/stable entity IDs passed generated-HTML checks.
+- Production canonical, robots, sitemap and utility-route noindex checks passed;
+  the local development homepage emits `noindex, nofollow`.
+- Native browser desktop/mobile inspection, mobile menu, FAQ expansion, console,
+  and observed network checks passed. No contact message was submitted.
+- The full sidecar verification suite reports homepage screenshot mismatches on
+  desktop and mobile. Both also reproduce with the pre-change homepage HTML;
+  stored screenshot baselines were not changed. This is an existing baseline
+  discrepancy, not a visual regression introduced by this metadata change.
+- Builds report the existing empty announcements collection warning.
+
+After the existing GitHub Pages workflow deploys the change, verify the live title,
+description, JSON-LD, canonical, robots directives, and sitemap. Inspect the
+homepage in Search Console and request recrawling where account access permits.
+Record the actual deployment date to anchor the four/eight-week reviews. Do not
+claim a local build is deployed or guarantee rankings from metadata changes.
+
 ## Current production SEO baseline
 
 These facts should remain true for the live custom-domain deployment:

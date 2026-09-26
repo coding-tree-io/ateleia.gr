@@ -251,7 +251,8 @@ The project now has a centralized metadata layer in:
 Current strategy:
 
 - production `index, follow` on the custom domain when launch gate passes
-- Athens-focused homepage title/description for conservative local discovery around `εικαστική ψυχοθεραπεία στην Αθήνα`
+- name/brand-focused homepage title/description for `Χρύσα Πλακιώτη` and `Ατέλεια`, retaining Athens and online service context
+- therapist JSON-LD connects the visible formal name `Χρυσούλα Πλακιώτη` with `Χρύσα Πλακιώτη`; business/site aliases include `Ateleia`, `Ateleia Therapy`, and `Ατέλεια Art Therapy`
 - canonical, Open Graph, Twitter metadata, and JSON-LD emitted from `PublicDocumentLayout.astro`
 - homepage JSON-LD includes `WebSite`, service-area `LocalBusiness`, therapist `Person`, and `FAQPage`
 - `robots.txt` generated from `src/pages/robots.txt.ts`
@@ -275,6 +276,11 @@ Launch-day SEO checks:
 3. redeploy after any domain or DNS changes
 
 Search Console findings and operator triage rules live in `SEO_OPERATIONS.md`.
+
+Name/brand SEO changes are confined to head metadata and JSON-LD. Visible copy,
+layout, routes, and interactions remain unchanged. OpenSEO is an external
+measurement tool, not a frontend dependency; connection and baseline procedures
+are documented in `SEO_OPERATIONS.md`.
 
 ## Legal page
 
