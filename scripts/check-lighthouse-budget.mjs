@@ -283,7 +283,7 @@ async function main() {
 
   const temporaryReportDirectory = await mkdtemp(join(tmpdir(), 'ateleia-lighthouse-'));
 
-  const previewCommandArguments = ['preview', '--host', previewHost, '--port', String(previewPort)];
+  const previewCommandArguments = ['preview', '--ignore-lock', '--host', previewHost, '--port', String(previewPort)];
   const { executableCommandName, executableCommandArguments } = createProcessInvocation(
     pnpmCommandName,
     previewCommandArguments
@@ -316,7 +316,7 @@ async function main() {
         npxCommandName,
         [
           '--yes',
-          'lighthouse',
+          'lighthouse@13.5.0',
           testedPageUrl,
           '--only-categories=performance',
           '--output=json',

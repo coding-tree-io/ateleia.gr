@@ -12,7 +12,7 @@ This folder is the project-local verification sidecar for UI and design quality.
 
 ## Required Environment
 
-- Node.js 20+
+- Node.js 24 LTS (24.21.0 or newer within 24.x)
 - Playwright Chromium browser (`npm run setup:browsers`)
 - `BASE_URL` pointing to the page under test
 

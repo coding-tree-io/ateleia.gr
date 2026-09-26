@@ -16,7 +16,7 @@ import {
 function createSingleDocumentCollection(
   path: string,
   id: string,
-  schema: z.ZodTypeAny,
+  schema: z.ZodType,
 ) {
   return defineCollection({
     loader: file(path, {

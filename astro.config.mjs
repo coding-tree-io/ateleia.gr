@@ -17,6 +17,7 @@ export default defineConfig({
 	site: 'https://ateleiatherapy.gr',
 	base: '/',
 	output: 'static',
+	compressHTML: true,
 	build: {
 		inlineStylesheets: 'always',
 	},
@@ -28,5 +29,11 @@ export default defineConfig({
 	],
 	vite: {
 		plugins: [tailwindcss()],
+		environments: {
+			prerender: {
+				// Resolve Astro's runtime dependencies inside pnpm's isolated package tree.
+				resolve: { noExternal: ['cookie', 'picomatch'] },
+			},
+		},
 	},
 });

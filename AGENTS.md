@@ -3,7 +3,7 @@
 This repo-local file overrides `.codex/AGENTS.md` for Ateleia.gr.
 
 ## Purpose
-Astro 5 Greek-first site for the current Ateleia direction. Keep the locked Terracotta Calm + Nunito brand.
+Astro 7 Greek-first site for the current Ateleia direction. Keep the locked Terracotta Calm + Nunito brand.
 
 ## Read first
 - `README.md`
@@ -15,7 +15,7 @@ Astro 5 Greek-first site for the current Ateleia direction. Keep the locked Terr
 - `ISLANDS_POLICY.md`
 
 ## Stack / invariants
-- Astro 5 + React + Tailwind CSS v4 + shadcn/ui.
+- Astro 7 + React + Tailwind CSS v4 + shadcn/ui.
 - Static GitHub Pages deployment; keep `site`, `base`, and `output` in `astro.config.mjs` unchanged unless the task explicitly requires a deployment change.
 - Use `import.meta.env.BASE_URL` for project-safe assets and links.
 - Homepage sections are intentionally limited to Hero, WhatIs, WhoIsItFor, About, Services, Announcements, Contact.

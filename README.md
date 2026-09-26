@@ -21,11 +21,23 @@ Use that branch only if you intentionally want to revisit palette/font explorati
 
 ## Stack
 
-- Astro 5 static output
+- Astro 7 static output
 - React integration for shadcn components
 - Tailwind CSS v4
 - shadcn-ui
 - pnpm
+
+Dependency baseline: Astro 7, React 19, Tailwind CSS 4, and pnpm 12.6.0.
+TypeScript stays on 6.x because `@astrojs/check` does not yet support 7.x.
+pnpm settings live in `pnpm-workspace.yaml`; the design
+pipeline keeps its separate npm lockfile. Astro's HTML whitespace compression
+is explicitly preserved across the major upgrade. The prerender configuration
+bundles Astro's `cookie` and `picomatch` dependencies for pnpm's isolated layout.
+The previous security overrides are no longer needed after refreshing the lockfile.
+
+The local CMS server still depends on deprecated `@hapi/joi`, which has one
+unpatched low-severity advisory (GHSA-6w3j-5fw6-r9vr). Do not force a replacement
+major through an override; update `decap-server` when upstream fixes its dependency.
 
 ## Project docs
 
@@ -36,7 +48,7 @@ Use that branch only if you intentionally want to revisit palette/font explorati
 
 ## Prerequisites
 
-- Node.js 20+
+- Node.js 24 LTS (24.21.0 or newer within 24.x)
 - Corepack (recommended)
 
 ## Setup

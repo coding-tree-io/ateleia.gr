@@ -20,6 +20,7 @@ const config: StorybookConfig = {
   viteFinal: async (config) =>
     mergeConfig(config, {
       plugins: [tailwindcss()],
+      oxc: { jsx: { runtime: 'automatic' } },
       resolve: {
         alias: {
           '@': resolve(repoRoot, 'src'),
