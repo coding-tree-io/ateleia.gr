@@ -57,8 +57,8 @@ export function About() {
               <img
                 src={portraitImageUrl}
                 alt={portraitAlt}
-                width={1066}
-                height={1600}
+                width={1086}
+                height={1448}
                 loading="lazy"
                 decoding="async"
                 className="therapy-about-portrait-image"

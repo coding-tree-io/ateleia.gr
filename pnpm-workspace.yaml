@@ -1,2 +1,5 @@
 allowBuilds:
   esbuild: true
+minimumReleaseAgeExclude:
+  - '@decap/cli@0.1.3'
+  - decap-server@3.11.6

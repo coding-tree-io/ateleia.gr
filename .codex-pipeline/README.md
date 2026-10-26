@@ -10,6 +10,10 @@ This folder is the project-local verification sidecar for UI and design quality.
 - Playwright + axe accessibility checks
 - Playwright screenshot-based visual regression (desktop + mobile)
 
+Dependency baseline: Storybook 10.6.4, Playwright 1.64.1, axe 4.14.0,
+Vite 8.3.5, and Style Dictionary 5.7.1. React and React DOM stay aligned with
+the app at 19.3.1. This sidecar retains its separate npm lockfile.
+
 ## Required Environment
 
 - Node.js 24 LTS (24.21.0 or newer within 24.x)
@@ -18,7 +22,7 @@ This folder is the project-local verification sidecar for UI and design quality.
 
 ## Commands
 
-1. `npm install`
+1. `npm ci --strict-peer-deps`
 2. `npm run setup:browsers`
 3. `npm run tokens:verify-sync`
 4. `npm run tokens:build`

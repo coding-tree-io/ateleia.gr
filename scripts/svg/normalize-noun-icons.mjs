@@ -90,7 +90,7 @@ async function normalizeFile(fileName, context) {
 
 async function runSvgerValidation() {
   const validationOutputDir = path.join(rootDir, '.tmp-svger-validate');
-  const command = 'npx --yes svger-cli@4.0.9 build src/assets/noun/normalized .tmp-svger-validate';
+  const command = 'npx --yes svger-cli@4.1.0 build src/assets/noun/normalized .tmp-svger-validate';
 
   await rm(validationOutputDir, { recursive: true, force: true });
 

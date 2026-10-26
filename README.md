@@ -27,17 +27,21 @@ Use that branch only if you intentionally want to revisit palette/font explorati
 - shadcn-ui
 - pnpm
 
-Dependency baseline: Astro 7, React 19, Tailwind CSS 4, and pnpm 12.6.0.
-TypeScript stays on 6.x because `@astrojs/check` does not yet support 7.x.
+Dependency baseline: Astro 7.4.2, React 19.3.1, Tailwind CSS 4, and pnpm 12.15.0.
+TypeScript stays on 6.0.3 because `@astrojs/check` 0.9.12 does not support 7.x.
 pnpm settings live in `pnpm-workspace.yaml`; the design
 pipeline keeps its separate npm lockfile. Astro's HTML whitespace compression
 is explicitly preserved across the major upgrade. The prerender configuration
 bundles Astro's `cookie` and `picomatch` dependencies for pnpm's isolated layout.
 The previous security overrides are no longer needed after refreshing the lockfile.
 
-The local CMS server still depends on deprecated `@hapi/joi`, which has one
-unpatched low-severity advisory (GHSA-6w3j-5fw6-r9vr). Do not force a replacement
-major through an override; update `decap-server` when upstream fixes its dependency.
+The local CMS tooling (`decap-server` via `@decap/cli`) has two development-only
+audit findings: a low-severity `@hapi/joi` advisory (GHSA-6w3j-5fw6-r9vr) and a
+high-severity Zod 3 advisory (GHSA-mrhx-c7xc-m3w5). Neither has a compatible
+upstream fix in the current dependency ranges. Do not force replacement majors
+through overrides; update `decap-server` when upstream fixes its dependencies.
+The requested Decap releases have exact release-age exceptions in
+`pnpm-workspace.yaml`; other packages retain pnpm's release-age checks.
 
 ## Project docs
 
@@ -105,6 +109,7 @@ The generated admin config uses `backend: proxy` on localhost, so local editing 
 ### Core app checks
 
 ```sh
+corepack pnpm install --frozen-lockfile --strict-peer-dependencies
 corepack pnpm check
 corepack pnpm build
 corepack pnpm perf:budget
@@ -113,7 +118,7 @@ corepack pnpm perf:budget
 ### Sidecar design checks (`.codex-pipeline`)
 
 ```sh
-npm --prefix .codex-pipeline install
+npm --prefix .codex-pipeline ci --strict-peer-deps
 npm --prefix .codex-pipeline run setup:browsers
 $env:BASE_URL="https://ateleiatherapy.gr/"
 npm --prefix .codex-pipeline run verify:all
@@ -200,6 +205,7 @@ The workflow does not cache `node_modules`, `dist`, Playwright browsers, Storybo
 This repo includes a static Decap CMS admin configured as a section-led editor for the site copy plus the services and announcements sections.
 
 - admin entry: `src/pages/admin/index.astro`
+- admin runtime: pinned Decap CMS 3.17.3; local proxy: `decap-server` 3.11.6
 - generated config: `src/pages/admin/config.yml.ts`
 - editable content: `src/data/site-global.json`, `src/data/hero.json`, `src/data/what-is.json`, `src/data/who-is-it-for.json`, `src/data/about.json`, `src/data/contact.json`, `src/data/services.json`, `src/data/announcements.json`
 - content schema/query helpers: `src/content.config.ts`, `src/content/therapy-practice-website-content.ts`, `src/content/services.ts`, `src/content/announcements.ts`
